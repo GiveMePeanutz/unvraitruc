@@ -98,11 +98,37 @@ public class DAOFactory {
      * Méthodes de récupération de l'implémentation des différents DAO
      * (uniquement deux dans le cadre de ce TP)
      */
-    public ClientDao getClientDao() {
-        return new ClientDaoImpl( this );
+    public CourseDao getCourseDao() {
+        return new CourseDaoImpl( this );
     }
 
-    public CommandeDao getCommandeDao() {
-        return new CommandeDaoImpl( this );
+    public GroupDao getGroupDao() {
+        return new GroupDaoImpl( this );
     }
+    
+    public GroupPrivDao getGroupPrivDao() {
+        return new GroupPrivDaoImpl( this );
+    }
+    
+    public PrivDao getPrivDao() {
+        return new PrivDaoImpl( this );
+    }
+    
+    public PrivMenuDao getDao() {
+        return new PrivMenuDaoImpl( this );
+    }
+    
+    public UserCourseDao getUserCourseDao() {
+        return new UserCourseDaoImpl( this );
+    }
+    
+    public UserDao getUserDao() {
+        return new UserDaoImpl( this );
+    }
+    
+    public UserGroupDao getUserGroupDao() {
+        return new UserGroupDaoImpl( this );
+    }
+    
+    
 }

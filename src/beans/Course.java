@@ -24,7 +24,7 @@ public class Course implements Serializable{
 	public String getDescription() {
 		return description;
 	}
-	public void setDescription(String description) {
+	public void setCourseDescription(String description) {
 		this.description = description;
 	}
 	public int getCourseYear() {
