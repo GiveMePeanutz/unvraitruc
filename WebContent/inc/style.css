@@ -52,3 +52,51 @@
 	text-decoration : none;
 	color : black;
 }
+
+
+/* Forms --------------------------------------------------------------------------------------- */
+
+#connectionForm {
+	display : inline-block;
+	vertical-align: bottom;
+	position : relative;
+	left : 20%;
+	top : 100px;
+	
+}
+
+form label {
+    float: left;
+    width: 200px;
+    margin: 3px 0px 0px 0px;
+}
+
+form input {
+    margin: 3px 3px 0px 0px;
+    border: 1px #999 solid;
+}
+
+
+form .required {
+    color: #c00;
+}
+form .error {
+    color: #900;
+}
+form .success {
+    color: #090;
+}
+form .info {
+    font-style: italic;
+    color: #E8A22B;
+}
+
+/* Pictures --------------------------------------------------------------------------------------- */
+.stikom {
+	display : inline-block;
+	vertical-align: bottom;
+	position : relative;
+	left : 20%;
+	top : 100px;
+	width : 20%;
+}
