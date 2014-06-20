@@ -20,9 +20,9 @@ public class CourseDaoImpl implements CourseDao {
 
 	private DAOFactory daoFactory;
 	
-	private static final String SQL_SELECT = "SELECT courseID, courseName, courseYear, courseDescription FROM Course ORDER BY courseID";
-	private static final String SQL_SELECT_BY_COURSEID = "SELECT courseID, courseName, courseYear, courseDescription FROM Course WHERE courseID = ?";
-	private static final String SQL_INSERT = "INSERT INTO Course (courseID, courseName, courseYear, courseDescription) VALUES (?, ?, ?, ?)";
+	private static final String SQL_SELECT = "SELECT courseID, courseName, courseYear, courseDescription, schedule FROM Course ORDER BY courseID";
+	private static final String SQL_SELECT_BY_COURSEID = "SELECT courseID, courseName, courseYear, courseDescription, schedule FROM Course WHERE courseID = ?";
+	private static final String SQL_INSERT = "INSERT INTO Course (courseID, courseName, courseYear, courseDescription, schedule) VALUES (?, ?, ?, ?, ?)";
 	private static final String SQL_DELETE_BY_COURSEID = "DELETE FROM Course WHERE courseID = ?";
 
 	CourseDaoImpl(DAOFactory daoFactory) {
@@ -38,7 +38,7 @@ public class CourseDaoImpl implements CourseDao {
 		try {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion,
-					SQL_INSERT, true, course.getCourseID(), course.getCourseName(), course.getCourseYear(), course.getDescription());
+					SQL_INSERT, true, course.getCourseID(), course.getCourseName(), course.getCourseYear(), course.getDescription(), course.getSchedule());
 			int statut = preparedStatement.executeUpdate();
 			if (statut == 0) {
 				throw new DAOException(
@@ -144,6 +144,7 @@ public class CourseDaoImpl implements CourseDao {
 		course.setCourseName(resultSet.getString("courseName"));
 		course.setCourseYear(resultSet.getInt("courseYear"));
 		course.setCourseDescription(resultSet.getString("courseDescription"));
+		course.setSchedule(resultSet.getString("schedule"));
 		return course;
 	}
 

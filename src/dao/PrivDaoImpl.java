@@ -18,7 +18,7 @@ public class PrivDaoImpl implements PrivDao {
 
 	private DAOFactory daoFactory;
 	
-	private static final String SQL_SELECT = "SELECT privID, privName, privDescription FROM Priv ORDER BY privID";
+	private static final String SQL_SELECT = "SELECT privID, privName, privDescription FROM Priv ORDER BY privName";
 	private static final String SQL_SELECT_BY_PRIVID = "SELECT privID, privName, privDescription FROM Priv WHERE privID = ?";
 	private static final String SQL_INSERT = "INSERT INTO Priv (privID, privName, privDescription) VALUES (?, ?, ?)";
 	private static final String SQL_DELETE_BY_PRIVID = "DELETE FROM Priv WHERE privID = ?";

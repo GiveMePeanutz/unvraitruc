@@ -8,6 +8,7 @@ public class Course implements Serializable{
 	private String courseName;
 	private String description;
 	private int courseYear;
+	private String schedule;
 	
 	public int getCourseID() {
 		return courseID;
@@ -32,6 +33,12 @@ public class Course implements Serializable{
 	}
 	public void setCourseYear(int courseYear) {
 		this.courseYear = courseYear;
+	}
+	public String getSchedule() {
+		return schedule;
+	}
+	public void setSchedule(String schedule) {
+		this.schedule = schedule;
 	}
 	
 	
