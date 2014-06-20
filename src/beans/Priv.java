@@ -20,7 +20,7 @@ public class Priv implements Serializable {
 	public void setPrivName(String privName) {
 		this.privName = privName;
 	}
-	public String getPrivDescrition() {
+	public String getPrivDescription() {
 		return privDescrition;
 	}
 	public void setPrivDescrition(String privDescrition) {
