@@ -11,9 +11,10 @@
 	float:left; /*pour IE*/
 	list-style-type: none; 
 	position: relative; 
-	width: 140px; 
+	width: 160px; 
 	background-color: #E0E0E0; 
 	padding: 2px; 
+	border : 1px outset black;
 }
 
  #dropdownmenu ul ul 
@@ -21,18 +22,17 @@
 	display: none;
 	position: absolute;
 	margin:0px; padding: 0px; 
-	border: 1px solid #B0B0B0;
 }
 
  #dropdownmenu ul.step2
 {
-	left: 0px; 
-	top: 22px;
+	left: -2px; 
+	top: 26px;
 }
 
  #dropdownmenu ul.step3
 {
-	left: 144px; 
+	left: 164px; 
 	top: -1px;
 }
 
@@ -41,17 +41,14 @@
 	display:block;
 }
 
- #dropdownmenu li 
-{
-	list-style-type: none; 
-	position: relative; 
-	width: 140px; 
-	background-color: #E0E0E0; 
-	padding: 2px; 
-	margin: 0px
-}
 #dropdownmenu li:hover 
 {
 	background-color: #FFFF70;
+	border : 1px inset black;
 }
 
+#dropdownmenu a
+{
+	text-decoration : none;
+	color : black;
+}
