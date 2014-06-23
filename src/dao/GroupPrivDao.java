@@ -11,6 +11,10 @@ public interface GroupPrivDao {
 	
 	void delete (int groupID, int privID ) throws DAOException;
 	
+	void deleteByGroupID (int groupID) throws DAOException;
+	
+	void deleteByPrivID (int privID ) throws DAOException;
+	
 	List<Priv> listGroupPrivs( int groupID ) throws DAOException;
 	
 	List<Group> listPrivGroups( int privID ) throws DAOException;

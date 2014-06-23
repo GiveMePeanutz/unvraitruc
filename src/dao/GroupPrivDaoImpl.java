@@ -15,7 +15,7 @@ public class GroupPrivDaoImpl implements GroupPrivDao {
 
 	private static final String SQL_INSERT = "INSERT INTO Group_Priv (groupID , privID) VALUES (? , ?)";
 	private static final String SQL_SELECT_GROUP_PRIVS = "SELECT privName, privDescription FROM Priv WHERE privID IN (SELECT privID FROM Group_Priv WHERE groupID = ?) ORDER BY privName";
-	private static final String SQL_SELECT_PRIV_GROUPS = "SELECT groupName, groupDescription FROM Group WHERE groupID IN (SELECT groupID FROM Group_Priv WHERE privID = ?) ORDER BY groupName";
+	private static final String SQL_SELECT_PRIV_GROUPS = "SELECT groupName, groupDescription FROM web_app_db.Group WHERE groupID IN (SELECT groupID FROM Group_Priv WHERE privID = ?) ORDER BY groupName";
 	private static final String SQL_DELETE_BY_GROUPID = "DELETE FROM Group_Priv WHERE groupID = ?";
 	private static final String SQL_DELETE_BY_PRIVID = "DELETE FROM Group_Priv WHERE privID = ?";
 	private static final String SQL_DELETE =  "DELETE FROM Group_Priv WHERE groupID = ? AND privID = ?";
@@ -43,6 +43,18 @@ public class GroupPrivDaoImpl implements GroupPrivDao {
 	public List<Group> listPrivGroups(int privID) throws DAOException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteByGroupID(int groupID) throws DAOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteByPrivID(int privID) throws DAOException {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

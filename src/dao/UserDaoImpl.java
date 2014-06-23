@@ -55,7 +55,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public User find(long username) throws DAOException {
+	public User find(String username) throws DAOException {
 		return find(SQL_SELECT_BY_USERNAME, username);
 	}
 
@@ -149,6 +149,36 @@ public class UserDaoImpl implements UserDao {
 		user.setRegDate( new DateTime( resultSet.getTimestamp( "regDate" ) ));
 		user.setSex(resultSet.getInt("sex"));
 		return user;
+	}
+
+	@Override
+	public String getPassword(String username) throws DAOException {
+		Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        String sql = SQL_SELECT_BY_USERNAME;
+        ResultSet resultSet = null;
+        String pw = null;
+
+        try {
+            /* Récupération d'une connection depuis la Factory */
+            connection = daoFactory.getConnection();
+            /*
+             * Préparation de la requête avec les objets passés en arguments
+             * (ici, uniquement un id) et exécution.
+             */
+            preparedStatement = initialisationRequetePreparee( connection, sql, false, username );
+            resultSet = preparedStatement.executeQuery();
+            /* Parcours de la ligne de données retournée dans le ResultSet */
+            if ( resultSet.next() ) {
+                pw = resultSet.getString("password");
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connection );
+        }
+
+        return pw;
 	}
 	
 }

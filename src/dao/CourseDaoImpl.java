@@ -20,9 +20,9 @@ public class CourseDaoImpl implements CourseDao {
 
 	private DAOFactory daoFactory;
 	
-	private static final String SQL_SELECT = "SELECT courseID, courseName, courseYear, courseDescription, schedule FROM Course ORDER BY courseID";
-	private static final String SQL_SELECT_BY_COURSEID = "SELECT courseID, courseName, courseYear, courseDescription, schedule FROM Course WHERE courseID = ?";
-	private static final String SQL_INSERT = "INSERT INTO Course (courseID, courseName, courseYear, courseDescription, schedule) VALUES (?, ?, ?, ?, ?)";
+	private static final String SQL_SELECT = "SELECT courseID, courseName, courseYear, courseDescription, courseschedule FROM Course ORDER BY courseID";
+	private static final String SQL_SELECT_BY_COURSEID = "SELECT courseID, courseName, courseYear, courseDescription, courseschedule FROM Course WHERE courseID = ?";
+	private static final String SQL_INSERT = "INSERT INTO Course ( courseName, courseYear, courseDescription, courseschedule) VALUES ( ?, ?, ?, ?)";
 	private static final String SQL_DELETE_BY_COURSEID = "DELETE FROM Course WHERE courseID = ?";
 
 	CourseDaoImpl(DAOFactory daoFactory) {

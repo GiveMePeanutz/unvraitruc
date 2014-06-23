@@ -18,10 +18,10 @@ public class GroupDaoImpl implements GroupDao {
 
 	private DAOFactory daoFactory;
 	
-	private static final String SQL_SELECT = "SELECT groupID, groupName, groupDescription FROM Group ORDER BY groupID";
-	private static final String SQL_SELECT_BY_GROUPID = "SELECT groupID, groupName, groupDescription FROM Group WHERE groupID = ?";
-	private static final String SQL_INSERT = "INSERT INTO Group (groupID, groupName, groupDescription) VALUES (?, ?, ?)";
-	private static final String SQL_DELETE_BY_GROUPID = "DELETE FROM Group WHERE groupID = ?";
+	private static final String SQL_SELECT = "SELECT groupID, groupName, groupDescription FROM web_app_db.Group ORDER BY groupID";
+	private static final String SQL_SELECT_BY_GROUPID = "SELECT groupID, groupName, groupDescription FROM web_app_db.Group WHERE groupID = ?";
+	private static final String SQL_INSERT = "INSERT INTO web_app_db.Group ( groupName, groupDescription) VALUES ( ?, ?)";
+	private static final String SQL_DELETE_BY_GROUPID = "DELETE FROM web_app_db.Group WHERE groupID = ?";
 
 	GroupDaoImpl(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
