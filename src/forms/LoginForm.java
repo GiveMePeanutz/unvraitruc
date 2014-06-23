@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import beans.User;
+import dao.DAOException;
+import dao.UserDao;
 
 public final class LoginForm {
     private static final String USERNAME_FIELD = "username";
@@ -13,6 +15,11 @@ public final class LoginForm {
 
     private String              result;
     private Map<String, String> errors         = new HashMap<String, String>();
+    private UserDao             userDao;
+
+    public LoginForm( UserDao userDao ) {
+        this.userDao = userDao;
+    }
 
     public String getResult() {
         return result;
@@ -22,58 +29,72 @@ public final class LoginForm {
         return errors;
     }
 
-    public User connectUser( HttpServletRequest request ) {
+    public User connectUser( HttpServletRequest request, String path ) {
         /* Récupération des champs du formulaire */
         String username = getFieldValue( request, USERNAME_FIELD );
         String password = getFieldValue( request, PWD_FIELD );
 
         User user = new User();
 
-        /* Validation du champ email. */
-        try {
-            usernameValidation( username );
-        } catch ( Exception e ) {
-            setError( USERNAME_FIELD, e.getMessage() );
-        }
-        user.setUsername( username );
+        handleUsername( username, user );
+        handlePassword( password, user );
+        similarityControl( username, password, user );
 
-        /* Validation du champ mot de passe. */
         try {
-            passwordValidation( password );
-        } catch ( Exception e ) {
-            setError( PWD_FIELD, e.getMessage() );
-        }
-        user.setPassword( password );
-
-        /* Initialisation du résultat global de la validation. */
-        if ( errors.isEmpty() ) {
-            result = "Connection is a success.";
-        } else {
-            result = "Connection failed.";
+            if ( errors.isEmpty() ) {
+                userDao.create( user );
+                result = "Connection is a success.";
+            } else {
+                result = "Connection failed.";
+            }
+        } catch ( DAOException e ) {
+            setError( "unexpected", "Unexpected error during the login" );
+            result = "Connection failed : unexpected error, please try again later.";
+            e.printStackTrace();
         }
 
         return user;
     }
 
-    /**
-     * Valide l'adresse email saisie.
-     */
-    private void usernameValidation( String username ) throws Exception {
-        if ( username != null && username.length() < 3 ) {
-            throw new Exception( "Merci de saisir une adresse mail valide." );
+    private void similarityControl( String username, String password, User user ) {
+
+    }
+
+    private void handleUsername( String username, User user ) {
+        try {
+            usernameValidation( username );
+        } catch ( FormExceptionValidation e ) {
+            setError( USERNAME_FIELD, e.getMessage() );
+        }
+        user.setUsername( username );
+    }
+
+    private void handlePassword( String password, User user ) {
+        try {
+            passwordValidation( password );
+        } catch ( FormExceptionValidation e ) {
+            setError( PWD_FIELD, e.getMessage() );
+        }
+        user.setPassword( password );
+    }
+
+    private void usernameValidation( String username ) throws FormExceptionValidation {
+        if ( username != null ) {
+            if ( username.length() < 3 ) {
+                throw new FormExceptionValidation( "Username must have more than 2 characters" );
+            }
+        } else {
+            throw new FormExceptionValidation( "Please enter a real username." );
         }
     }
 
-    /**
-     * Valide le mot de passe saisi.
-     */
-    private void passwordValidation( String password ) throws Exception {
+    private void passwordValidation( String password ) throws FormExceptionValidation {
         if ( password != null ) {
             if ( password.length() < 3 ) {
-                throw new Exception( "Password must have at least 3 characters" );
+                throw new FormExceptionValidation( "Password must have at least 3 characters" );
             }
         } else {
-            throw new Exception( "Please enter your password." );
+            throw new FormExceptionValidation( "Please enter your password." );
         }
     }
 

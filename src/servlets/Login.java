@@ -18,20 +18,30 @@ import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
 import beans.User;
+import dao.DAOFactory;
+import dao.UserDao;
 import forms.LoginForm;
 
 @WebServlet( "/login" )
 public class Login extends HttpServlet {
-    public static final String USER_ATT           = "user";
-    public static final String FORM_ATT           = "form";
-    public static final String LOGIN_INTERVAL_ATT = "loginInterval";
-    public static final String USER_SESSION_ATT   = "userSession";
-    public static final String LAST_LOGIN_COOKIE  = "lastLogin";
-    public static final String DATE_FORMAT        = "dd/MM/yyyy HH:mm:ss";
-    public static final String VIEW               = "/WEB-INF/login.jsp";
-    public static final String MEMORY_FIELD       = "memory";
-    public static final int    MAX_AGE_COOKIE     = 60 * 60 * 24 * 365;   // 1
-                                                                           // year
+
+    public static final String  CONF_DAO_FACTORY   = "daofactory";
+    public static final String  USER_ATT           = "user";
+    public static final String  FORM_ATT           = "form";
+    public static final String  LOGIN_INTERVAL_ATT = "loginInterval";
+    public static final String  USER_SESSION_ATT   = "userSession";
+    public static final String  LAST_LOGIN_COOKIE  = "lastLogin";
+    public static final String  DATE_FORMAT        = "dd/MM/yyyy HH:mm:ss";
+    public static final String  VIEW               = "/WEB-INF/login.jsp";
+    public static final String  MEMORY_FIELD       = "memory";
+    public static final int     MAX_AGE_COOKIE     = 60 * 60 * 24 * 365;   // 1
+    private static final String PATH               = "path";
+    private UserDao             userDao;                                   // year
+
+    public void init() throws ServletException {
+        /* Récupération d'une instance de notre DAO Utilisateur */
+        this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
+    }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         /* Tentative de récupération du cookie depuis la requête */
@@ -64,10 +74,13 @@ public class Login extends HttpServlet {
     }
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+
+        String path = this.getServletConfig().getInitParameter( PATH );
+
         /* Préparation de l'objet formulaire */
-        LoginForm form = new LoginForm();
+        LoginForm form = new LoginForm( userDao );
         /* Traitement de la requête et récupération du bean en résultant */
-        User user = form.connectUser( request );
+        User user = form.connectUser( request, path );
         /* Récupération de la session depuis la requête */
         HttpSession session = request.getSession();
 
