@@ -10,8 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import beans.Course;
-import beans.Group;
 import beans.Group;
 
 public class GroupDaoImpl implements GroupDao {
