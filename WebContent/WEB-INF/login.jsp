@@ -11,7 +11,7 @@
     <body>
         
         <div id = "connectionForm">
-	        <form method="post" action="<c:url value="/connection" />">
+	        <form method="post" action="<c:url value="/login" />">
 			    <fieldset>
 	                <legend>Login</legend>
 	                <p>Please connect yourself to access the application.</p>
