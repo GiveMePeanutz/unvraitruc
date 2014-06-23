@@ -34,9 +34,9 @@ public class Login extends HttpServlet {
     public static final String  DATE_FORMAT        = "dd/MM/yyyy HH:mm:ss";
     public static final String  VIEW               = "/WEB-INF/login.jsp";
     public static final String  MEMORY_FIELD       = "memory";
-    public static final int     MAX_AGE_COOKIE     = 60 * 60 * 24 * 365;   // 1
+    public static final int     MAX_AGE_COOKIE     = 60 * 60 * 24 * 365;   // 1year
     private static final String PATH               = "path";
-    private UserDao             userDao;                                   // year
+    private UserDao             userDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */

@@ -24,7 +24,7 @@
 	                <br />
 	
 	                <label for="password">Password <span class="required">*</span></label>
-	                <input type="password" id="pwd" name="pwd" value="" size="20" maxlength="20" />
+	                <input type="password" id="password" name="password" value="" size="20" maxlength="20" />
 	                <span class="error">${form.errors['password']}</span>
 	                <br />
 	 				<br />

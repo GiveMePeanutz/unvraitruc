@@ -38,11 +38,10 @@ public final class LoginForm {
 
         handleUsername( username, user );
         handlePassword( password, user );
-        similarityControl( username, password, user );
+        handleSimilarity( username, password, user );
 
         try {
             if ( errors.isEmpty() ) {
-                userDao.create( user );
                 result = "Connection is a success.";
             } else {
                 result = "Connection failed.";
@@ -56,7 +55,14 @@ public final class LoginForm {
         return user;
     }
 
-    private void similarityControl( String username, String password, User user ) {
+    private void handleSimilarity( String username, String password, User user )
+    {
+        try {
+            similarityValidation( username, password );
+        } catch ( FormExceptionValidation e )
+        {
+            setError( PWD_FIELD, e.getMessage() );
+        }
 
     }
 
@@ -96,6 +102,14 @@ public final class LoginForm {
         } else {
             throw new FormExceptionValidation( "Please enter your password." );
         }
+    }
+
+    private void similarityValidation( String username, String password ) throws FormExceptionValidation {
+
+        if ( userDao.getPassword( username ) != password ) {
+            throw new FormExceptionValidation( "This password doesn't match with this username" );
+        }
+
     }
 
     /*
