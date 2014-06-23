@@ -13,7 +13,7 @@ public interface UserGroupDao {
 	
 	void deleteBygroupID (int groupID) throws DAOException;
 	
-	void deleteByPrivID (String username ) throws DAOException;
+	void deleteByUsername (String username ) throws DAOException;
 	
 	List<User> listGroupUsers( int groupID ) throws DAOException;
 	
