@@ -59,7 +59,7 @@ public final class LoginForm {
     {
         try {
             similarityValidation( username, password );
-        } catch ( FormExceptionValidation e )
+        } catch ( FormValidationException e )
         {
             setError( PWD_FIELD, e.getMessage() );
         }
@@ -69,7 +69,7 @@ public final class LoginForm {
     private void handleUsername( String username, User user ) {
         try {
             usernameValidation( username );
-        } catch ( FormExceptionValidation e ) {
+        } catch ( FormValidationException e ) {
             setError( USERNAME_FIELD, e.getMessage() );
         }
         user.setUsername( username );
@@ -78,35 +78,35 @@ public final class LoginForm {
     private void handlePassword( String password, User user ) {
         try {
             passwordValidation( password );
-        } catch ( FormExceptionValidation e ) {
+        } catch ( FormValidationException e ) {
             setError( PWD_FIELD, e.getMessage() );
         }
         user.setPassword( password );
     }
 
-    private void usernameValidation( String username ) throws FormExceptionValidation {
+    private void usernameValidation( String username ) throws FormValidationException {
         if ( username != null ) {
             if ( username.length() < 3 ) {
-                throw new FormExceptionValidation( "Username must have more than 2 characters" );
+                throw new FormValidationException( "Username must have more than 2 characters" );
             }
         } else {
-            throw new FormExceptionValidation( "Please enter a real username." );
+            throw new FormValidationException( "Please enter a real username." );
         }
     }
 
-    private void passwordValidation( String password ) throws FormExceptionValidation {
+    private void passwordValidation( String password ) throws FormValidationException {
         if ( password != null ) {
             if ( password.length() < 3 ) {
-                throw new FormExceptionValidation( "Password must have at least 3 characters" );
+                throw new FormValidationException( "Password must have at least 3 characters" );
             }
         } else {
-            throw new FormExceptionValidation( "Please enter your password." );
+            throw new FormValidationException( "Please enter your password." );
         }
     }
 
-    private void similarityValidation( String username, String password ) throws FormExceptionValidation {
-        if ( !(userDao.getPassword( username).equals( password ))) {
-            throw new FormExceptionValidation( "This password doesn't match with this username" );
+    private void similarityValidation( String username, String password ) throws FormValidationException {
+        if ( !( userDao.getPassword( username ).equals( password ) ) ) {
+            throw new FormValidationException( "This password doesn't match with this username" );
         }
 
     }

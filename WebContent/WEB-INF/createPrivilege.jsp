@@ -1,12 +1,33 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+    <head>
+        <meta charset="utf-8" />
+        <title>Create a privilege</title>
+        <link type="text/css" rel="stylesheet" href="<c:url value="/inc/design.css"/>" />
+    </head>
+    <body>
+        <c:import url="/inc/menu.jsp" />
+        <div>
+            <form method="post" action="<c:url value="/createPrivilege"/>" enctype="multipart/form-data">
+                <fieldset>
+                    <legend>Privilege Information</legend>
+                    <label for="namePrivilege">Name <span class="requis">*</span></label>
+					<input type="text" id="namePrivilege" name="namePrivilege" value="<c:out value="${privilege.name}"/>" size="30" maxlength="30" />
+					<span class="error">${form.errors['namePrivilege']}</span>
+					<br />
 
-</body>
+					<label for="descriptionPrivilege">Description</label>
+					<input type="text" id="descriptionPrivilege" name="descriptionPrivilege" value="<c:out value="${privilege.description}"/>" size="30" maxlength="30" />
+					<span class="error">${form.errors['descriptionPrivilege']}</span>
+					<br />
+                    
+                </fieldset>  
+                <p class="info">${ form.result }</p>
+                <input type="submit" value="Create"  />
+                <input type="reset" value="Reset all" /> <br />
+            </form>
+        </div>
+    </body>
 </html>
