@@ -5,7 +5,7 @@
     <head>
         <meta charset="utf-8" />
         <title>Login</title>
-        <link type="text/css" rel="stylesheet" href="<c:url value="/inc/style.css"/>" />
+        <link type="text/css" rel="stylesheet" href="<c:url value="/inc/design.css"/>" />
     	<c:import url="/inc/menu.jsp" />
     </head>
     <body>
