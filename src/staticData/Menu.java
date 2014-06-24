@@ -46,8 +46,7 @@ public final class Menu {
 	
 	public static String getMenuName(int path){
 		
-		
-		return null;
+		return menus[path/10000][(path-(path/10000)*10000)/100][(path-(path/100)*100)];
 	}
 
 			
