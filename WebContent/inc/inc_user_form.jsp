@@ -22,8 +22,8 @@
 <br />
 
 <label for="sex">Sex </label>
-<input type="radio" id="sex" name="sex" value="<c:out value="${user.sex}"/>" />Male 
-<input type="radio" id="sex" name="sex" value="<c:out value="${user.sex}"/>" />Female
+<input type="radio" id="sex" name="sex" value="<c:out value="0"/>" />Male 
+<input type="radio" id="sex" name="sex" value="<c:out value="1"/>" />Female
 <span class="error">${form.errors['sex']}</span>
 <br />
 
@@ -43,7 +43,7 @@
 <br />
 
 <label for="birthDate">Date of Birth</label>
-<input type="datetime" id="birthDate" name="birthDate" value="<c:out value="${user.birthDate}"/>" size="30" maxlength="60" />
+<input type="date" id="birthDate" name="birthDate" value="<c:out value="${user.birthDate}"/>" size="30" maxlength="60" />
 <span class="error">${form.errors['birthDate']}</span>
 <br />
 

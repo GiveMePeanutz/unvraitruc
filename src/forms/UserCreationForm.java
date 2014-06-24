@@ -6,13 +6,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
+
+import org.joda.time.DateTime;
 
 import beans.User;
 import dao.DAOException;
@@ -43,7 +48,7 @@ public final class UserCreationForm {
         this.userDao = userDao;
     }
 
-    public Map<String, String> getErreurs() {
+    public Map<String, String> getErrors() {
         return errors;
     }
 
@@ -51,7 +56,7 @@ public final class UserCreationForm {
         return result;
     }
 
-    public User createUser( HttpServletRequest request, String path ) {
+    public User createUser( HttpServletRequest request, String path ) throws ParseException {
         String username = getFieldValue( request, USERNAME_FIELD );
         String password = getFieldValue( request, PASSWORD_FIELD );
         String lastName = getFieldValue( request, NAME_FIELD );
@@ -64,13 +69,20 @@ public final class UserCreationForm {
         String promotion = getFieldValue( request, PROMOTION_FIELD );
 
         User user = new User();
-
+        handleUsername( username, user );
+        handlePassword( password, user );
         handleLastName( lastName, user );
         handleFirstName( firstName, user );
+        handleSex( sex, user );
         handleAddress( address, user );
         handlePhone( phone, user );
         handleEmail( email, user );
+        handleBirthDate( birthDate, user );
+        handlePromotion( promotion, user );
         handlePhoto( user, request, path );
+
+        DateTime today = new DateTime();
+        user.setRegDate( today );
 
         try {
             if ( errors.isEmpty() ) {
@@ -80,129 +92,220 @@ public final class UserCreationForm {
                 result = "User creation failed !.";
             }
         } catch ( DAOException e ) {
-            setError( "imprévu", "Unexpected " );
-            resulta = "Échec de la création du user : une erreur imprévue est survenue, merci de réessayer dans quelques instants.";
+            setError( "imprévu", "Unexpected mistake, please retry later. " );
+            result = "User creation failed : Unexpected mistake, please retry later.";
             e.printStackTrace();
         }
 
         return user;
     }
 
-    private void handleLastName( String nom, User user ) {
+    private void handleUsername( String username, User user ) {
         try {
-            validationNom( nom );
+            usernameValidation( username );
         } catch ( FormValidationException e ) {
-            setErreur( CHAMP_NOM, e.getMessage() );
+            setError( USERNAME_FIELD, e.getMessage() );
         }
-        user.setNom( nom );
+        user.setUsername( username );
     }
 
-    private void handleFirstName( String prenom, User user ) {
+    private void handlePassword( String password, User user ) {
         try {
-            validationPrenom( prenom );
+            passwordValidation( password );
         } catch ( FormValidationException e ) {
-            setErreur( CHAMP_PRENOM, e.getMessage() );
+            setError( PASSWORD_FIELD, e.getMessage() );
         }
-        user.setPrenom( prenom );
+        user.setPassword( password );
     }
 
-    private void handleAddress( String adresse, User user ) {
+    private void handleLastName( String lastName, User user ) {
         try {
-            validationAdresse( adresse );
+            lastNameValidation( lastName );
         } catch ( FormValidationException e ) {
-            setErreur( CHAMP_ADRESSE, e.getMessage() );
+            setError( NAME_FIELD, e.getMessage() );
         }
-        user.setAdresse( adresse );
+        user.setLastName( lastName );
     }
 
-    private void handlePhone( String telephone, User user ) {
+    private void handleFirstName( String firstName, User user ) {
         try {
-            validationTelephone( telephone );
+            firstNameValidation( firstName );
         } catch ( FormValidationException e ) {
-            setErreur( CHAMP_TELEPHONE, e.getMessage() );
+            setError( FIRSTNAME_FIELD, e.getMessage() );
         }
-        user.setTelephone( telephone );
+        user.setFirstName( firstName );
+    }
+
+    private void handleSex( String sex, User user ) {
+        try {
+            sexValidation( sex );
+        } catch ( FormValidationException e ) {
+            setError( SEX_FIELD, e.getMessage() );
+        }
+        if ( sex == "1" )
+        {
+            user.setSex( 1 );
+        }
+        else
+        {
+            user.setSex( 0 );
+        }
+    }
+
+    private void handleAddress( String address, User user ) {
+        try {
+            addressValidation( address );
+        } catch ( FormValidationException e ) {
+            setError( ADDRESS_FIELD, e.getMessage() );
+        }
+        user.setAddress( address );
+    }
+
+    private void handlePhone( String phone, User user ) {
+        try {
+            phoneValidation( phone );
+        } catch ( FormValidationException e ) {
+            setError( PHONE_FIELD, e.getMessage() );
+        }
+        user.setPhone( phone );
     }
 
     private void handleEmail( String email, User user ) {
         try {
-            validationEmail( email );
+            emailValidation( email );
         } catch ( FormValidationException e ) {
-            setErreur( CHAMP_EMAIL, e.getMessage() );
+            setError( EMAIL_FIELD, e.getMessage() );
         }
         user.setEmail( email );
     }
 
-    private void handlePhoto( User user, HttpServletRequest request, String path ) {
-        String image = null;
+    private void handleBirthDate( String birthDate, User user ) throws ParseException {
         try {
-            image = validationImage( request, path );
+            usernameValidation( birthDate );
         } catch ( FormValidationException e ) {
-            setErreur( CHAMP_IMAGE, e.getMessage() );
+            setError( BIRTH_FIELD, e.getMessage() );
         }
-        user.setImage( image );
+
+        SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yy hh:mi:ss" );
+        Date d = sdf.parse( birthDate );
+        user.setBirthDate( d );
     }
 
-    private void validationNom( String nom ) throws FormValidationException {
-        if ( nom != null ) {
-            if ( nom.length() < 2 ) {
-                throw new FormValidationException( "Le nom d'utilisateur doit contenir au moins 2 caractères." );
+    private void handlePromotion( String promotion, User user ) {
+        try {
+            promotionValidation( promotion );
+        } catch ( FormValidationException e ) {
+            setError( USERNAME_FIELD, e.getMessage() );
+        }
+        user.setPromotion( promotion );
+    }
+
+    private void handlePhoto( User user, HttpServletRequest request, String path ) {
+        String photoURL = null;
+        try {
+            photoURL = photoValidation( request, path );
+        } catch ( FormValidationException e ) {
+            setError( PHOTO_FIELD, e.getMessage() );
+        }
+        user.setPhotoURL( photoURL );
+    }
+
+    private void usernameValidation( String username ) throws FormValidationException {
+        if ( username != null ) {
+            if ( username.length() < 2 ) {
+                throw new FormValidationException( "Username must have at least 3 characters" );
             }
         } else {
-            throw new FormValidationException( "Merci d'entrer un nom d'utilisateur." );
+            throw new FormValidationException( "Please enter a username." );
         }
     }
 
-    private void validationPrenom( String prenom ) throws FormValidationException {
-        if ( prenom != null && prenom.length() < 2 ) {
-            throw new FormValidationException( "Le prénom d'utilisateur doit contenir au moins 2 caractères." );
-        }
-    }
-
-    private void validationAdresse( String adresse ) throws FormValidationException {
-        if ( adresse != null ) {
-            if ( adresse.length() < 10 ) {
-                throw new FormValidationException( "L'adresse de livraison doit contenir au moins 10 caractères." );
+    private void passwordValidation( String password ) throws FormValidationException {
+        if ( password != null ) {
+            if ( password.length() < 5 ) {
+                throw new FormValidationException( "Password must have at least 5 characters" );
             }
         } else {
-            throw new FormValidationException( "Merci d'entrer une adresse de livraison." );
+            throw new FormValidationException( "Please enter a password." );
         }
     }
 
-    private void validationTelephone( String telephone ) throws FormValidationException {
-        if ( telephone != null ) {
-            if ( !telephone.matches( "^\\d+$" ) ) {
-                throw new FormValidationException( "Le numéro de téléphone doit uniquement contenir des chiffres." );
-            } else if ( telephone.length() < 4 ) {
-                throw new FormValidationException( "Le numéro de téléphone doit contenir au moins 4 chiffres." );
+    private void lastNameValidation( String lastName ) throws FormValidationException {
+        if ( lastName != null ) {
+            if ( lastName.length() < 2 ) {
+                throw new FormValidationException( "Last name must have at least 3 characters" );
             }
         } else {
-            throw new FormValidationException( "Merci d'entrer un numéro de téléphone." );
+            throw new FormValidationException( "Please enter a name." );
         }
     }
 
-    private void validationEmail( String email ) throws FormValidationException {
+    private void firstNameValidation( String firstName ) throws FormValidationException {
+        if ( firstName != null && firstName.length() < 2 ) {
+            throw new FormValidationException( "First name must have at least 3 characters" );
+        }
+    }
+
+    private void sexValidation( String sex ) throws FormValidationException {
+        if ( sex == null ) {
+            throw new FormValidationException( "Please check the right user sex." );
+        }
+    }
+
+    private void addressValidation( String address ) throws FormValidationException {
+        if ( address != null ) {
+            if ( address.length() < 10 ) {
+                throw new FormValidationException( "Address must have at least 10 characters" );
+            }
+        } else {
+            throw new FormValidationException( "Please enter the address" );
+        }
+    }
+
+    private void phoneValidation( String phone ) throws FormValidationException {
+        if ( phone != null ) {
+            if ( !phone.matches( "^\\d+$" ) ) {
+                throw new FormValidationException( "Phone number must have numbers only" );
+            } else if ( phone.length() < 4 ) {
+                throw new FormValidationException( "Phone number must have at least 4 characters" );
+            }
+        } else {
+            throw new FormValidationException( "Please enter a phone number." );
+        }
+    }
+
+    private void emailValidation( String email ) throws FormValidationException {
         if ( email != null && !email.matches( "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)" ) ) {
-            throw new FormValidationException( "Merci de saisir une adresse mail valide." );
+            throw new FormValidationException( "Plese enter a right email address." );
         }
     }
 
-    private String validationImage( HttpServletRequest request, String path ) throws FormValidationException {
+    private void promotionValidation( String promotion ) throws FormValidationException {
+        if ( promotion != null ) {
+            if ( !promotion.matches( "([\\D]+)([0-9]+)" ) ) {
+                throw new FormValidationException( "Promotion must be a name or an acronym followed by a number." );
+            }
+        } else {
+            throw new FormValidationException( "Please enter a promotion." );
+        }
+    }
+
+    private String photoValidation( HttpServletRequest request, String path ) throws FormValidationException {
         /*
          * Récupération du contenu du champ image du formulaire. Il faut ici
          * utiliser la méthode getPart().
          */
-        String nomFichier = null;
-        InputStream contenuFichier = null;
+        String fileName = null;
+        InputStream fileContent = null;
         try {
-            Part part = request.getPart( CHAMP_IMAGE );
-            nomFichier = getNomFichier( part );
+            Part part = request.getPart( PHOTO_FIELD );
+            fileName = getFileName( part );
 
             /*
              * Si la méthode getNomFichier() a renvoyé quelque chose, il s'agit
              * donc d'un champ de type fichier (input type="file").
              */
-            if ( nomFichier != null && !nomFichier.isEmpty() ) {
+            if ( fileName != null && !fileName.isEmpty() ) {
                 /*
                  * Antibug pour Internet Explorer, qui transmet pour une raison
                  * mystique le path du fichier local à la machine du user...
@@ -212,15 +315,15 @@ public final class UserCreationForm {
                  * On doit donc faire en sorte de ne sélectionner que le nom et
                  * l'extension du fichier, et de se débarrasser du superflu.
                  */
-                nomFichier = nomFichier.substring( nomFichier.lastIndexOf( '/' ) + 1 )
-                        .substring( nomFichier.lastIndexOf( '\\' ) + 1 );
+                fileName = fileName.substring( fileName.lastIndexOf( '/' ) + 1 )
+                        .substring( fileName.lastIndexOf( '\\' ) + 1 );
 
                 /* Récupération du contenu du fichier */
-                contenuFichier = part.getInputStream();
+                fileContent = part.getInputStream();
 
                 /* Extraction du type MIME du fichier depuis l'InputStream */
                 MimeUtil.registerMimeDetector( "eu.medsea.mimeutil.detector.MagicMimeMimeDetector" );
-                Collection<?> mimeTypes = MimeUtil.getMimeTypes( contenuFichier );
+                Collection<?> mimeTypes = MimeUtil.getMimeTypes( fileContent );
 
                 /*
                  * Si le fichier est bien une image, alors son en-tête MIME
@@ -228,9 +331,9 @@ public final class UserCreationForm {
                  */
                 if ( mimeTypes.toString().startsWith( "image" ) ) {
                     /* Écriture du fichier sur le disque */
-                    ecrireFichier( contenuFichier, nomFichier, path );
+                    fileWriting( fileContent, fileName, path );
                 } else {
-                    throw new FormValidationException( "Le fichier envoyé doit être une image." );
+                    throw new FormValidationException( "Sent File must be a photo" );
                 }
             }
         } catch ( IllegalStateException e ) {
@@ -240,15 +343,15 @@ public final class UserCreationForm {
              * notre servlet d'upload dans le fichier web.xml
              */
             e.printStackTrace();
-            throw new FormValidationException( "Le fichier envoyé ne doit pas dépasser 1Mo." );
+            throw new FormValidationException( "Sent file can't be heavier than 10 Mo" );
         } catch ( IOException e ) {
             /*
-             * Exception retournée si une erreur au niveau des répertoires de
+             * Exception retournée si une error au niveau des répertoires de
              * stockage survient (répertoire inexistant, droits d'accès
              * insuffisants, etc.)
              */
             e.printStackTrace();
-            throw new FormValidationException( "Erreur de configuration du serveur." );
+            throw new FormValidationException( "Server configuration error" );
         } catch ( ServletException e ) {
             /*
              * Exception retournée si la requête n'est pas de type
@@ -256,29 +359,29 @@ public final class UserCreationForm {
              */
             e.printStackTrace();
             throw new FormValidationException(
-                    "Ce type de requête n'est pas supporté, merci d'utiliser le formulaire prévu pour envoyer votre fichier." );
+                    "Impossible, please use this form to upload your photo." );
         }
 
-        return nomFichier;
+        return fileName;
     }
 
     /*
-     * Ajoute un message correspondant au champ spécifié à la map des erreurs.
+     * Ajoute un message correspondant au champ spécifié à la map des errors.
      */
-    private void setError( String champ, String message ) {
-        errors.put( champ, message );
+    private void setError( String path, String message ) {
+        errors.put( path, message );
     }
 
     /*
      * Méthode utilitaire qui retourne null si un champ est vide, et son contenu
      * sinon.
      */
-    private static String getFieldValue( HttpServletRequest request, String nomChamp ) {
-        String valeur = request.getParameter( nomChamp );
-        if ( valeur == null || valeur.trim().length() == 0 ) {
+    private static String getFieldValue( HttpServletRequest request, String fieldName ) {
+        String value = request.getParameter( fieldName );
+        if ( value == null || value.trim().length() == 0 ) {
             return null;
         } else {
-            return valeur;
+            return value;
         }
     }
 
@@ -289,7 +392,7 @@ public final class UserCreationForm {
      * retourne son nom, sinon il s'agit d'un champ de formulaire classique et
      * la méthode retourne null.
      */
-    private static String getNomFichier( Part part ) {
+    private static String getFileName( Part part ) {
         /* Boucle sur chacun des paramètres de l'en-tête "content-disposition". */
         for ( String contentDisposition : part.getHeader( "content-disposition" ).split( ";" ) ) {
             /* Recherche de l'éventuelle présence du paramètre "filename". */
@@ -309,35 +412,35 @@ public final class UserCreationForm {
      * Méthode utilitaire qui a pour but d'écrire le fichier passé en paramètre
      * sur le disque, dans le répertoire donné et avec le nom donné.
      */
-    private void ecrireFichier( InputStream contenuFichier, String nomFichier, String path )
+    private void fileWriting( InputStream fileContent, String fileName, String path )
             throws FormValidationException {
         /* Prépare les flux. */
-        BufferedInputStream entree = null;
-        BufferedOutputStream sortie = null;
+        BufferedInputStream in = null;
+        BufferedOutputStream out = null;
         try {
             /* Ouvre les flux. */
-            entree = new BufferedInputStream( contenuFichier, TAILLE_TAMPON );
-            sortie = new BufferedOutputStream( new FileOutputStream( new File( path + nomFichier ) ),
-                    TAILLE_TAMPON );
+            in = new BufferedInputStream( fileContent, BUFFER_LENGTH );
+            out = new BufferedOutputStream( new FileOutputStream( new File( path + fileName ) ),
+                    BUFFER_LENGTH );
 
             /*
              * Lit le fichier reçu et écrit son contenu dans un fichier sur le
              * disque.
              */
-            byte[] tampon = new byte[TAILLE_TAMPON];
-            int longueur = 0;
-            while ( ( longueur = entree.read( tampon ) ) > 0 ) {
-                sortie.write( tampon, 0, longueur );
+            byte[] buffer = new byte[BUFFER_LENGTH];
+            int length = 0;
+            while ( ( length = in.read( buffer ) ) > 0 ) {
+                out.write( buffer, 0, length );
             }
         } catch ( Exception e ) {
-            throw new FormValidationException( "Erreur lors de l'écriture du fichier sur le disque." );
+            throw new FormValidationException( "File-writed error (on disk) " );
         } finally {
             try {
-                sortie.close();
+                out.close();
             } catch ( IOException ignore ) {
             }
             try {
-                entree.close();
+                out.close();
             } catch ( IOException ignore ) {
             }
         }
