@@ -1,6 +1,7 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Course implements Serializable{
 	
@@ -9,6 +10,7 @@ public class Course implements Serializable{
 	private String description;
 	private int courseYear;
 	private String schedule;
+	private List<User> users;
 	
 	public int getCourseID() {
 		return courseID;
@@ -39,6 +41,12 @@ public class Course implements Serializable{
 	}
 	public void setSchedule(String schedule) {
 		this.schedule = schedule;
+	}
+	public List<User> getUsers() {
+		return users;
+	}
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 	
 	
