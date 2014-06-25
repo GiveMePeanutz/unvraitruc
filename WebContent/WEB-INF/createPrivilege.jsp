@@ -22,7 +22,7 @@
 					<br />
 
 					<label for="descriptionPrivilege">Description</label>
-					<TEXTAREA name="descriptionPrivilege" rows="5" cols="22" value="<c:out value="${privilege.description}"/>"  ></TEXTAREA>
+					<TEXTAREA name="descriptionPrivilege" rows="5" cols="22" ><c:out value="${privilege.description}"/>"  </TEXTAREA>
 					<span class="error">${form.errors['descriptionPrivilege']}</span>
 					<br />
                     

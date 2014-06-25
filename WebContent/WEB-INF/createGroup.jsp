@@ -22,7 +22,7 @@
 					<br />
 
 					<label for="descriptionGroup">Description</label>
-					<TEXTAREA name="descriptionGroup" rows="5" cols="22" value="<c:out value="${group.description}"/>"  ></TEXTAREA>
+					<TEXTAREA name="descriptionGroup" rows="5" cols="22" ><c:out value="${group.description}"/>"  </TEXTAREA>
 					<span class="error">${form.errors['descriptionGroup']}</span>
 					<br />
                     
