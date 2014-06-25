@@ -2,6 +2,7 @@ package beans;
 
 import java.io.Serializable;
 import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -20,8 +21,8 @@ public class User implements Serializable {
     private String   promotion;
     private DateTime regDate;
     private DateTime birthDate;
-    private Array groups;
-    private Array courses;
+    private ArrayList<Integer> groupIDs;
+    private ArrayList<Integer> courseIDs;
     
 
     public String getPassword() {
@@ -120,20 +121,22 @@ public class User implements Serializable {
         this.birthDate = d;
     }
 
-	public Array getGroups() {
-		return groups;
+	
+
+	public ArrayList<Integer> getGroupIDs() {
+		return groupIDs;
 	}
 
-	public void setGroups(Array groups) {
-		this.groups = groups;
+	public void setGroupIDs(ArrayList<Integer> groupIDs) {
+		this.groupIDs = groupIDs;
 	}
 
-	public Array getCourses() {
-		return courses;
+	public ArrayList<Integer> getCourseIDs() {
+		return courseIDs;
 	}
 
-	public void setCourses(Array courses) {
-		this.courses = courses;
+	public void setCourseIDs(ArrayList<Integer> courseIDs) {
+		this.courseIDs = courseIDs;
 	}
 
 }

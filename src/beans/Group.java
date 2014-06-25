@@ -2,22 +2,18 @@ package beans;
 
 import java.io.Serializable;
 import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Group implements Serializable{
 
-	private int groupID;
+
 	private String groupName;
 	private String groupDescription;
-	private Array users;
-	private Array privs;
+	private ArrayList<String> usernames;
+	private ArrayList<Integer> privIDs;
 	
-	public int getGroupID() {
-		return groupID;
-	}
-	public void setGroupID(int groupID) {
-		this.groupID = groupID;
-	}
+
 	public String getGroupName() {
 		return groupName;
 	}
@@ -30,17 +26,17 @@ public class Group implements Serializable{
 	public void setGroupDescription(String groupDescription) {
 		this.groupDescription = groupDescription;
 	}
-	public Array getUsers() {
-		return users;
+	public ArrayList<String> getUsernames() {
+		return usernames;
 	}
-	public void setUsers(Array users) {
-		this.users = users;
+	public void setUsernames(ArrayList<String> usernames) {
+		this.usernames = usernames;
 	}
-	public Array getPrivs() {
-		return privs;
+	public ArrayList<Integer> getPrivIDs() {
+		return privIDs;
 	}
-	public void setPrivs(Array privs) {
-		this.privs = privs;
+	public void setPrivIDs(ArrayList<Integer> privIDs) {
+		this.privIDs = privIDs;
 	}
 	
 	

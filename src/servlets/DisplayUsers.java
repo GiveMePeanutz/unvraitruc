@@ -44,9 +44,9 @@ public class DisplayUsers extends HttpServlet{
 	 
 	 public void doGet (HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 	 
-		 List<User> listeClients = userDao.list();
+		 List<User> listeUsers = userDao.list();
 		Map<String, User> mapUsers = new HashMap<String, User>();
-		for (User user : listeClients) {
+		for (User user : listeUsers) {
 			mapUsers.put(user.getUsername(), user);
 		}
 		
@@ -59,9 +59,9 @@ public class DisplayUsers extends HttpServlet{
 		 
 	 public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
-		List<User> listeClients = userDao.list();
+		List<User> listeUsers = userDao.list();
 		Map<String, User> mapUsers = new HashMap<String, User>();
-		for (User user : listeClients) {
+		for (User user : listeUsers) {
 			mapUsers.put(user.getUsername(), user);
 		}
 		

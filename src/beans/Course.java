@@ -2,23 +2,19 @@ package beans;
 
 import java.io.Serializable;
 import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Course implements Serializable{
 	
-	private int courseID;
 	private String courseName;
 	private String description;
 	private int courseYear;
 	private String schedule;
-	private Array users;
+	private ArrayList<String> usernames;
 	
-	public int getCourseID() {
-		return courseID;
-	}
-	public void setCourseID(int courseID) {
-		this.courseID = courseID;
-	}
+
 	public String getCourseName() {
 		return courseName;
 	}
@@ -43,11 +39,11 @@ public class Course implements Serializable{
 	public void setSchedule(String schedule) {
 		this.schedule = schedule;
 	}
-	public Array getUsers() {
-		return users;
+	public ArrayList<String> getUsernames() {
+		return usernames;
 	}
-	public void setUsers(Array users) {
-		this.users = users;
+	public void setUsernames(ArrayList<String> usernames) {
+		this.usernames = usernames;
 	}
 	
 	

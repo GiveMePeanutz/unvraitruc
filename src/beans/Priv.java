@@ -2,23 +2,16 @@ package beans;
 
 import java.io.Serializable;
 import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Priv implements Serializable {
 
-    private int           privID;
+
     private String        privName;
     private String        privDescrition;
-    private Array  		  groups;
-    private Array 		  menus;
-
-    public int getPrivID() {
-        return privID;
-    }
-
-    public void setPrivID( int privID ) {
-        this.privID = privID;
-    }
+    private ArrayList<Integer> groupIDs;
+    private ArrayList<Integer> menuPaths;
 
     public String getPrivName() {
         return privName;
@@ -36,20 +29,21 @@ public class Priv implements Serializable {
         this.privDescrition = privDescrition;
     }
 
-    public Array getGroups() {
-        return groups;
-    }
 
-    public void setGroups( Array groups ) {
-        this.groups = groups;
-    }
+	public ArrayList<Integer> getGroupIDs() {
+		return groupIDs;
+	}
 
-    public Array getMenus() {
-        return menus;
-    }
+	public void setGroupIDs(ArrayList<Integer> groupIDs) {
+		this.groupIDs = groupIDs;
+	}
 
-    public void setMenus( Array menus ) {
-        this.menus = menus;
-    }
+	public ArrayList<Integer> getMenuPaths() {
+		return menuPaths;
+	}
+
+	public void setMenuPaths(ArrayList<Integer> menuPaths) {
+		this.menuPaths = menuPaths;
+	}
 
 }

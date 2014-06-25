@@ -8,7 +8,7 @@ public interface PrivDao {
 	
 	void create( Priv priv ) throws DAOException;
 	
-	Priv find (long privID )throws DAOException;
+	Priv find (String privName )throws DAOException;
 	
 	List<Priv> list() throws DAOException;
 
