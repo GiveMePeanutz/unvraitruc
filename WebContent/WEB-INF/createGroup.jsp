@@ -25,14 +25,23 @@
 					<br />
 
 					<label for="descriptionGroup">Description</label>
-					<TEXTAREA name="descriptionGroup" rows="5" cols="22" ><c:out value="${group.description}"/>"  </TEXTAREA>
+					<TEXTAREA name="descriptionGroup" rows="5" cols="22" ><c:out value="${group.description}"/></TEXTAREA>
 					<span class="error">${form.errors['descriptionGroup']}</span>
 					<br />
-                    <select name="privileges" id = "privileges" multiple="multiple" size ="2">
-						<c:forEach var="p" items="commercial">
-							<option value='<c:out value="${p.name}"/>'><c:out value="${p.name}"/></option>
-						</c:forEach>
-					</select>
+					<label for="privileges">Please assign privileges<br /> to this group</label>
+					<c:choose>
+            			<c:when test="${ empty requestScope.privs }">
+                		<p class="errorr">No privileges in database</p>
+            			</c:when>
+            			<c:otherwise>
+		                    <select name="privileges" id = "privileges" multiple="multiple" >																				
+								<%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
+		                		<c:forEach items="${ requestScope.privs }" var="mapPrivs" varStatus="boucle">
+		                    		<option value='<c:out value="${mapPrivs.value.privName}"/>'><c:out value="${mapPrivs.value.privName}"/></option>                    
+		                		</c:forEach>
+		                	</select>
+                		</c:otherwise>
+        			</c:choose>
 				</fieldset>
                  
                 <p class="info">${ form.result }</p>

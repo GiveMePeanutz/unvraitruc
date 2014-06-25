@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import staticData.Menu;
 import beans.Priv;
 import dao.DAOFactory;
 import dao.PrivDao;
@@ -24,6 +25,7 @@ public class PrivilegeCreation extends HttpServlet {
     public static final String VUE_FORM         = "/WEB-INF/createPrivilege.jsp";
 
     private PrivDao            privDao;
+    private Menu               menu;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
@@ -31,7 +33,7 @@ public class PrivilegeCreation extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        /* À la réception d'une requête GET, simple affichage du formulaire */
+
         this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
     }
 

@@ -2,6 +2,9 @@ package servlets;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,8 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import beans.Group;
+import beans.Priv;
 import dao.DAOFactory;
 import dao.GroupDao;
+import dao.PrivDao;
 import forms.GroupCreationForm;
 
 @WebServlet( urlPatterns = "/groupCreation" )
@@ -20,18 +25,29 @@ public class GroupCreation extends HttpServlet {
     public static final String PATH             = "path";
     public static final String GROUP_ATT        = "group";
     public static final String FORM_ATT         = "form";
+    public static final String PRIV_REQUEST_ATT = "privs";
     public static final String VUE_SUCCESS      = "/WEB-INF/displayGroups.jsp";
     public static final String VUE_FORM         = "/WEB-INF/createGroup.jsp";
 
     private GroupDao           groupDao;
+    private PrivDao            privDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
+        this.privDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getPrivDao();
+
         this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        /* À la réception d'une requête GET, simple affichage du formulaire */
+
+        List<Priv> listePriv = privDao.list();
+        Map<Integer, Priv> mapPrivs = new HashMap<Integer, Priv>();
+        for ( Priv priv : listePriv ) {
+            mapPrivs.put( priv.getPrivID(), priv );
+        }
+
+        request.setAttribute( PRIV_REQUEST_ATT, mapPrivs );
         this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
     }
 
