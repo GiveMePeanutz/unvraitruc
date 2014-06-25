@@ -1,5 +1,8 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.util.List" %>
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -25,8 +28,13 @@
 					<TEXTAREA name="descriptionGroup" rows="5" cols="22" ><c:out value="${group.description}"/>"  </TEXTAREA>
 					<span class="error">${form.errors['descriptionGroup']}</span>
 					<br />
-                    
-                </fieldset>  
+                    <select name="privileges" id = "privileges" multiple="multiple" size ="2">
+						<c:forEach var="p" items="commercial">
+							<option value='<c:out value="${p.name}"/>'><c:out value="${p.name}"/></option>
+						</c:forEach>
+					</select>
+				</fieldset>
+                 
                 <p class="info">${ form.result }</p>
                 <input type="submit" value="Create"  />
                 <input type="reset" value="Reset all" /> <br />
