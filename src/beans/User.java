@@ -1,6 +1,7 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.joda.time.DateTime;
 
@@ -18,6 +19,9 @@ public class User implements Serializable {
     private String   promotion;
     private DateTime regDate;
     private DateTime birthDate;
+    private List<Group> groups;
+    private List<Course> courses;
+    
 
     public String getPassword() {
         return password;

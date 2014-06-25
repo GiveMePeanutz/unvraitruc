@@ -23,8 +23,7 @@
                     <th>Prénom</th>
                     <th>Adresse</th>
                     <th>Téléphone</th>
-                    <th>Email</th>
-                    <th class="action">Action</th>                    
+                    <th>Email</th>                   
                 </tr>
                 <%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
                 <c:forEach items="${ requestScope.users }" var="mapUsers" varStatus="boucle">
