@@ -133,21 +133,22 @@ public class UserDaoImpl implements UserDao {
     }
 	
 	
-	private static User map(ResultSet resultSet) throws SQLException {
+	private static User map(ResultSet resultSet1) throws SQLException {
 		
 		User user = new User();
-		user.setUsername(resultSet.getString("username"));
-		user.setAddress(resultSet.getString("address"));
-		user.setBirthDate( new DateTime( resultSet.getTimestamp("birthDate")));
-		user.setEmail(resultSet.getString("email"));
-		user.setFirstName(resultSet.getString("firstName"));
-		user.setLastName(resultSet.getString("lastName"));
-		user.setPassword(resultSet.getString("password"));
-		user.setPhone(resultSet.getString("phone"));
-		user.setPhotoURL(resultSet.getString("photoURL"));
-		user.setPromotion(resultSet.getString("promotion"));
-		user.setRegDate( new DateTime( resultSet.getTimestamp( "regDate" ) ));
-		user.setSex(resultSet.getInt("sex"));
+		user.setUsername(resultSet1.getString("username"));
+		user.setAddress(resultSet1.getString("address"));
+		user.setBirthDate( new DateTime( resultSet1.getTimestamp("birthDate")));
+		user.setEmail(resultSet1.getString("email"));
+		user.setFirstName(resultSet1.getString("firstName"));
+		user.setLastName(resultSet1.getString("lastName"));
+		user.setPassword(resultSet1.getString("password"));
+		user.setPhone(resultSet1.getString("phone"));
+		user.setPhotoURL(resultSet1.getString("photoURL"));
+		user.setPromotion(resultSet1.getString("promotion"));
+		user.setRegDate( new DateTime( resultSet1.getTimestamp( "regDate" ) ));
+		user.setSex(resultSet1.getInt("sex"));
+		
 		return user;
 	}
 

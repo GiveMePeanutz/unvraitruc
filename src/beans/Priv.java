@@ -1,6 +1,7 @@
 package beans;
 
 import java.io.Serializable;
+import java.sql.Array;
 import java.util.List;
 
 public class Priv implements Serializable {
@@ -8,8 +9,8 @@ public class Priv implements Serializable {
     private int           privID;
     private String        privName;
     private String        privDescrition;
-    private List<Group>   groups;
-    private List<Integer> menus;
+    private Array  		  groups;
+    private Array 		  menus;
 
     public int getPrivID() {
         return privID;
@@ -35,19 +36,19 @@ public class Priv implements Serializable {
         this.privDescrition = privDescrition;
     }
 
-    public List<Group> getGroups() {
+    public Array getGroups() {
         return groups;
     }
 
-    public void setGroups( List<Group> groups ) {
+    public void setGroups( Array groups ) {
         this.groups = groups;
     }
 
-    public List getMenus() {
+    public Array getMenus() {
         return menus;
     }
 
-    public void setMenus( List menus ) {
+    public void setMenus( Array menus ) {
         this.menus = menus;
     }
 

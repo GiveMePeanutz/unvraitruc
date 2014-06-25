@@ -1,6 +1,7 @@
 package beans;
 
 import java.io.Serializable;
+import java.sql.Array;
 import java.util.List;
 
 public class Course implements Serializable{
@@ -10,7 +11,7 @@ public class Course implements Serializable{
 	private String description;
 	private int courseYear;
 	private String schedule;
-	private List<User> users;
+	private Array users;
 	
 	public int getCourseID() {
 		return courseID;
@@ -42,10 +43,10 @@ public class Course implements Serializable{
 	public void setSchedule(String schedule) {
 		this.schedule = schedule;
 	}
-	public List<User> getUsers() {
+	public Array getUsers() {
 		return users;
 	}
-	public void setUsers(List<User> users) {
+	public void setUsers(Array users) {
 		this.users = users;
 	}
 	
