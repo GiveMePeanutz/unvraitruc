@@ -6,10 +6,11 @@
         <meta charset="utf-8" />
         <title>Login</title>
         <link type="text/css" rel="stylesheet" href="<c:url value="/inc/design.css"/>" />
-    	<c:import url="/inc/menu.jsp" />
     </head>
     <body>
-        
+        <c:import url="/inc/menu.jsp" />
+        <br />
+        <h1>Welcome to the new <br /> Stikom Web Application</h1>
         <div id = "connectionForm">
 	        <form method="post" action="<c:url value="/login" />">
 			    <fieldset>

@@ -4,34 +4,30 @@ import java.io.IOException;
 import java.text.ParseException;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import beans.User;
+import beans.Group;
 import dao.DAOFactory;
-import dao.UserDao;
-import forms.UserCreationForm;
+import dao.GroupDao;
+import forms.GroupCreationForm;
 
-@WebServlet( urlPatterns = "/userCreation", initParams = @WebInitParam( name = "path", value = "/fichiers/images/" ) )
-@MultipartConfig( location = "c:/fichiers/images", maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 5, fileSizeThreshold = 1024 * 1024 * 3 )
-public class UserCreation extends HttpServlet {
+@WebServlet( urlPatterns = "/groupCreation" )
+public class GroupCreation extends HttpServlet {
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String PATH             = "path";
-    public static final String USER_ATT         = "user";
+    public static final String GROUP_ATT        = "group";
     public static final String FORM_ATT         = "form";
+    public static final String VUE_SUCCESS      = "/WEB-INF/displayGroups.jsp";
+    public static final String VUE_FORM         = "/WEB-INF/createGroup.jsp";
 
-    public static final String VUE_SUCCESS      = "/WEB-INF/displayUsers.jsp";
-    public static final String VUE_FORM         = "/WEB-INF/createUser.jsp";
-
-    private UserDao            userDao;
+    private GroupDao           groupDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
-        this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
+        this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -47,18 +43,18 @@ public class UserCreation extends HttpServlet {
         String path = this.getServletConfig().getInitParameter( PATH );
 
         /* Préparation de l'objet formulaire */
-        UserCreationForm form = new UserCreationForm( userDao );
+        GroupCreationForm form = new GroupCreationForm( groupDao );
 
         /* Traitement de la requête et récupération du bean en résultant */
-        User user = null;
+        Group group = null;
         try {
-            user = form.createUser( request, path );
+            group = form.createGroup( request, path );
         } catch ( ParseException e ) {
             e.printStackTrace();
         }
 
         /* Ajout du bean et de l'objet métier à l'objet requête */
-        request.setAttribute( USER_ATT, user );
+        request.setAttribute( GROUP_ATT, group );
         request.setAttribute( FORM_ATT, form );
 
         /* Si aucune erreur */

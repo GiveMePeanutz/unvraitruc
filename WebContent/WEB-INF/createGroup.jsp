@@ -9,17 +9,20 @@
     </head>
     <body>
         <c:import url="/inc/menu.jsp" />
-        <div>
-            <form method="post" action="<c:url value="/createGroup"/>" enctype="multipart/form-data">
+        <br />
+        	<h1>Create a Group</h1>
+       		<h3>Please, fill the following form and validate</h3>
+        <div id="normalForm">
+            <form method="post" action="<c:url value="/groupCreation"/>" enctype="multipart/form-data">
                 <fieldset>
                     <legend>Group Information</legend>
-                    <label for="nameGroup">Name <span class="requis">*</span></label>
+                    <label for="nameGroup">Name </label>
 					<input type="text" id="nameGroup" name="nameGroup" value="<c:out value="${group.name}"/>" size="30" maxlength="30" />
 					<span class="error">${form.errors['nameGroup']}</span>
 					<br />
 
 					<label for="descriptionGroup">Description</label>
-					<input type="text" id="descriptionGroup" name="descriptionGroup" value="<c:out value="${group.description}"/>" size="30" maxlength="30" />
+					<TEXTAREA name="descriptionGroup" rows="5" cols="22" value="<c:out value="${group.description}"/>"  ></TEXTAREA>
 					<span class="error">${form.errors['descriptionGroup']}</span>
 					<br />
                     

@@ -90,7 +90,7 @@ public final class UserCreationForm {
                 result = "User creation failed !.";
             }
         } catch ( DAOException e ) {
-            setError( "imprévu", "Unexpected mistake, please retry later. " );
+            setError( "unexpected", "Unexpected mistake, please retry later. " );
             result = "User creation failed : Unexpected mistake, please retry later.";
             e.printStackTrace();
         }

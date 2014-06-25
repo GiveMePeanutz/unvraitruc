@@ -62,9 +62,8 @@
 	display : inline-block;
 	vertical-align: bottom;
 	position : relative;
-	left : 20%;
-	top : 100px;
 	width : auto;
+	margin-left : 25%;
 	
 }
 
@@ -115,7 +114,7 @@ form .info {
 /* Text --------------------------------------------------------------------------------------- */
 
 
-#titre 
+h1, h3 
 {
 	 text-align : center;
 }
@@ -125,7 +124,6 @@ form .info {
 	display : inline-block;
 	vertical-align: bottom;
 	position : relative;
-	left : 20%;
-	top : 100px;
+	margin-right : 20%;	
 	width : 20%;
 }

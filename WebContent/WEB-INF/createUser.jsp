@@ -10,12 +10,10 @@
     <body>
         <c:import url="/inc/menu.jsp" />
         <br />
-        <div id="titre">
         	<h1>Create a User</h1>
        		<h3>Please, fill the following form and validate</h3>
-        </div>
         <div id="normalForm">
-            <form method="post" action="<c:url value="/createUser"/>" enctype="multipart/form-data">
+            <form method="post" action="<c:url value="/userCreation"/>" enctype="multipart/form-data">
                 <fieldset>
                     <legend>User Information</legend>
                     <c:import url="/inc/inc_user_form.jsp" />
