@@ -44,7 +44,7 @@
 <br />
 
 <label for="birthDate">Date of Birth</label>
-<input type="date" id="birthDate" name="birthDate" value="<c:out value="${user.birthDate}"/>" size="30" maxlength="60" />
+<input type="datetime" id="birthDate" name="birthDate" value="<c:out value="${user.birthDate}"/>" size="30" maxlength="60" />
 <span class="error">${form.errors['birthDate']}</span>
 <br />
 

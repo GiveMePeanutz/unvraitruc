@@ -11,14 +11,14 @@
 	      				Group
 		      				<ul class="step3">
 			      				<li><a href="<c:url value="/displayGroups"/>">Display groups</a></li>
-			      				<li><a href="<c:url value="/addGroups"/>">Add a group</a></li>
+			      				<li><a href="<c:url value="/groupCreation"/>">Add a group</a></li>
 		      				</ul>
 	      			</li>
 	      			<li>
 	      				Privilege
 	      					<ul class="step3">
 			      				<li><a href="<c:url value="/displayPrivileges"/>">Display privileges</a></li>
-			      				<li><a href="<c:url value="/addPrivilege"/>">Add a privilege</a></li>
+			      				<li><a href="<c:url value="/privilegeCreation"/>">Add a privilege</a></li>
 		      				</ul>
 	      			</li>
 	    		</ul>
