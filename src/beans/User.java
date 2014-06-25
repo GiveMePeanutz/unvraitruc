@@ -1,7 +1,6 @@
 package beans;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import org.joda.time.DateTime;
 
@@ -18,7 +17,7 @@ public class User implements Serializable {
     private int      sex;
     private String   promotion;
     private DateTime regDate;
-    private Date     birthDate;
+    private DateTime birthDate;
 
     public String getPassword() {
         return password;
@@ -108,11 +107,11 @@ public class User implements Serializable {
         this.regDate = regDate;
     }
 
-    public Date getBirthDate() {
+    public DateTime getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate( Date d ) {
+    public void setBirthDate( DateTime d ) {
         this.birthDate = d;
     }
 

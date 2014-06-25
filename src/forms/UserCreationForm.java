@@ -7,9 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -186,8 +184,9 @@ public final class UserCreationForm {
             setError( BIRTH_FIELD, e.getMessage() );
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yy hh:mi:ss" );
-        Date d = sdf.parse( birthDate );
+        // SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yy hh:mi:ss" );
+        // DateTime d = null;
+        DateTime d = DateTime.parse( birthDate );
         user.setBirthDate( d );
     }
 
