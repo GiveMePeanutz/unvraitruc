@@ -6,7 +6,7 @@
 	    	User
 	    		<ul class="step2">
 	      			<li><a href="<c:url value="/displayUsers"/>">Display users</a></li>
-	      			<li><a href="<c:url value="/addUser"/>">Add a user</a></li>
+	      			<li><a href="<c:url value="/userCreation"/>">Add a user</a></li>
 	      			<li>
 	      				Group
 		      				<ul class="step3">
@@ -34,14 +34,14 @@
 	    	Teacher
 	    		<ul class="step2">
 	      			<li><a href="<c:url value="/displayUsers"/>">Display teachers</a></li>
-	      			<li><a href="<c:url value="/addUser"/>">Add a teacher</a></li>
+	      			<li><a href="<c:url value="/userCreation"/>">Add a teacher</a></li>
 	    		</ul>
 	  	</li>
 	  	<li>
 	    	Student
 	    		<ul class="step2">
 	      			<li><a href="<c:url value="/displayUsers"/>">Display students</a></li>
-	      			<li><a href="<c:url value="/addUser"/>">Add a student</a></li>
+	      			<li><a href="<c:url value="/userCreation"/>">Add a student</a></li>
 	    		</ul>
 	  	</li>
 		<li><a href="<c:url value="/warehouseMaintenance"/>">WarehouseMaintenance</a></li>

@@ -9,7 +9,7 @@
     </head>
     <body>
         <c:import url="/inc/menu.jsp" />
-        <div>
+        <div id="normalForm">
             <form method="post" action="<c:url value="/createUser"/>" enctype="multipart/form-data">
                 <fieldset>
                     <legend>User Information</legend>
