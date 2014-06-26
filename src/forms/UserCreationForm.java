@@ -81,7 +81,7 @@ public final class UserCreationForm {
         handleBirthDate( birthDate, user );
         handlePromotion( promotion, user );
         handlePhoto( user, request, path );
-        handlegroups( groups );
+        handleGroups( groups, user );
 
         DateTime today = new DateTime();
         user.setRegDate( today );
@@ -100,6 +100,16 @@ public final class UserCreationForm {
         }
 
         return user;
+    }
+
+    private void handleGroups( ArrayList<String> groups, User user ) {
+        try {
+            groupValidation( groups );
+        } catch ( FormValidationException e ) {
+            setError( GROUP_FIELD, e.getMessage() );
+        }
+        user.setGroupNames( groups );
+
     }
 
     private void handleUsername( String username, User user ) {
@@ -211,6 +221,13 @@ public final class UserCreationForm {
             setError( PHOTO_FIELD, e.getMessage() );
         }
         user.setPhotoURL( photoURL );
+    }
+
+    private void groupValidation( ArrayList<String> groups ) throws FormValidationException {
+        if ( groups.isEmpty() )
+        {
+            throw new FormValidationException( "Please choose a group." );
+        }
     }
 
     private void usernameValidation( String username ) throws FormValidationException {
@@ -390,11 +407,11 @@ public final class UserCreationForm {
 
     private static ArrayList<String> getSelectedValues( HttpServletRequest request, String fieldName ) {
 
-        ArrayList<String> groups = new ArrayList();
+        ArrayList<String> groups = new ArrayList<String>();
         String[] values = request.getParameterValues( fieldName );
         for ( int i = 0; i < values.length; i++ )
         {
-            groups.add
+            groups.add( values[i] );
         }
         return groups;
     }

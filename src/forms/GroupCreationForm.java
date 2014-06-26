@@ -1,6 +1,7 @@
 package forms;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ public final class GroupCreationForm {
 
     private static final String NAME_FIELD        = "groupName";
     private static final String DESCRIPTION_FIELD = "groupDescription";
+    private static final String PRIV_FIELD        = "privs";
 
     private String              result;
     private Map<String, String> errors            = new HashMap<String, String>();
@@ -35,10 +37,12 @@ public final class GroupCreationForm {
 
         String groupName = getFieldValue( request, NAME_FIELD );
         String groupDescription = getFieldValue( request, DESCRIPTION_FIELD );
+        ArrayList<String> privileges = getSelectedValues( request, PRIV_FIELD );
 
         Group group = new Group();
         handleGroupName( groupName, group );
         handleGroupDescription( groupDescription, group );
+        handlePrivs( privileges, group );
 
         try {
             if ( errors.isEmpty() ) {
@@ -74,6 +78,16 @@ public final class GroupCreationForm {
         group.setGroupDescription( groupDescription );
     }
 
+    private void handlePrivs( ArrayList<String> privileges, Group group ) {
+        try {
+            privValidation( privileges );
+        } catch ( FormValidationException e ) {
+            setError( PRIV_FIELD, e.getMessage() );
+        }
+        group.setPrivNames( privileges );
+
+    }
+
     private void groupNameValidation( String name ) throws FormValidationException {
         if ( name != null ) {
             if ( name.length() < 2 ) {
@@ -91,6 +105,13 @@ public final class GroupCreationForm {
             }
         } else {
             throw new FormValidationException( "Please enter a description." );
+        }
+    }
+
+    private void privValidation( ArrayList<String> privileges ) throws FormValidationException {
+        if ( privileges.isEmpty() )
+        {
+            throw new FormValidationException( "Please choose at least one privilege." );
         }
     }
 
@@ -112,6 +133,17 @@ public final class GroupCreationForm {
         } else {
             return value;
         }
+    }
+
+    private static ArrayList<String> getSelectedValues( HttpServletRequest request, String fieldName ) {
+
+        ArrayList<String> privileges = new ArrayList<String>();
+        String[] values = request.getParameterValues( fieldName );
+        for ( int i = 0; i < values.length; i++ )
+        {
+            privileges.add( values[i] );
+        }
+        return privileges;
     }
 
 }

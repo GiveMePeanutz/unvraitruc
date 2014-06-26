@@ -122,8 +122,8 @@ public class User implements Serializable {
         return groupNames;
     }
 
-    public void setGroupNames( ArrayList<String> groupIDs ) {
-        this.groupNames = groupIDs;
+    public void setGroupNames( ArrayList<String> groupNames ) {
+        this.groupNames = groupNames;
     }
 
     public ArrayList<String> getCourseNames() {

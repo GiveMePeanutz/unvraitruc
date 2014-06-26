@@ -1,6 +1,7 @@
 package forms;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ public final class PrivilegeCreationForm {
 
     private static final String NAME_FIELD        = "privName";
     private static final String DESCRIPTION_FIELD = "privDescription";
+    private static final String MENU_FIELD        = "menus";
 
     private String              result;
     private Map<String, String> errors            = new HashMap<String, String>();
@@ -35,10 +37,12 @@ public final class PrivilegeCreationForm {
 
         String privName = getFieldValue( request, NAME_FIELD );
         String privDescription = getFieldValue( request, DESCRIPTION_FIELD );
+        ArrayList<Integer> menus = getSelectedValues( request, MENU_FIELD );
 
         Priv priv = new Priv();
         handlePrivName( privName, priv );
         handlePrivDescription( privDescription, priv );
+        handleMenus( menus, priv );
 
         try {
             if ( errors.isEmpty() ) {
@@ -74,6 +78,16 @@ public final class PrivilegeCreationForm {
         priv.setPrivDescription( privDescription );
     }
 
+    private void handleMenus( ArrayList<Integer> menus, Priv priv ) {
+        try {
+            menuValidation( menus );
+        } catch ( FormValidationException e ) {
+            setError( MENU_FIELD, e.getMessage() );
+        }
+        priv.setMenuPaths( menus );
+
+    }
+
     private void privNameValidation( String name ) throws FormValidationException {
         if ( name != null ) {
             if ( name.length() < 2 ) {
@@ -91,6 +105,13 @@ public final class PrivilegeCreationForm {
             }
         } else {
             throw new FormValidationException( "Please enter a description." );
+        }
+    }
+
+    private void menuValidation( ArrayList<Integer> menus ) throws FormValidationException {
+        if ( menus.isEmpty() )
+        {
+            throw new FormValidationException( "Please choose at least one menu." );
         }
     }
 
@@ -112,6 +133,17 @@ public final class PrivilegeCreationForm {
         } else {
             return value;
         }
+    }
+
+    private static ArrayList<Integer> getSelectedValues( HttpServletRequest request, String fieldName ) {
+
+        ArrayList<Integer> menus = new ArrayList<Integer>();
+        String[] values = request.getParameterValues( fieldName );
+        for ( int i = 0; i < values.length; i++ )
+        {
+            menus.add( Integer.parseInt( values[i] ) );
+        }
+        return menus;
     }
 
 }
