@@ -35,6 +35,11 @@
                     <td><c:out value="${ mapUsers.value.address }"/></td>
                     <td><c:out value="${ mapUsers.value.phone }"/></td>
                     <td><c:out value="${ mapUsers.value.email }"/></td>
+                    <td>
+	                    <c:forEach items="${mapUsers.value.courseNames}" var="item">
+						    ${item} / 
+						</c:forEach>
+					</td>
                 </tr>
                 </c:forEach>
             </table>

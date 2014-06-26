@@ -22,6 +22,8 @@ public class User implements Serializable {
     private ArrayList<String> groupNames;
     private ArrayList<String> courseNames;
 
+   
+    
     public String getPassword() {
         return password;
     }

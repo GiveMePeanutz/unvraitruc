@@ -24,7 +24,7 @@ public class UserDaoImpl implements UserDao {
 	private static final String SQL_SELECT = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex FROM User ORDER BY username";
 	private static final String SQL_SELECT_BY_USERNAME = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex FROM User WHERE username = ?";
 	private static final String SQL_SELECT_USER_COURSES = "SELECT courseName FROM course WHERE courseName IN (SELECT courseName FROM user_course WHERE username = ?) ORDER BY courseName";
-	private static final String SQL_SELECT_USER_GROUPS = "SELECT groupName FROM group WHERE groupName IN (SELECT groupName FROM user_group WHERE username = ?) ORDER BY groupName";
+	private static final String SQL_SELECT_USER_GROUPS = "SELECT groupName FROM web_app_db.group WHERE groupName IN (SELECT groupName FROM user_group WHERE username = ?) ORDER BY groupName";
 	
 	private static final String SQL_INSERT = "INSERT INTO User (username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String SQL_INSERT_USER_COURSE = "INSERT INTO user_course (username , courseName) VALUES (? , ?)";
@@ -193,6 +193,7 @@ public class UserDaoImpl implements UserDao {
 	
 	
 	
+
 	private static User map(ResultSet resultSet1, ResultSet resultSet2, ResultSet resultSet3) throws SQLException {
 		
 		User user = new User();
@@ -209,16 +210,19 @@ public class UserDaoImpl implements UserDao {
 		user.setRegDate( new DateTime( resultSet1.getTimestamp( "regDate" ) ));
 		user.setSex(resultSet1.getInt("sex"));
 		
-		
+		ArrayList<String> courseNames = new ArrayList<String>();
 		resultSet2.beforeFirst();
 		while(resultSet2.next()) {
-			user.addCourseName(resultSet2.getString("courseName"));
+			courseNames.add(resultSet2.getString("courseName"));
 		}
+		user.setCourseNames(courseNames);
 		
+		ArrayList<String> groupNames = new ArrayList<String>();	
 		resultSet3.beforeFirst();
-		while(resultSet2.next()) {
-			user.addGroupName(resultSet3.getString("GroupName"));
+		while(resultSet3.next()) {
+			groupNames.add(resultSet3.getString("groupName"));
 		}
+		user.setGroupNames(groupNames);
 		
 		return user;
 	}
