@@ -190,7 +190,6 @@ public class UserGroupDaoImpl implements UserGroupDao {
 	private static Group mapGroup(ResultSet resultSet) throws SQLException {
 		
 		Group group = new Group();
-		group.setGroupID(resultSet.getInt("groupID"));
 		group.setGroupName(resultSet.getString("groupName"));
 		group.setGroupDescription(resultSet.getString("groupDescription"));
 		return group;

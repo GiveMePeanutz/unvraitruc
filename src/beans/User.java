@@ -21,8 +21,8 @@ public class User implements Serializable {
     private String   promotion;
     private DateTime regDate;
     private DateTime birthDate;
-    private ArrayList<Integer> groupIDs;
-    private ArrayList<Integer> courseIDs;
+    private ArrayList<String> groupNames;
+    private ArrayList<String> courseNames;
     
 
     public String getPassword() {
@@ -123,20 +123,28 @@ public class User implements Serializable {
 
 	
 
-	public ArrayList<Integer> getGroupIDs() {
-		return groupIDs;
+	public ArrayList<String> getGroupNames() {
+		return courseNames;
 	}
 
-	public void setGroupIDs(ArrayList<Integer> groupIDs) {
-		this.groupIDs = groupIDs;
+	public void setGroupNames(ArrayList<String> groupIDs) {
+		this.courseNames = groupIDs;
 	}
 
-	public ArrayList<Integer> getCourseIDs() {
-		return courseIDs;
+	public ArrayList<String> getCourseNames() {
+		return groupNames;
 	}
 
-	public void setCourseIDs(ArrayList<Integer> courseIDs) {
-		this.courseIDs = courseIDs;
+	public void setCourseNames(ArrayList<String> courseIDs) {
+		this.groupNames = courseIDs;
+	}
+	
+	public void addCourseName(String courseName){
+		this.courseNames.add(courseName);
+	}
+	
+	public void addGroupName(String groupName){
+		this.groupNames.add(groupName);
 	}
 
 }

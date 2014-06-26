@@ -168,7 +168,6 @@ public class UserCourseDaoImpl implements UserCourseDao {
 
     private Course mapCourse( ResultSet resultSet ) throws SQLException {
         Course course = new Course();
-        course.setCourseID( resultSet.getInt( "courseID" ) );
         course.setCourseName( resultSet.getString( "courseName" ) );
         course.setCourseYear( resultSet.getInt( "courseYear" ) );
         course.setCourseDescription( resultSet.getString( "courseDescription" ) );

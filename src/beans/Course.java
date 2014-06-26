@@ -42,8 +42,11 @@ public class Course implements Serializable{
 	public ArrayList<String> getUsernames() {
 		return usernames;
 	}
-	public void setUsernames(ArrayList<String> usernames) {
-		this.usernames = usernames;
+	public void setUsernames(ArrayList<String> strings) {
+		this.usernames = strings;
+	}
+	public void addUsername(String username){
+		this.usernames.add(username);
 	}
 	
 	

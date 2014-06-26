@@ -11,7 +11,7 @@ public class Group implements Serializable{
 	private String groupName;
 	private String groupDescription;
 	private ArrayList<String> usernames;
-	private ArrayList<Integer> privIDs;
+	private ArrayList<String> privNames;
 	
 
 	public String getGroupName() {
@@ -32,11 +32,19 @@ public class Group implements Serializable{
 	public void setUsernames(ArrayList<String> usernames) {
 		this.usernames = usernames;
 	}
-	public ArrayList<Integer> getPrivIDs() {
-		return privIDs;
+	public ArrayList<String> getPrivNames() {
+		return privNames;
 	}
-	public void setPrivIDs(ArrayList<Integer> privIDs) {
-		this.privIDs = privIDs;
+	public void setPrivNames(ArrayList<String> privNames) {
+		this.privNames = privNames;
+	}
+	
+	public void addUsername(String username){
+		this.usernames.add(username);
+	}
+	
+	public void addPrivName(String privName){
+		this.usernames.add(privName);
 	}
 	
 	

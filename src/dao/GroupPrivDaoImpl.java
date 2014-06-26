@@ -166,7 +166,6 @@ public class GroupPrivDaoImpl implements GroupPrivDao {
     private static Group mapGroup( ResultSet resultSet ) throws SQLException {
 
         Group group = new Group();
-        group.setGroupID( resultSet.getInt( "groupID" ) );
         group.setGroupName( resultSet.getString( "groupName" ) );
         group.setGroupDescription( resultSet.getString( "groupDescription" ) );
         return group;
@@ -175,7 +174,6 @@ public class GroupPrivDaoImpl implements GroupPrivDao {
     private static Priv mapPriv( ResultSet resultSet ) throws SQLException {
 
         Priv priv = new Priv();
-        priv.setPrivID( resultSet.getInt( "privID" ) );
         priv.setPrivName( resultSet.getString( "privName" ) );
         priv.setPrivDescription( resultSet.getString( "privDescription" ) );
         return priv;
