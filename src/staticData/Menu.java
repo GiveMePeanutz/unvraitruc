@@ -1,21 +1,23 @@
 package staticData;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public final class Menu {
 
-    private static String[][][] menus = {
+    private static String[][][] menus =
+                                      {
                                       {
                                       { "User" },
                                       { "Display Users" },
                                       { "Add User" },
                                       { "Group",
                                       "Display Groups",
-                                      "Add Groups" },
+                                      "Add Groups"
+                                      },
                                       { "Privilege",
                                       "Displays Privileges",
-                                      "Add Privileges" }
+                                      "Add Privileges"
+                                      }
                                       },
                                       {
                                       { "Course" },
@@ -54,13 +56,30 @@ public final class Menu {
 
     public static HashMap<Integer, String> list()
     {
-        Map<Integer, String> mapMenus = new HashMap<Integer, String>();
-
+        HashMap<Integer, String> mapMenus = new HashMap<Integer, String>();
+        int i = 0;
+        while ( menus[i][0][0] != null )
         {
-            mapMenus.put( path, getMenuName( path ) );
+            int j = 0;
+            while ( menus[i][j][0] != null )
+            {
+                int k = 0;
+                while ( menus[i][j][k] != null )
+                {
+                    mapMenus.put( getPath( i, j, k ), getMenuName( getPath( i, j, k ) ) );
+                    k = k + 1;
+                }
+                j = j + 1;
+            }
+            i = i + 1;
         }
-        paths.add( map() );
-        return paths;
+
+        return mapMenus;
+    }
+
+    public static int getPath( int firstmenu, int submenu, int subsubmenu ) {
+
+        return ( firstmenu * 10000 + submenu * 100 + subsubmenu );
     }
 
 }

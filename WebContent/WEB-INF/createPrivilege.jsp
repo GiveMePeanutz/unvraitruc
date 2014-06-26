@@ -25,7 +25,20 @@
 					<TEXTAREA name="descriptionPrivilege" rows="5" cols="22" ><c:out value="${privilege.description}"/>"  </TEXTAREA>
 					<span class="error">${form.errors['descriptionPrivilege']}</span>
 					<br />
-                    
+                    <label for="privileges">Please assign menus<br /> to this group</label>
+					<c:choose>
+            			<c:when test="${ empty requestScope.menus }">
+                		<p class="errorr">No menus in database</p>
+            			</c:when>
+            			<c:otherwise>
+		                    <select name="menus" id = "menus" multiple="multiple" >																				
+								<%-- Parcours de la Map des menus en session, et utilisation de l'objet varStatus. --%>
+		                		<c:forEach items="${ requestScope.menus }" var="mapMenus" varStatus="boucle">
+		                    		<option value='<c:out value="${mapMenus.key}"/>'><c:out value="${mapPrivs.value}"/></option>                    
+		                		</c:forEach>
+		                	</select>
+                		</c:otherwise>
+        			</c:choose>
                 </fieldset>  
                 <p class="info">${ form.result }</p>
                 <input type="submit" value="Create"  />

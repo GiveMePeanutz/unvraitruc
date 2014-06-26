@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,11 +22,12 @@ public class PrivilegeCreation extends HttpServlet {
     public static final String PATH             = "path";
     public static final String PRIV_ATT         = "priv";
     public static final String FORM_ATT         = "form";
+    public static final String MENU_REQUEST_ATT = "menus";
+
     public static final String VUE_SUCCESS      = "/WEB-INF/displayPrivileges.jsp";
     public static final String VUE_FORM         = "/WEB-INF/createPrivilege.jsp";
 
     private PrivDao            privDao;
-    private Menu               menu;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
@@ -33,7 +35,9 @@ public class PrivilegeCreation extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+        Map<Integer, String> mapMenus = Menu.list();
 
+        request.setAttribute( MENU_REQUEST_ATT, mapMenus );
         this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
     }
 

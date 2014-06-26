@@ -42,9 +42,9 @@ public class GroupCreation extends HttpServlet {
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
         List<Priv> listePriv = privDao.list();
-        Map<Integer, Priv> mapPrivs = new HashMap<Integer, Priv>();
+        Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
         for ( Priv priv : listePriv ) {
-            mapPrivs.put( priv.getPrivID(), priv );
+            mapPrivs.put( priv.getPrivName(), priv );
         }
 
         request.setAttribute( PRIV_REQUEST_ATT, mapPrivs );

@@ -44,9 +44,9 @@ public class UserCreation extends HttpServlet {
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         List<Group> listeGroup = groupDao.list();
-        Map<Integer, Group> mapGroups = new HashMap<Integer, Group>();
+        Map<String, Group> mapGroups = new HashMap<String, Group>();
         for ( Group group : listeGroup ) {
-            mapGroups.put( group.getGroupID(), group );
+            mapGroups.put( group.getGroupName(), group );
         }
 
         request.setAttribute( GROUP_REQUEST_ATT, mapGroups );
