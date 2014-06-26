@@ -57,21 +57,19 @@ public final class Menu {
     public static HashMap<Integer, String> list()
     {
         HashMap<Integer, String> mapMenus = new HashMap<Integer, String>();
-        int i = 0;
-        while ( menus[i][0][0] != null )
+        for ( int i = 0; i < menus.length; i++ )
         {
-            int j = 0;
-            while ( menus[i][j][0] != null )
+
+            for ( int j = 0; j < menus[i].length; j++ )
             {
-                int k = 0;
-                while ( menus[i][j][k] != null )
+                for ( int k = 0; k < menus[i][j].length; k++ )
                 {
+                    System.out.println( i + j + k );
+                    System.out.println( getPath( i, j, k ) );
+                    System.out.println( getMenuName( getPath( i, j, k ) ) );
                     mapMenus.put( getPath( i, j, k ), getMenuName( getPath( i, j, k ) ) );
-                    k = k + 1;
                 }
-                j = j + 1;
             }
-            i = i + 1;
         }
 
         return mapMenus;
