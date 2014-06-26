@@ -76,7 +76,7 @@ public class GroupDaoImpl implements GroupDao {
 
 	@Override
 	public Group find(String groupName) throws DAOException {
-Connection connection = null;
+		Connection connection = null;
 		
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -122,20 +122,31 @@ Connection connection = null;
 	public List<Group> list() throws DAOException {
 		Connection connection = null;
         PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement2 = null;
+        PreparedStatement preparedStatement3 = null;
         ResultSet resultSet = null;
+        ResultSet resultSet2 = null;
+        ResultSet resultSet3 = null;
         List<Group> groups = new ArrayList<Group>();
 
         try {
             connection = daoFactory.getConnection();
             preparedStatement = connection.prepareStatement( SQL_SELECT );
             resultSet = preparedStatement.executeQuery();
+            
             while ( resultSet.next() ) {
-                groups.add( map( resultSet ) );
+            	preparedStatement2 = initialisationRequetePreparee(connection, SQL_SELECT_GROUP_PRIVS, false, resultSet.getString("groupName") );
+                resultSet2 = preparedStatement2.executeQuery();
+                preparedStatement3 = initialisationRequetePreparee(connection, SQL_SELECT_GROUP_USERS, false, resultSet.getString("groupName") );
+                resultSet3 = preparedStatement3.executeQuery();
+                groups.add( map( resultSet , resultSet2, resultSet3) );
             }
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } finally {
             fermeturesSilencieuses( resultSet, preparedStatement, connection );
+            fermeturesSilencieuses( resultSet2, preparedStatement2, connection );
+            fermeturesSilencieuses( resultSet3, preparedStatement3, connection );
         }
 
         return groups;
@@ -162,33 +173,7 @@ Connection connection = null;
         }
 	}
 	
-	private Group find( String sql, Object... objets ) throws DAOException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        Group group = null;
-
-        try {
-            /* Récupération d'une connection depuis la Factory */
-            connection = daoFactory.getConnection();
-            /*
-             * Préparation de la requête avec les objets passés en arguments
-             * (ici, uniquement un id) et exécution.
-             */
-            preparedStatement = initialisationRequetePreparee( connection, sql, false, objets );
-            resultSet = preparedStatement.executeQuery();
-            /* Parcours de la ligne de données retournée dans le ResultSet */
-            if ( resultSet.next() ) {
-                group = map( resultSet );
-            }
-        } catch ( SQLException e ) {
-            throw new DAOException( e );
-        } finally {
-            fermeturesSilencieuses( resultSet, preparedStatement, connection );
-        }
-
-        return group;
-    }
+	
 	
 	
 	private static Group map(ResultSet resultSet,ResultSet resultSet2,ResultSet resultSet3) throws SQLException {
