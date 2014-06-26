@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,7 @@ public final class UserCreationForm {
     private static final String EMAIL_FIELD     = "email";
     private static final String BIRTH_FIELD     = "birthDate";
     private static final String PROMOTION_FIELD = "promotion";
+    private static final String GROUP_FIELD     = "groups";
     private static final String PHOTO_FIELD     = "photoURL";
 
     private static final int    BUFFER_LENGTH   = 10240;                        // 10ko
@@ -65,6 +67,7 @@ public final class UserCreationForm {
         String email = getFieldValue( request, EMAIL_FIELD );
         String birthDate = getFieldValue( request, BIRTH_FIELD );
         String promotion = getFieldValue( request, PROMOTION_FIELD );
+        ArrayList<String> groups = getSelectedValues( request, GROUP_FIELD );
 
         User user = new User();
         handleUsername( username, user );
@@ -78,6 +81,7 @@ public final class UserCreationForm {
         handleBirthDate( birthDate, user );
         handlePromotion( promotion, user );
         handlePhoto( user, request, path );
+        handlegroups( groups );
 
         DateTime today = new DateTime();
         user.setRegDate( today );
@@ -382,6 +386,17 @@ public final class UserCreationForm {
         } else {
             return value;
         }
+    }
+
+    private static ArrayList<String> getSelectedValues( HttpServletRequest request, String fieldName ) {
+
+        ArrayList<String> groups = new ArrayList();
+        String[] values = request.getParameterValues( fieldName );
+        for ( int i = 0; i < values.length; i++ )
+        {
+            groups.add
+        }
+        return groups;
     }
 
     /*

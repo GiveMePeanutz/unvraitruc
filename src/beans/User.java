@@ -1,29 +1,26 @@
 package beans;
 
 import java.io.Serializable;
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.joda.time.DateTime;
 
 public class User implements Serializable {
 
-    private String   username;
-    private String   password;
-    private String   firstName;
-    private String   lastName;
-    private String   email;
-    private String   phone;
-    private String   photoURL;
-    private String   address;
-    private int      sex;
-    private String   promotion;
-    private DateTime regDate;
-    private DateTime birthDate;
+    private String            username;
+    private String            password;
+    private String            firstName;
+    private String            lastName;
+    private String            email;
+    private String            phone;
+    private String            photoURL;
+    private String            address;
+    private int               sex;
+    private String            promotion;
+    private DateTime          regDate;
+    private DateTime          birthDate;
     private ArrayList<String> groupNames;
     private ArrayList<String> courseNames;
-    
 
     public String getPassword() {
         return password;
@@ -121,30 +118,28 @@ public class User implements Serializable {
         this.birthDate = d;
     }
 
-	
+    public ArrayList<String> getGroupNames() {
+        return groupNames;
+    }
 
-	public ArrayList<String> getGroupNames() {
-		return courseNames;
-	}
+    public void setGroupNames( ArrayList<String> groupIDs ) {
+        this.groupNames = groupIDs;
+    }
 
-	public void setGroupNames(ArrayList<String> groupIDs) {
-		this.courseNames = groupIDs;
-	}
+    public ArrayList<String> getCourseNames() {
+        return courseNames;
+    }
 
-	public ArrayList<String> getCourseNames() {
-		return groupNames;
-	}
+    public void setCourseNames( ArrayList<String> courseIDs ) {
+        this.courseNames = courseIDs;
+    }
 
-	public void setCourseNames(ArrayList<String> courseIDs) {
-		this.groupNames = courseIDs;
-	}
-	
-	public void addCourseName(String courseName){
-		this.courseNames.add(courseName);
-	}
-	
-	public void addGroupName(String groupName){
-		this.groupNames.add(groupName);
-	}
+    public void addCourseName( String courseName ) {
+        this.courseNames.add( courseName );
+    }
+
+    public void addGroupName( String groupName ) {
+        this.groupNames.add( groupName );
+    }
 
 }

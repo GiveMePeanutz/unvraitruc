@@ -6,6 +6,7 @@
         <meta charset="utf-8" />
         <title>Create a user</title>
         <link type="text/css" rel="stylesheet" href="<c:url value="/inc/design.css"/>" />
+        
     </head>
     <body>
         <c:import url="/inc/menu.jsp" />
