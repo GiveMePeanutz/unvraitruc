@@ -163,7 +163,6 @@ public class PrivMenuDaoImpl implements PrivMenuDao {
     private static Priv mapPriv( ResultSet resultSet ) throws SQLException {
 
         Priv priv = new Priv();
-        priv.setPrivID( resultSet.getInt( "privID" ) );
         priv.setPrivName( resultSet.getString( "privName" ) );
         priv.setPrivDescription( resultSet.getString( "privDescription" ) );
         return priv;

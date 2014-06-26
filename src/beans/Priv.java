@@ -10,7 +10,7 @@ public class Priv implements Serializable {
 
     private String        privName;
     private String        privDescrition;
-    private ArrayList<Integer> groupIDs;
+    private ArrayList<String> groupNames;
     private ArrayList<Integer> menuPaths;
 
     public String getPrivName() {
@@ -30,12 +30,12 @@ public class Priv implements Serializable {
     }
 
 
-	public ArrayList<Integer> getGroupIDs() {
-		return groupIDs;
+	public ArrayList<String> getGroupNames() {
+		return groupNames;
 	}
 
-	public void setGroupIDs(ArrayList<Integer> groupIDs) {
-		this.groupIDs = groupIDs;
+	public void setGroupNames(ArrayList<String> groupNames) {
+		this.groupNames = groupNames;
 	}
 
 	public ArrayList<Integer> getMenuPaths() {
@@ -45,5 +45,13 @@ public class Priv implements Serializable {
 	public void setMenuPaths(ArrayList<Integer> menuPaths) {
 		this.menuPaths = menuPaths;
 	}
+	
+	public void addMenuPath(int menuPath){
+		this.menuPaths.add(menuPath);
+	}
+	
+	public void addGroupName(String groupName){
+		this.groupNames.add(groupName)
+;	}
 
 }
