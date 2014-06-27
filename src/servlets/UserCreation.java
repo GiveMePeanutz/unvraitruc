@@ -83,7 +83,14 @@ public class UserCreation extends HttpServlet {
             this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response );
         } else {
             /* Sinon, ré-affichage du formulaire de création avec les erreurs */
-            this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
+        	List<Group> listeGroup = groupDao.list();
+            Map<String, Group> mapGroups = new HashMap<String, Group>();
+            for ( Group group : listeGroup ) {
+                mapGroups.put( group.getGroupName(), group );
+            }
+
+            request.setAttribute( GROUP_REQUEST_ATT, mapGroups );
+        	this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }
     }
 }
