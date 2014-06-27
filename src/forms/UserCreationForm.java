@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import beans.User;
 import dao.DAOException;
@@ -56,7 +58,7 @@ public final class UserCreationForm {
         return result;
     }
 
-    public User createUser( HttpServletRequest request, String path ) throws ParseException {
+    public User createUser( HttpServletRequest request, String path ) throws ParseException, FormValidationException {
         String username = getFieldValue( request, USERNAME_FIELD );
         String password = getFieldValue( request, PASSWORD_FIELD );
         String lastName = getFieldValue( request, NAME_FIELD );
@@ -65,7 +67,7 @@ public final class UserCreationForm {
         String address = getFieldValue( request, ADDRESS_FIELD );
         String phone = getFieldValue( request, PHONE_FIELD );
         String email = getFieldValue( request, EMAIL_FIELD );
-        String birthDate = getFieldValue( request, BIRTH_FIELD );
+        DateTime birthDate = getDateValue( request, BIRTH_FIELD );
         String promotion = getFieldValue( request, PROMOTION_FIELD );
         ArrayList<String> groups = getSelectedValues( request, GROUP_FIELD );
 
@@ -191,17 +193,8 @@ public final class UserCreationForm {
         user.setEmail( email );
     }
 
-    private void handleBirthDate( String birthDate, User user ) throws ParseException {
-        try {
-            usernameValidation( birthDate );
-        } catch ( FormValidationException e ) {
-            setError( BIRTH_FIELD, e.getMessage() );
-        }
-
-        // SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yy hh:mi:ss" );
-        // DateTime d = null;
-        DateTime d = DateTime.parse( birthDate );
-        user.setBirthDate( d );
+    private void handleBirthDate( DateTime birthDate, User user ) {
+        user.setBirthDate( birthDate );
     }
 
     private void handlePromotion( String promotion, User user ) {
@@ -396,6 +389,22 @@ public final class UserCreationForm {
      * Méthode utilitaire qui retourne null si un champ est vide, et son contenu
      * sinon.
      */
+    private static DateTime getDateValue( HttpServletRequest request, String fieldName ) throws FormValidationException {
+        String value = request.getParameter( fieldName );
+        if ( value == null || value.trim().length() == 0 ) {
+            return null;
+        } else if ( !value.matches( "([0-3])([0-9])(/)([0-1])([0-9])(/)([1-2])([0-9])([0-1])([0-9])" ) )
+        {
+            throw new FormValidationException( "Promotion must be a name or an acronym followed by a number." );
+        }
+        else
+        {
+            DateTimeFormatter formatter = DateTimeFormat.forPattern( "dd/MM/yyyy" );
+            DateTime dt = formatter.parseDateTime( value );
+            return dt;
+        }
+    }
+
     private static String getFieldValue( HttpServletRequest request, String fieldName ) {
         String value = request.getParameter( fieldName );
         if ( value == null || value.trim().length() == 0 ) {

@@ -19,6 +19,7 @@ import beans.User;
 import dao.DAOFactory;
 import dao.GroupDao;
 import dao.UserDao;
+import forms.FormValidationException;
 import forms.UserCreationForm;
 
 @WebServlet( urlPatterns = "/userCreation", initParams = @WebInitParam( name = "path", value = "/fichiers/images/" ) )
@@ -67,7 +68,7 @@ public class UserCreation extends HttpServlet {
         User user = null;
         try {
             user = form.createUser( request, path );
-        } catch ( ParseException e ) {
+        } catch ( ParseException | FormValidationException e ) {
             e.printStackTrace();
         }
 
