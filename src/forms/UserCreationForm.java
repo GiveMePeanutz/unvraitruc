@@ -405,7 +405,7 @@ public final class UserCreationForm {
         }
     }
 
-    private static ArrayList<String> getSelectedValues( HttpServletRequest request, String fieldName ) {
+    private ArrayList<String> getSelectedValues( HttpServletRequest request, String fieldName ) {
 
         ArrayList<String> groups = new ArrayList<String>();
         String[] values = request.getParameterValues( fieldName );
