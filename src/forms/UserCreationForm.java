@@ -295,7 +295,7 @@ public final class UserCreationForm {
 
     private void promotionValidation( String promotion ) throws FormValidationException {
         if ( promotion != null ) {
-            if ( !promotion.matches( "([\\D]+)([0-9]+)" ) ) {
+            if ( !promotion.matches( "([^0-9]+)([0-9]+)" ) ) {
                 throw new FormValidationException( "Promotion must be a name or an acronym followed by a number." );
             }
         } else {
@@ -393,9 +393,9 @@ public final class UserCreationForm {
         String value = request.getParameter( fieldName );
         if ( value == null || value.trim().length() == 0 ) {
             return null;
-        } else if ( !value.matches( "([0-3])([0-9])(/)([0-1])([0-9])(/)([1-2])([0-9])([0-1])([0-9])" ) )
+        } else if ( !value.matches( "^(0?[1-9]|[12][0-9]|3[01])[-/]?(0?[1-9]|1[012])[-/]?(19[\\d]{2}|20[\\d]{2}|2100)$" ) )
         {
-            throw new FormValidationException( "Promotion must be a name or an acronym followed by a number." );
+            throw new FormValidationException( "Incorrect date format." );
         }
         else
         {
