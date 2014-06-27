@@ -254,9 +254,14 @@ public final class UserCreationForm {
     }
 
     private void firstNameValidation( String firstName ) throws FormValidationException {
-        if ( firstName != null && firstName.length() < 2 ) {
-            throw new FormValidationException( "First name must have at least 3 characters" );
+        if ( firstName != null ) {
+            if ( firstName.length() < 2 ) {
+                throw new FormValidationException( "First name must have at least 3 characters" );
+            }
+        } else {
+            throw new FormValidationException( "Please enter a firstname." );
         }
+
     }
 
     private void sexValidation( String sex ) throws FormValidationException {
@@ -288,8 +293,13 @@ public final class UserCreationForm {
     }
 
     private void emailValidation( String email ) throws FormValidationException {
-        if ( email != null && !email.matches( "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)" ) ) {
-            throw new FormValidationException( "Plese enter a right email address." );
+        if ( email != null ) {
+            if ( !email.matches( "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)" ) ) {
+
+                throw new FormValidationException( "Plese enter a right email address." );
+            }
+        } else {
+            throw new FormValidationException( "Please enter a mail address." );
         }
     }
 
