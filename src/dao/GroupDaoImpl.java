@@ -173,6 +173,9 @@ public class GroupDaoImpl implements GroupDao {
         Group group = new Group();
         group.setGroupName( resultSet.getString( "groupName" ) );
         group.setGroupDescription( resultSet.getString( "groupDescription" ) );
+        
+        group.setPrivNames(new ArrayList<String>());
+        group.setUsernames(new ArrayList<String>());
 
         resultSet2.beforeFirst();
         while ( resultSet2.next() ) {
