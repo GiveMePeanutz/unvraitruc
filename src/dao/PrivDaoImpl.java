@@ -19,8 +19,8 @@ public class PrivDaoImpl implements PrivDao {
 
     private static final String SQL_SELECT           = "SELECT privName, privDescription FROM Priv ORDER BY privName";
     private static final String SQL_SELECT_BY_PRIVNAME = "SELECT privName, privDescription FROM Priv WHERE privID = ?";
-    private static final String SQL_SELECT_PRIV_MENUPATHS = "SELECT menuPath FROM priv_menu WHERE privName = ? ORDER BY groupName";
-    private static final String SQL_SELECT_PRIV_GROUPS = "SELECT * FROM web_app_db.Group WHERE groupName IN (SELECT groupName FROM Group_Priv WHERE privName = ?) ORDER BY groupName";
+    private static final String SQL_SELECT_PRIV_MENUPATHS = "SELECT menuPath FROM priv_menu WHERE privName = ? ORDER BY menuPath";
+    private static final String SQL_SELECT_PRIV_GROUPS = "SELECT groupName FROM web_app_db.group WHERE groupName IN (SELECT groupName FROM user_group WHERE username = ?) ORDER BY groupName";
 
     private static final String SQL_INSERT           = "INSERT INTO Priv ( privName, privDescription) VALUES ( ?, ?)";
     private static final String SQL_INSERT_PRIV_MENU = "INSERT INTO priv_menu (menuPath , privID) VALUES (? , ?)";
@@ -180,15 +180,19 @@ public class PrivDaoImpl implements PrivDao {
         priv.setPrivName( resultSet.getString( "privName" ) );
         priv.setPrivDescription( resultSet.getString( "privDescription" ) );
         
+        ArrayList<Integer> menuPaths = new ArrayList<Integer>();
         resultSet2.beforeFirst();
 		while(resultSet2.next()) {
-			priv.addMenuPath(resultSet2.getInt("menuPath"));
+			menuPaths.add(resultSet2.getInt("menuPath"));
 		}
+		priv.setMenuPaths(menuPaths);
 		
+		ArrayList<String> groupNames = new ArrayList<String>();
 		resultSet3.beforeFirst();
 		while(resultSet2.next()) {
-			priv.addGroupName(resultSet3.getString("groupName"));
+			groupNames.add(resultSet3.getString("groupName"));
 		}
+		priv.setGroupNames(groupNames);
         
         return priv;
     }
