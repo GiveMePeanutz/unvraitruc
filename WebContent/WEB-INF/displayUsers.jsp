@@ -42,7 +42,7 @@
 					</td>
 					<td class="action">
                         <a href="<c:url value="/profile"><c:param name="username" value="${ mapClients.key }" /></c:url>">
-                            ...
+                            <img src="<c:url value="/inc/info.gif"/>" alt="info" />
                         </a>
                     </td>
                     <td class="action">
