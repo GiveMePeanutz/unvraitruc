@@ -26,7 +26,7 @@ public class UserDaoImpl implements UserDao {
 	private static final String SQL_SELECT_USER_COURSES = "SELECT courseName FROM course WHERE courseName IN (SELECT courseName FROM user_course WHERE username = ?) ORDER BY courseName";
 	private static final String SQL_SELECT_USER_GROUPS = "SELECT groupName FROM web_app_db.group WHERE groupName IN (SELECT groupName FROM user_group WHERE username = ?) ORDER BY groupName";
 	
-	private static final String SQL_INSERT = "INSERT INTO User (username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String SQL_INSERT = "INSERT INTO User (username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, sex, regDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String SQL_INSERT_USER_COURSE = "INSERT INTO user_course (username , courseName) VALUES (? , ?)";
 	private static final String SQL_INSERT_USER_GROUP = "INSERT INTO user_group (username , groupName) VALUES (? , ?)";
 	
@@ -48,7 +48,7 @@ public class UserDaoImpl implements UserDao {
 		try {
 			connection = daoFactory.getConnection();
 			preparedStatement1 = initialisationRequetePreparee(connection,
-					SQL_INSERT, true, user.getUsername(), user.getAddress(), user.getBirthDate(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getPassword(), user.getPhone(), user.getPhone(), user.getPhotoURL(), user.getPromotion(), new Timestamp( user.getRegDate().getMillis() ) , user.getSex());
+					SQL_INSERT, true, user.getUsername(), user.getAddress(), new Timestamp(user.getBirthDate().getMillis()), user.getEmail(), user.getFirstName(), user.getLastName(), user.getPassword(), user.getPhone(), user.getPhotoURL(), user.getPromotion(), user.getSex(), new Timestamp( user.getRegDate().getMillis()));
 			int statut1 = preparedStatement1.executeUpdate();
 			if (statut1 == 0) {
 				throw new DAOException(
@@ -58,15 +58,7 @@ public class UserDaoImpl implements UserDao {
 			
 			
 			
-			for (String courseName : user.getCourseNames()) {
-				preparedStatement2 = initialisationRequetePreparee( connection,
-	                    SQL_INSERT_USER_COURSE, true, user.getUsername(), courseName );
-	            int statut2 = preparedStatement2.executeUpdate();
-	            if ( statut2 == 0 ) {
-	                throw new DAOException(
-	                        "Failed to create user-course association. No row added" );
-	            }
-			}
+			
 			
 			for (String groupName : user.getGroupNames()) {
 				preparedStatement3 = initialisationRequetePreparee( connection,

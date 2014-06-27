@@ -54,7 +54,7 @@ public final class UserCreationForm {
         return errors;
     }
 
-    public String getResultat() {
+    public String getResult() {
         return result;
     }
 
@@ -393,14 +393,15 @@ public final class UserCreationForm {
         String value = request.getParameter( fieldName );
         if ( value == null || value.trim().length() == 0 ) {
             return null;
-        } else if ( !value.matches( "^(0?[1-9]|[12][0-9]|3[01])[-/]?(0?[1-9]|1[012])[-/]?(19[\\d]{2}|20[\\d]{2}|2100)$" ) )
+        } /*else if ( !value.matches( "^(0?[1-9]|[12][0-9]|3[01])[-/]?(0?[1-9]|1[012])[-/]?(19[\\d]{2}|20[\\d]{2}|2100)$" ) )
         {
             throw new FormValidationException( "Incorrect date format." );
-        }
+        }*/
         else
         {
-            DateTimeFormatter formatter = DateTimeFormat.forPattern( "dd/MM/yyyy" );
+            DateTimeFormatter formatter = DateTimeFormat.forPattern( "MM/dd/yyyy" );
             DateTime dt = formatter.parseDateTime( value );
+            System.out.println(dt);
             return dt;
         }
     }
