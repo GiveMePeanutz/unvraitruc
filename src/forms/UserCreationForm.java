@@ -432,7 +432,7 @@ public final class UserCreationForm {
         ArrayList<String> groups = new ArrayList<String>();
 
         String[] values = request.getParameterValues( fieldName );
-        if ( values == null )
+        if ( values == null || values.length == 0 )
         {
             return null;
         }

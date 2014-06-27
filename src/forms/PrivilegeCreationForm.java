@@ -139,6 +139,11 @@ public final class PrivilegeCreationForm {
 
         ArrayList<Integer> menus = new ArrayList<Integer>();
         String[] values = request.getParameterValues( fieldName );
+        if ( values == null || values.length == 0 )
+        {
+            return null;
+        }
+
         for ( int i = 0; i < values.length; i++ )
         {
             menus.add( Integer.parseInt( values[i] ) );

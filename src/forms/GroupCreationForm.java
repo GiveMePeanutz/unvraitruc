@@ -139,6 +139,10 @@ public final class GroupCreationForm {
 
         ArrayList<String> privileges = new ArrayList<String>();
         String[] values = request.getParameterValues( fieldName );
+        if ( values == null || values.length == 0 )
+        {
+            return null;
+        }
         for ( int i = 0; i < values.length; i++ )
         {
             privileges.add( values[i] );
