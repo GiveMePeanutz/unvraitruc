@@ -59,14 +59,7 @@ public class DisplayUsers extends HttpServlet{
 		 
 	 public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
-		List<User> listeUsers = userDao.list();
-		Map<String, User> mapUsers = new HashMap<String, User>();
-		for (User user : listeUsers) {
-			mapUsers.put(user.getUsername(), user);
-		}
 		
-		
-		request.setAttribute(USER_REQUEST_ATT, mapUsers);
 
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
         
