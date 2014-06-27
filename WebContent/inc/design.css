@@ -1,15 +1,20 @@
 /* Menu déroulant ------------------------------------------------------------------------------------- */
 
+#dropdownmenu{
+	float : left;
+	position : fixed;
+	top : 25%;
+}
 #dropdownmenu ul {
 
  padding:0;
  margin:0;
  list-style-type:none;
  }
+ 
 #dropdownmenu li 
 {
-	margin-left:2px;
-	float:left; /*pour IE*/
+	
 	list-style-type: none; 
 	position: relative; 
 	width: 160px; 
@@ -20,22 +25,16 @@
 
  #dropdownmenu ul ul 
 {
-	display: none;
-	position: absolute;
-	margin:0px; padding: 0px; 
-}
+	display: none; 
+	left: 165px; 
+	top: -1px; 
+	position: absolute; 
+	margin:0px; 
+	padding: 0px; 
+	border: 1px solid #B0B0B0;
+	}
 
- #dropdownmenu ul.step2
-{
-	left: -2px; 
-	top: 25px;
-}
 
- #dropdownmenu ul.step3
-{
-	left: 164px; 
-	top: -1px;
-}
 
  #dropdownmenu li:hover ul.step2,  #dropdownmenu li li:hover ul.step3 
 {
@@ -58,12 +57,12 @@
 /* Forms --------------------------------------------------------------------------------------- */
 
 
+
 #connectionForm {
 	display : inline-block;
 	vertical-align: bottom;
-	position : relative;
-	width : auto;
 	margin-left : 25%;
+	
 	
 }
 

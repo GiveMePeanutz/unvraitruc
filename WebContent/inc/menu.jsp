@@ -49,3 +49,4 @@
 		<li><a href="<c:url value="/profile"/>">Profile</a></li>	  
 	</ul>
 </div>
+

@@ -9,7 +9,6 @@
     </head>
     <body>
         <c:import url="/inc/menu.jsp" />
-        <br />
         <h1>Welcome to the new <br /> Stikom Web Application</h1>
         <div id = "connectionForm">
 	        <form method="post" action="<c:url value="/login" />">
