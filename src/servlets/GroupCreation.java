@@ -79,6 +79,13 @@ public class GroupCreation extends HttpServlet {
             /* Affichage de la fiche récapitulative */
             this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response );
         } else {
+            List<Priv> listePriv = privDao.list();
+            Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
+            for ( Priv priv : listePriv ) {
+                mapPrivs.put( priv.getPrivName(), priv );
+            }
+
+            request.setAttribute( PRIV_REQUEST_ATT, mapPrivs );
             /* Sinon, ré-affichage du formulaire de création avec les erreurs */
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }

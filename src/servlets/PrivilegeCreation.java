@@ -69,6 +69,9 @@ public class PrivilegeCreation extends HttpServlet {
             /* Affichage de la fiche récapitulative */
             this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response );
         } else {
+            Map<Integer, String> mapMenus = Menu.list();
+
+            request.setAttribute( MENU_REQUEST_ATT, mapMenus );
             /* Sinon, ré-affichage du formulaire de création avec les erreurs */
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }
