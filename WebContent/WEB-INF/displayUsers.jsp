@@ -9,7 +9,8 @@
     </head>
     <body>
         <c:import url="/inc/menu.jsp" />
-        <div id="body">
+        <div id="normalForm">
+        
         <c:choose>
             <%-- Si aucun client n'existe en session, affichage d'un message par défaut. --%>
             <c:when test="${ empty requestScope.users }">
