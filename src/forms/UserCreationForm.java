@@ -217,7 +217,7 @@ public final class UserCreationForm {
     }
 
     private void groupValidation( ArrayList<String> groups ) throws FormValidationException {
-        if ( groups.isEmpty() || groups == null )
+        if ( groups == null )
         {
             throw new FormValidationException( "Please choose a group." );
         }
@@ -420,7 +420,13 @@ public final class UserCreationForm {
     private ArrayList<String> getSelectedValues( HttpServletRequest request, String fieldName ) {
 
         ArrayList<String> groups = new ArrayList<String>();
+
         String[] values = request.getParameterValues( fieldName );
+        if ( values == null )
+        {
+            return null;
+        }
+
         for ( int i = 0; i < values.length; i++ )
         {
             groups.add( values[i] );
