@@ -12,7 +12,7 @@ public interface UserDao {
 	
 	List<User> list() throws DAOException;
 
-	void delete( User user ) throws DAOException;
+	void delete( String username ) throws DAOException;
 	
 	String getPassword( String username) throws DAOException;
 	

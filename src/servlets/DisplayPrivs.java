@@ -15,41 +15,42 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import beans.User;
-import dao.UserDao;
+import beans.Priv;
+import dao.GroupDao;
 import dao.DAOFactory;
+import dao.PrivDao;
 import forms.LoginForm;
-import beans.User;
 
-@WebServlet( "/displayUsers" )
-public class DisplayUsers extends HttpServlet{
+@WebServlet( "/displayPrivs" )
+public class DisplayPrivs extends HttpServlet{
 	
 	public static final String CONF_DAO_FACTORY = "daofactory";
-	public static final String USER_REQUEST_ATT = "users";
-	public static final String VIEW= "/WEB-INF/displayUsers.jsp";
+	public static final String PRIV_REQUEST_ATT = "privs";
+	public static final String VIEW= "/WEB-INF/displayPrivs.jsp";
 	
-	private UserDao userDao;
+	private PrivDao privDao;
 	
 	 public void init() throws ServletException {
 	        /* Récupération d'une instance de notre DAO Utilisateur */
-	        this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
+	        this.privDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getPrivDao();
 	    }
 	
 	 
 	 public void doGet (HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 	 
-		 List<User> listeUsers = userDao.list();
-		Map<String, User> mapUsers = new HashMap<String, User>();
-		for (User user : listeUsers) {
-			mapUsers.put(user.getUsername(), user);
+		List<Priv> listPrivs = privDao.list();
+		Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
+		for (Priv priv : listPrivs) {
+			mapPrivs.put(priv.getPrivName(), priv);
 		}
 		
 		
-		request.setAttribute(USER_REQUEST_ATT, mapUsers);
+		request.setAttribute(PRIV_REQUEST_ATT, mapPrivs);
 
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
 		 
@@ -57,17 +58,17 @@ public class DisplayUsers extends HttpServlet{
 		 
 	 public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
-		 List<User> listeUsers = userDao.list();
-			Map<String, User> mapUsers = new HashMap<String, User>();
-			for (User user : listeUsers) {
-				mapUsers.put(user.getUsername(), user);
-			}
-			
-			
-			request.setAttribute(USER_REQUEST_ATT, mapUsers);
+		List<Priv> listPrivs = privDao.list();
+		Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
+		for (Priv priv : listPrivs) {
+			mapPrivs.put(priv.getPrivName(), priv);
+		}
+		
+		
+		request.setAttribute(PRIV_REQUEST_ATT, mapPrivs);
 
-	        this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
-        
+        this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
+    
 	}
 	 
 	

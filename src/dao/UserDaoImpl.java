@@ -161,13 +161,12 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public void delete(User user) throws DAOException {
+	public void delete(String username) throws DAOException {
 		Connection connexion = null;
         PreparedStatement preparedStatement = null;
-
         try {
             connexion = daoFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connexion, SQL_DELETE_BY_USERNAME, true, user.getUsername() );
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_DELETE_BY_USERNAME, true, username );
             int statut = preparedStatement.executeUpdate();
             if ( statut == 0 ) {
                 throw new DAOException( "Failed to delete user, no row deleted." );

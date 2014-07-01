@@ -17,8 +17,8 @@
 	      			<li>
 	      				Privilege
 	      					<ul class="step3">
-			      				<li><a href="<c:url value="/displayPrivileges"/>">Display privileges</a></li>
-			      				<li><a href="<c:url value="/privilegeCreation"/>">Add a privilege</a></li>
+			      				<li><a href="<c:url value="/displayPrivs"/>">Display privileges</a></li>
+			      				<li><a href="<c:url value="/privCreation"/>">Add a privilege</a></li>
 		      				</ul>
 	      			</li>
 	    		</ul>

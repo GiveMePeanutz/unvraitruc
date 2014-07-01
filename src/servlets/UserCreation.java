@@ -75,21 +75,23 @@ public class UserCreation extends HttpServlet {
         /* Ajout du bean et de l'objet métier à l'objet requête */
         request.setAttribute( USER_ATT, user );
         request.setAttribute( FORM_ATT, form );
-
+        
+        
+        
         /* Si aucune erreur */
         if ( form.getErrors().isEmpty() ) {
 
             /* Affichage de la fiche récapitulative */
-            this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response );
-        } else {
-            /* Sinon, ré-affichage du formulaire de création avec les erreurs */
         	List<Group> listeGroup = groupDao.list();
             Map<String, Group> mapGroups = new HashMap<String, Group>();
             for ( Group group : listeGroup ) {
                 mapGroups.put( group.getGroupName(), group );
             }
-
             request.setAttribute( GROUP_REQUEST_ATT, mapGroups );
+            this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response );
+        } else {
+            /* Sinon, ré-affichage du formulaire de création avec les erreurs */
+        	
         	this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }
     }

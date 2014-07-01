@@ -12,6 +12,6 @@ public interface GroupDao {
 	
 	List<Group> list() throws DAOException;
 
-	void delete( Group group ) throws DAOException;
+	void delete( String groupName ) throws DAOException;
 	
 }

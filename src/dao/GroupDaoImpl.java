@@ -147,14 +147,14 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public void delete( Group group ) throws DAOException {
+    public void delete( String groupName ) throws DAOException {
         Connection connexion = null;
         PreparedStatement preparedStatement = null;
 
         try {
             connexion = daoFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connexion, SQL_DELETE_BY_GROUPNAME, true,
-                    group.getGroupName() );
+                    groupName );
             int statut = preparedStatement.executeUpdate();
             if ( statut == 0 ) {
                 throw new DAOException( "Failed to delete group, no row deleted." );
@@ -174,18 +174,21 @@ public class GroupDaoImpl implements GroupDao {
         group.setGroupName( resultSet.getString( "groupName" ) );
         group.setGroupDescription( resultSet.getString( "groupDescription" ) );
         
-        group.setPrivNames(new ArrayList<String>());
         group.setUsernames(new ArrayList<String>());
+        
+        ArrayList<String> privNames = new ArrayList<String>();
+		resultSet2.beforeFirst();
+		while(resultSet2.next()) {
+			privNames.add(resultSet2.getString("privName"));
+		}
+		group.setPrivNames(privNames);
 
-        resultSet2.beforeFirst();
-        while ( resultSet2.next() ) {
-            group.addPrivName( resultSet2.getString( "privName" ) );
-        }
-
-        resultSet3.beforeFirst();
-        while ( resultSet2.next() ) {
-            group.addUsername( resultSet3.getString( "username" ) );
-        }
+		ArrayList<String> usernames = new ArrayList<String>();
+		resultSet3.beforeFirst();
+		while(resultSet3.next()) {
+			usernames.add(resultSet3.getString("username"));
+		}
+		group.setUsernames(usernames);
 
         return group;
     }

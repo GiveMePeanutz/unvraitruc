@@ -19,37 +19,37 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import beans.User;
-import dao.UserDao;
+import beans.Group;
+import dao.GroupDao;
 import dao.DAOFactory;
 import forms.LoginForm;
-import beans.User;
+import beans.Group;
 
-@WebServlet( "/displayUsers" )
-public class DisplayUsers extends HttpServlet{
+@WebServlet( "/displayGroups" )
+public class DisplayGroups extends HttpServlet{
 	
 	public static final String CONF_DAO_FACTORY = "daofactory";
-	public static final String USER_REQUEST_ATT = "users";
-	public static final String VIEW= "/WEB-INF/displayUsers.jsp";
+	public static final String GROUP_REQUEST_ATT = "groups";
+	public static final String VIEW= "/WEB-INF/displayGroups.jsp";
 	
-	private UserDao userDao;
+	private GroupDao groupDao;
 	
 	 public void init() throws ServletException {
 	        /* Récupération d'une instance de notre DAO Utilisateur */
-	        this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
+	        this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
 	    }
 	
 	 
 	 public void doGet (HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 	 
-		 List<User> listeUsers = userDao.list();
-		Map<String, User> mapUsers = new HashMap<String, User>();
-		for (User user : listeUsers) {
-			mapUsers.put(user.getUsername(), user);
+		List<Group> listeGroups = groupDao.list();
+		Map<String, Group> mapGroups = new HashMap<String, Group>();
+		for (Group group : listeGroups) {
+			mapGroups.put(group.getGroupName(), group);
 		}
 		
 		
-		request.setAttribute(USER_REQUEST_ATT, mapUsers);
+		request.setAttribute(GROUP_REQUEST_ATT, mapGroups);
 
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
 		 
@@ -57,17 +57,17 @@ public class DisplayUsers extends HttpServlet{
 		 
 	 public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
-		 List<User> listeUsers = userDao.list();
-			Map<String, User> mapUsers = new HashMap<String, User>();
-			for (User user : listeUsers) {
-				mapUsers.put(user.getUsername(), user);
-			}
-			
-			
-			request.setAttribute(USER_REQUEST_ATT, mapUsers);
+		List<Group> listeGroups = groupDao.list();
+		Map<String, Group> mapGroups = new HashMap<String, Group>();
+		for (Group group : listeGroups) {
+			mapGroups.put(group.getGroupName(), group);
+		}
+		
+		
+		request.setAttribute(GROUP_REQUEST_ATT, mapGroups);
 
-	        this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
-        
+        this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
+    
 	}
 	 
 	
