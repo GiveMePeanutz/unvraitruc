@@ -151,13 +151,13 @@ public class PrivDaoImpl implements PrivDao {
     }
 
     @Override
-    public void delete( Priv priv ) throws DAOException {
+    public void delete( String privName ) throws DAOException {
         Connection connexion = null;
         PreparedStatement preparedStatement = null;
 
         try {
             connexion = daoFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connexion, SQL_DELETE_BY_PRIVID, true, priv.getPrivName() );
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_DELETE_BY_PRIVID, true, privName );
             int statut = preparedStatement.executeUpdate();
             if ( statut == 0 ) {
                 throw new DAOException( "Failed to delete privilege, no row deleted." );

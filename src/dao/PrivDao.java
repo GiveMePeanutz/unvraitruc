@@ -12,6 +12,6 @@ public interface PrivDao {
 	
 	List<Priv> list() throws DAOException;
 
-	void delete( Priv priv ) throws DAOException;
+	void delete( String privName ) throws DAOException;
 	
 }
