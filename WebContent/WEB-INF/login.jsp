@@ -43,8 +43,7 @@
 	                    <p class="succes">You are connected with the username : ${sessionScope.sessionUser.username}</p>
 	                </c:if>
 	            </fieldset>
-	        </form>
-	        
+	        </form>	        
         </div>
         <img src="inc/stikom.gif" alt="StikomPicture" class="stikom" /> 
     	
