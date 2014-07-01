@@ -36,6 +36,7 @@ public final class GroupCreationForm {
     public Group createGroup( HttpServletRequest request, String path ) throws ParseException {
 
         String groupName = getFieldValue( request, NAME_FIELD );
+        
         String groupDescription = getFieldValue( request, DESCRIPTION_FIELD );
         ArrayList<String> privileges = getSelectedValues( request, PRIV_FIELD );
 

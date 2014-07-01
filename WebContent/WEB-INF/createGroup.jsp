@@ -16,7 +16,7 @@
         	<h1>Create a Group</h1>
        		<h3>Please, fill the following form and validate</h3>
         <div id="normalForm">
-            <form method="post" action="<c:url value="/groupCreation"/>" enctype="multipart/form-data">
+            <form method="post" action="<c:url value="/groupCreation"/>" >
                 <fieldset>
                     <legend>Group Information</legend>
                     <label for="groupName">Name </label>

@@ -60,7 +60,9 @@ public class GroupCreation extends HttpServlet {
 
         /* Préparation de l'objet formulaire */
         GroupCreationForm form = new GroupCreationForm( groupDao );
-
+        
+        System.out.println(request.getParameter("groupName"));
+        
         /* Traitement de la requête et récupération du bean en résultant */
         Group group = null;
         try {
