@@ -64,9 +64,7 @@ public final class Menu {
             {
                 for ( int k = 0; k < menus[i][j].length; k++ )
                 {
-                    System.out.println( i + j + k );
-                    System.out.println( getPath( i, j, k ) );
-                    System.out.println( getMenuName( getPath( i, j, k ) ) );
+
                     mapMenus.put( getPath( i, j, k ), getMenuName( getPath( i, j, k ) ) );
                 }
             }
