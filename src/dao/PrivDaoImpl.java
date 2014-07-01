@@ -18,16 +18,16 @@ public class PrivDaoImpl implements PrivDao {
     private DAOFactory          daoFactory;
 
     private static final String SQL_SELECT           = "SELECT privName, privDescription FROM Priv ORDER BY privName";
-    private static final String SQL_SELECT_BY_PRIVNAME = "SELECT privName, privDescription FROM Priv WHERE privID = ?";
+    private static final String SQL_SELECT_BY_PRIVNAME = "SELECT privName, privDescription FROM Priv WHERE privName = ?";
     private static final String SQL_SELECT_PRIV_MENUPATHS = "SELECT menuPath FROM priv_menu WHERE privName = ? ORDER BY menuPath";
     private static final String SQL_SELECT_PRIV_GROUPS = "SELECT groupName FROM web_app_db.group WHERE groupName IN (SELECT groupName FROM user_group WHERE username = ?) ORDER BY groupName";
 
     private static final String SQL_INSERT           = "INSERT INTO Priv ( privName, privDescription) VALUES ( ?, ?)";
-    private static final String SQL_INSERT_PRIV_MENU = "INSERT INTO priv_menu (menuPath , privID) VALUES (? , ?)";
-    private static final String SQL_INSERT_PRIV_GROUP= "INSERT INTO Group_Priv (groupID , privID) VALUES (? , ?)";
+    private static final String SQL_INSERT_PRIV_MENU = "INSERT INTO priv_menu (menuPath , privName) VALUES (? , ?)";
+    private static final String SQL_INSERT_PRIV_GROUP= "INSERT INTO Group_Priv (groupName , privName) VALUES (? , ?)";
 
     
-    private static final String SQL_DELETE_BY_PRIVID = "DELETE FROM Priv WHERE privID = ?";
+    private static final String SQL_DELETE_BY_PRIVNAME = "DELETE FROM Priv WHERE privName = ?";
 
     PrivDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
@@ -157,7 +157,7 @@ public class PrivDaoImpl implements PrivDao {
 
         try {
             connexion = daoFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connexion, SQL_DELETE_BY_PRIVID, true, privName );
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_DELETE_BY_PRIVNAME, true, privName );
             int statut = preparedStatement.executeUpdate();
             if ( statut == 0 ) {
                 throw new DAOException( "Failed to delete privilege, no row deleted." );
