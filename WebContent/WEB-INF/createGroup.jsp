@@ -25,7 +25,7 @@
 					<br />
 
 					<label for="groupDescription">Description</label>
-					<TEXTAREA name="groupDescription" rows="5" cols="22" ><c:out value="${group.groupDescription}"/></TEXTAREA>
+					<TEXTAREA name="groupDescription" id="groupDescription" rows="5" cols="22" ><c:out value="${group.groupDescription}"/></TEXTAREA>
 					<span class="error">${form.errors['groupDescription']}</span>
 					<br />
 					<label for="privs">Please assign privileges<br /> to this group</label>
