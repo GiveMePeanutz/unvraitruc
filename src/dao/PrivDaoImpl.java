@@ -54,7 +54,7 @@ public class PrivDaoImpl implements PrivDao {
 			
 			for (int menuPath : priv.getMenuPaths()) {
 				preparedStatement2 = initialisationRequetePreparee( connexion,
-	                    SQL_INSERT_PRIV_MENU, true, priv.getPrivName(), menuPath );
+	                    SQL_INSERT_PRIV_MENU, true,menuPath, priv.getPrivName()  );
 	            int statut2 = preparedStatement2.executeUpdate();
 	            if ( statut2 == 0 ) {
 	                throw new DAOException(
