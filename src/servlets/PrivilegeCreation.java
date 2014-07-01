@@ -16,7 +16,7 @@ import dao.DAOFactory;
 import dao.PrivDao;
 import forms.PrivilegeCreationForm;
 
-@WebServlet( urlPatterns = "/privilegeCreation" )
+@WebServlet( urlPatterns = "/privCreation" )
 public class PrivilegeCreation extends HttpServlet {
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String PATH             = "path";
@@ -24,7 +24,7 @@ public class PrivilegeCreation extends HttpServlet {
     public static final String FORM_ATT         = "form";
     public static final String MENU_REQUEST_ATT = "menus";
 
-    public static final String VUE_SUCCESS      = "/WEB-INF/displayPrivileges.jsp";
+    public static final String VUE_SUCCESS      = "/WEB-INF/displayPrivs.jsp";
     public static final String VUE_FORM         = "/WEB-INF/createPrivilege.jsp";
 
     private PrivDao            privDao;
