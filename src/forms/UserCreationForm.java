@@ -217,7 +217,6 @@ public final class UserCreationForm {
         try {
             photoURL = photoValidation( request, path );
         } catch ( FormValidationException e ) {
-            System.out.println( e.getMessage() );
             setError( PHOTO_FIELD, e.getMessage() );
         }
         user.setPhotoURL( photoURL );
