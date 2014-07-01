@@ -37,6 +37,8 @@
 		                    		<option value='<c:out value="${mapMenus.key}"/>'><c:out value="${mapMenus.value}"/></option>                    
 		                		</c:forEach>
 		                	</select>
+		                	<span class="error">${form.errors['menus']}</span>
+		                	
                 		</c:otherwise>
         			</c:choose>
                 </fieldset>  

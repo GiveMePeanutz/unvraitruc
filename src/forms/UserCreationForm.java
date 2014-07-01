@@ -194,6 +194,12 @@ public final class UserCreationForm {
     }
 
     private void handleBirthDate( DateTime birthDate, User user ) {
+
+        try {
+            birthDateValidation( birthDate );
+        } catch ( FormValidationException e ) {
+            setError( BIRTH_FIELD, e.getMessage() );
+        }
         user.setBirthDate( birthDate );
     }
 
@@ -201,7 +207,7 @@ public final class UserCreationForm {
         try {
             promotionValidation( promotion );
         } catch ( FormValidationException e ) {
-            setError( USERNAME_FIELD, e.getMessage() );
+            setError( PROMOTION_FIELD, e.getMessage() );
         }
         user.setPromotion( promotion );
     }
@@ -211,6 +217,7 @@ public final class UserCreationForm {
         try {
             photoURL = photoValidation( request, path );
         } catch ( FormValidationException e ) {
+            System.out.println( e.getMessage() );
             setError( PHOTO_FIELD, e.getMessage() );
         }
         user.setPhotoURL( photoURL );
@@ -220,6 +227,13 @@ public final class UserCreationForm {
         if ( groups == null )
         {
             throw new FormValidationException( "Please choose a group." );
+        }
+    }
+
+    private void birthDateValidation( DateTime birthDate ) throws FormValidationException {
+        if ( birthDate == null )
+        {
+            throw new FormValidationException( "Please enter a birth date." );
         }
     }
 

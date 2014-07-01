@@ -40,6 +40,8 @@
 		                    		<option value='<c:out value="${mapPrivs.value.privName}"/>'><c:out value="${mapPrivs.value.privName}"/></option>                    
 		                		</c:forEach>
 		                	</select>
+		                	<span class="error">${form.errors['privileges']}</span>
+		                	
                 		</c:otherwise>
         			</c:choose>
 				</fieldset>

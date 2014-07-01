@@ -31,6 +31,8 @@
 		                    		<option value='<c:out value="${mapGroups.value.groupName}"/>'><c:out value="${mapGroups.value.groupName}"/></option>                    
 		                		</c:forEach>
 		                	</select>
+		                	<span class="error">${form.errors['groups']}</span>
+		                	
                 		</c:otherwise>
         			</c:choose>
                 </fieldset>  
