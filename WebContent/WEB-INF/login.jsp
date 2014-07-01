@@ -10,6 +10,7 @@
     <body>
         <c:import url="/inc/menu.jsp" />
         <h1>Welcome to the new <br /> Stikom Web Application</h1>
+        
         <div id = "connectionForm">
 	        <form method="post" action="<c:url value="/login" />">
 			    <fieldset>
@@ -42,8 +43,10 @@
 	                    <p class="succes">You are connected with the username : ${sessionScope.sessionUser.username}</p>
 	                </c:if>
 	            </fieldset>
-	        </form> 
+	        </form>
+	        
         </div>
-    	<img src="inc/stikom.gif" alt="StikomPicture" class="stikom" />
+        <img src="inc/stikom.gif" alt="StikomPicture" class="stikom" /> 
+    	
     </body>
 </html>
