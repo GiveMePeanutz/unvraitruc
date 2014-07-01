@@ -26,8 +26,9 @@ public class GroupCreation extends HttpServlet {
     public static final String GROUP_ATT        = "group";
     public static final String FORM_ATT         = "form";
     public static final String PRIV_REQUEST_ATT = "privs";
-    public static final String VUE_SUCCESS      = "/WEB-INF/displayGroups.jsp";
+    public static final String VUE_SUCCESS      = "/displayGroups";
     public static final String VUE_FORM         = "/WEB-INF/createGroup.jsp";
+    public static final String GROUP_REQUEST_ATT = "groups";
 
     private GroupDao           groupDao;
     private PrivDao            privDao;
@@ -74,20 +75,26 @@ public class GroupCreation extends HttpServlet {
         /* Ajout du bean et de l'objet métier à l'objet requête */
         request.setAttribute( GROUP_ATT, group );
         request.setAttribute( FORM_ATT, form );
-
+        
+        if(request.getAttribute(PRIV_REQUEST_ATT)==null){
+	        List<Priv> listePriv = privDao.list();
+	        Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
+	        for ( Priv priv : listePriv ) {
+	            mapPrivs.put( priv.getPrivName(), priv );
+	        }
+	        request.setAttribute( PRIV_REQUEST_ATT, mapPrivs );
+        }
+        
         /* Si aucune erreur */
         if ( form.getErrors().isEmpty() ) {
-
+        	
+        	
             /* Affichage de la fiche récapitulative */
             this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response );
         } else {
-            List<Priv> listePriv = privDao.list();
-            Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
-            for ( Priv priv : listePriv ) {
-                mapPrivs.put( priv.getPrivName(), priv );
-            }
+            
 
-            request.setAttribute( PRIV_REQUEST_ATT, mapPrivs );
+            
             /* Sinon, ré-affichage du formulaire de création avec les erreurs */
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }
