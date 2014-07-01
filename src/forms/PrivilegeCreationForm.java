@@ -29,7 +29,7 @@ public final class PrivilegeCreationForm {
         return errors;
     }
 
-    public String getResultat() {
+    public String getResult() {
         return result;
     }
 
@@ -109,7 +109,7 @@ public final class PrivilegeCreationForm {
     }
 
     private void menuValidation( ArrayList<Integer> menus ) throws FormValidationException {
-        if ( menus.isEmpty() )
+        if ( menus == null )
         {
             throw new FormValidationException( "Please choose at least one menu." );
         }

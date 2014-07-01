@@ -16,14 +16,14 @@
             <form method="post" action="<c:url value="/privCreation"/>" enctype="multipart/form-data">
                 <fieldset>
                     <legend>Privilege Information</legend>
-                    <label for="namePrivilege">Name</label>
-					<input type="text" id="namePrivilege" name="namePrivilege" value="<c:out value="${privilege.name}"/>" size="30" maxlength="30" />
-					<span class="error">${form.errors['namePrivilege']}</span>
+                    <label for="privName">Name</label>
+					<input type="text" id="privName" name="privName" value="<c:out value="${privilege.privName}"/>" size="30" maxlength="30" />
+					<span class="error">${form.errors['privName']}</span>
 					<br />
 
-					<label for="descriptionPrivilege">Description</label>
-					<TEXTAREA name="descriptionPrivilege" rows="5" cols="22" ><c:out value="${privilege.description}"/></TEXTAREA>
-					<span class="error">${form.errors['descriptionPrivilege']}</span>
+					<label for="privDescription">Description</label>
+					<TEXTAREA name="privDescription" rows="5" cols="22" ><c:out value="${privilege.privDescription}"/></TEXTAREA>
+					<span class="error">${form.errors['privDescription']}</span>
 					<br />
                     <label for="privileges">Please assign menus<br /> to this group</label>
 					<c:choose>

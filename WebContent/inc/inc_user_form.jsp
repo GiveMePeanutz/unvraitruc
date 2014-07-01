@@ -11,7 +11,7 @@
 <span class="error">${form.errors['password']}</span>
 <br />
 <br />
-<label for="name">Last Name </label>
+<label for="lastName">Last Name </label>
 <input type="text" id="lastName" name="lastName" value="<c:out value="${user.lastName}"/>" size="30" maxlength="30" />
 <span class="error">${form.errors['lastName']}</span>
 <br />

@@ -19,14 +19,14 @@
             <form method="post" action="<c:url value="/groupCreation"/>" enctype="multipart/form-data">
                 <fieldset>
                     <legend>Group Information</legend>
-                    <label for="nameGroup">Name </label>
-					<input type="text" id="nameGroup" name="nameGroup" value="<c:out value="${group.name}"/>" size="30" maxlength="30" />
-					<span class="error">${form.errors['nameGroup']}</span>
+                    <label for="groupName">Name </label>
+					<input type="text" id="groupName" name="groupName" value="<c:out value="${group.groupName}"/>" size="30" maxlength="30" />
+					<span class="error">${form.errors['groupName']}</span>
 					<br />
 
-					<label for="descriptionGroup">Description</label>
-					<TEXTAREA name="descriptionGroup" rows="5" cols="22" ><c:out value="${group.description}"/></TEXTAREA>
-					<span class="error">${form.errors['descriptionGroup']}</span>
+					<label for="groupDescription">Description</label>
+					<TEXTAREA name="groupDescription" rows="5" cols="22" ><c:out value="${group.groupDescription}"/></TEXTAREA>
+					<span class="error">${form.errors['groupDescription']}</span>
 					<br />
 					<label for="privileges">Please assign privileges<br /> to this group</label>
 					<c:choose>

@@ -15,7 +15,7 @@ public final class GroupCreationForm {
 
     private static final String NAME_FIELD        = "groupName";
     private static final String DESCRIPTION_FIELD = "groupDescription";
-    private static final String PRIV_FIELD        = "privs";
+    private static final String PRIV_FIELD        = "privileges";
 
     private String              result;
     private Map<String, String> errors            = new HashMap<String, String>();
@@ -29,7 +29,7 @@ public final class GroupCreationForm {
         return errors;
     }
 
-    public String getResultat() {
+    public String getResult() {
         return result;
     }
 
@@ -109,7 +109,7 @@ public final class GroupCreationForm {
     }
 
     private void privValidation( ArrayList<String> privileges ) throws FormValidationException {
-        if ( privileges.isEmpty() )
+        if ( privileges == null )
         {
             throw new FormValidationException( "Please choose at least one privilege." );
         }
