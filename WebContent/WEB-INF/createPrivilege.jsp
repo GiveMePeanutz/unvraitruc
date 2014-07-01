@@ -28,7 +28,7 @@
                     <label for="privileges">Please assign menus<br /> to this group</label>
 					<c:choose>
             			<c:when test="${ empty requestScope.menus }">
-                		<p class="errorr">No menus in database</p>
+                		<p class="error">No menus in database</p>
             			</c:when>
             			<c:otherwise>
 		                    <select name="menus" id = "menus" multiple="multiple" >																				

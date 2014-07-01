@@ -28,10 +28,10 @@
 					<TEXTAREA name="groupDescription" rows="5" cols="22" ><c:out value="${group.groupDescription}"/></TEXTAREA>
 					<span class="error">${form.errors['groupDescription']}</span>
 					<br />
-					<label for="privileges">Please assign privileges<br /> to this group</label>
+					<label for="privs">Please assign privileges<br /> to this group</label>
 					<c:choose>
             			<c:when test="${ empty requestScope.privs }">
-                		<p class="errorr">No privileges in database</p>
+                		<p class="error">No privileges in database</p>
             			</c:when>
             			<c:otherwise>
 		                    <select name="privileges" id = "privileges" multiple="multiple" >																				

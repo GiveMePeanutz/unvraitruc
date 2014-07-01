@@ -22,7 +22,7 @@
                     <label for="groups">Please assign groups<br /> to the user</label>
                     <c:choose>
             			<c:when test="${ empty requestScope.groups }">
-                		<p class="errorr">No groups in database</p>
+                		<p class="error">No groups in database</p>
             			</c:when>
             			<c:otherwise>
 		                    <select name="groups" id = "groups" multiple="multiple">																				
