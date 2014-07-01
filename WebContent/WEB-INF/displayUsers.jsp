@@ -20,7 +20,8 @@
             </c:when>
             <%-- Sinon, affichage du tableau. --%>
             <c:otherwise>
-            <table>
+            <CENTER>          
+            <table >
                 <tr>
                 	<th>Username</th>
                     <th>Lastname</th>
@@ -55,6 +56,7 @@
                 </tr>
                 </c:forEach>
             </table>
+            </CENTER> 
             </c:otherwise>
         </c:choose>
         </div>

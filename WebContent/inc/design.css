@@ -70,6 +70,7 @@
 	margin-left: auto;
     margin-right: auto;
     width : 40%;
+    
 	
 }
 
@@ -130,6 +131,7 @@ h1, h3
 /* Table -------------------------------------------------------------------------------------*/
 table{
 	border-collapse: collapse;
+	margin: 0 auto;
 }
 tr.pair{
 	background-color: #efefef;

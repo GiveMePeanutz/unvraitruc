@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>User list</title>
+        <title>Group list</title>
         <link type="text/css" rel="stylesheet" href="<c:url value="/inc/design.css"/>" />
     </head>
     <body>
@@ -20,7 +20,8 @@
             </c:when>
             <%-- Sinon, affichage du tableau. --%>
             <c:otherwise>
-            <table>
+            <CENTER>
+            <table >
                 <tr>
                 	<th>Group name</th>
                     <th>Description</th>
@@ -47,6 +48,7 @@
                 </tr>
                 </c:forEach>
             </table>
+            </CENTER>
             </c:otherwise>
         </c:choose>
         </div>

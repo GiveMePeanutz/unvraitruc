@@ -11,7 +11,7 @@
         <c:import url="/inc/menu.jsp" />
         
         <div id="normalForm">
-        <h1>Groups  </h1>
+        <h1>Privileges  </h1>
         <br />
         <c:choose>
             <%-- Si aucun client n'existe en session, affichage d'un message par défaut. --%>
@@ -20,6 +20,7 @@
             </c:when>
             <%-- Sinon, affichage du tableau. --%>
             <c:otherwise>
+            <CENTER> 
             <table>
                 <tr>
                 	<th>Privilege name</th>
@@ -47,6 +48,7 @@
                 </tr>
                 </c:forEach>
             </table>
+            </CENTER>
             </c:otherwise>
         </c:choose>
         </div>
