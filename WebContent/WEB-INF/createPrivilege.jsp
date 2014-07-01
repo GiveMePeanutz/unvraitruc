@@ -13,7 +13,7 @@
         	<h1>Create a Privilege</h1>
        		<h3>Please, fill the following form and validate</h3>
         <div id="normalForm">
-            <form method="post" action="<c:url value="/privilegeCreation"/>" enctype="multipart/form-data">
+            <form method="post" action="<c:url value="/privCreation"/>" enctype="multipart/form-data">
                 <fieldset>
                     <legend>Privilege Information</legend>
                     <label for="namePrivilege">Name</label>
