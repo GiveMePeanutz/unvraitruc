@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import beans.Group;
+import beans.Priv;
 import beans.User;
 import dao.DAOFactory;
 import dao.GroupDao;
@@ -31,7 +32,7 @@ public class UserCreation extends HttpServlet {
     public static final String FORM_ATT          = "form";
     public static final String GROUP_REQUEST_ATT = "groups";
 
-    public static final String VUE_SUCCESS       = "/WEB-INF/displayUsers.jsp";
+    public static final String VUE_SUCCESS       = "/displayUsers";
     public static final String VUE_FORM          = "/WEB-INF/createUser.jsp";
 
     private UserDao            userDao;
@@ -76,18 +77,20 @@ public class UserCreation extends HttpServlet {
         request.setAttribute( USER_ATT, user );
         request.setAttribute( FORM_ATT, form );
         
+        if(request.getAttribute(GROUP_REQUEST_ATT)==null){
+	        List<Group> listGroup = groupDao.list();
+	        Map<String, Group> mapPrivs = new HashMap<String, Group>();
+	        for ( Group group : listGroup ) {
+	            mapPrivs.put( group.getGroupName(), group );
+	        }
+	        request.setAttribute( GROUP_REQUEST_ATT, mapPrivs );
+        }
         
         
         /* Si aucune erreur */
         if ( form.getErrors().isEmpty() ) {
 
-            /* Affichage de la fiche récapitulative */
-        	List<Group> listeGroup = groupDao.list();
-            Map<String, Group> mapGroups = new HashMap<String, Group>();
-            for ( Group group : listeGroup ) {
-                mapGroups.put( group.getGroupName(), group );
-            }
-            request.setAttribute( GROUP_REQUEST_ATT, mapGroups );
+            
             this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response );
         } else {
             /* Sinon, ré-affichage du formulaire de création avec les erreurs */
