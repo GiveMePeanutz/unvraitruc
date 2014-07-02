@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,17 +26,18 @@ import forms.LoginForm;
 @WebServlet( "/login" )
 public class Login extends HttpServlet {
 
-    public static final String  CONF_DAO_FACTORY   = "daofactory";
-    public static final String  USER_ATT           = "user";
-    public static final String  FORM_ATT           = "form";
-    public static final String  LOGIN_INTERVAL_ATT = "loginInterval";
-    public static final String  USER_SESSION_ATT   = "userSession";
-    public static final String  LAST_LOGIN_COOKIE  = "lastLogin";
-    public static final String  DATE_FORMAT        = "dd/MM/yyyy HH:mm:ss";
-    public static final String  VIEW               = "/WEB-INF/login.jsp";
-    public static final String  MEMORY_FIELD       = "memory";
-    public static final int     MAX_AGE_COOKIE     = 60 * 60 * 24 * 365;   // 1year
-    private static final String PATH               = "path";
+    public static final String  CONF_DAO_FACTORY   		= "daofactory";
+    public static final String  USER_ATT           		= "user";
+    public static final String  FORM_ATT           		= "form";
+    public static final String  LOGIN_INTERVAL_ATT 		= "loginInterval";
+    public static final String  USER_SESSION_ATT   		= "userSession";
+    public static final String	USER_SESSION_ACCESS_ATT = "userSessionAccess";
+    public static final String  LAST_LOGIN_COOKIE  		= "lastLogin";
+    public static final String  DATE_FORMAT        		= "dd/MM/yyyy HH:mm:ss";
+    public static final String  VIEW               		= "/WEB-INF/login.jsp";
+    public static final String  MEMORY_FIELD       		= "memory";
+    public static final int     MAX_AGE_COOKIE     		= 60 * 60 * 24 * 365;   // 1year
+    private static final String PATH               		= "path";
     private UserDao             userDao;
 
     public void init() throws ServletException {
@@ -81,6 +83,7 @@ public class Login extends HttpServlet {
         LoginForm form = new LoginForm( userDao );
         /* Traitement de la requête et récupération du bean en résultant */
         User user = form.connectUser( request, path );
+        
         /* Récupération de la session depuis la requête */
         HttpSession session = request.getSession();
 
@@ -90,6 +93,9 @@ public class Login extends HttpServlet {
          */
         if ( form.getErrors().isEmpty() ) {
             session.setAttribute( USER_SESSION_ATT, user );
+            List<String> menus = userDao.listAccMenus(user.getUsername());
+            session.setAttribute(USER_SESSION_ACCESS_ATT, menus);
+            
         } else {
             session.setAttribute( USER_SESSION_ATT, null );
         }

@@ -25,6 +25,8 @@ public class UserDaoImpl implements UserDao {
 	private static final String SQL_SELECT_BY_USERNAME = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex FROM User WHERE username = ?";
 	private static final String SQL_SELECT_USER_COURSES = "SELECT courseName FROM course WHERE courseName IN (SELECT courseName FROM user_course WHERE username = ?) ORDER BY courseName";
 	private static final String SQL_SELECT_USER_GROUPS = "SELECT groupName FROM web_app_db.group WHERE groupName IN (SELECT groupName FROM user_group WHERE username = ?) ORDER BY groupName";
+	private static final String SQL_SELECT_USER_ACC_MENUS = "SELECT DISTINCT menuPath from priv_menu where privname IN (SELECT privName FROM group_priv WHERE groupname IN ( SELECT groupName FROM user_group WHERE username = ? ))";
+	
 	
 	private static final String SQL_INSERT = "INSERT INTO User (username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, sex, regDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String SQL_INSERT_USER_COURSE = "INSERT INTO user_course (username , courseName) VALUES (? , ?)";
@@ -246,6 +248,30 @@ public class UserDaoImpl implements UserDao {
         }
 
         return pw;
+	}
+
+	@Override
+	public List<String> listAccMenus( String username ) throws DAOException {
+		Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<String> menus = new ArrayList<String>();
+
+        try {
+            connection = daoFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connection, SQL_SELECT_USER_ACC_MENUS, false, username );
+            resultSet = preparedStatement.executeQuery();
+            
+            while ( resultSet.next() ) {
+            	menus.add(resultSet.getString("menuPath"));
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connection );
+        }
+
+        return menus;
 	}
 	
 }

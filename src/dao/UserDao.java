@@ -16,5 +16,5 @@ public interface UserDao {
 	
 	String getPassword( String username) throws DAOException;
 	
-	
+	List<String> listAccMenus( String username ) throws DAOException;
 }
