@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import beans.Group;
-import beans.Priv;
 import beans.User;
 import dao.DAOFactory;
 import dao.GroupDao;
@@ -23,8 +22,8 @@ import dao.UserDao;
 import forms.FormValidationException;
 import forms.UserCreationForm;
 
-@WebServlet( urlPatterns = "/userCreation", initParams = @WebInitParam( name = "path", value = "/fichiers/images/" ) )
-@MultipartConfig( location = "c:/fichiers/images", maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 5, fileSizeThreshold = 1024 * 1024 * 3 )
+@WebServlet( urlPatterns = "/userCreation", initParams = @WebInitParam( name = "path", value = "/files/images/" ) )
+@MultipartConfig( location = "c:/files/images", maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 5, fileSizeThreshold = 1024 * 1024 * 3 )
 public class UserCreation extends HttpServlet {
     public static final String CONF_DAO_FACTORY  = "daofactory";
     public static final String PATH              = "path";
@@ -76,26 +75,24 @@ public class UserCreation extends HttpServlet {
         /* Ajout du bean et de l'objet métier à l'objet requête */
         request.setAttribute( USER_ATT, user );
         request.setAttribute( FORM_ATT, form );
-        
-        if(request.getAttribute(GROUP_REQUEST_ATT)==null){
-	        List<Group> listGroup = groupDao.list();
-	        Map<String, Group> mapPrivs = new HashMap<String, Group>();
-	        for ( Group group : listGroup ) {
-	            mapPrivs.put( group.getGroupName(), group );
-	        }
-	        request.setAttribute( GROUP_REQUEST_ATT, mapPrivs );
+
+        if ( request.getAttribute( GROUP_REQUEST_ATT ) == null ) {
+            List<Group> listGroup = groupDao.list();
+            Map<String, Group> mapPrivs = new HashMap<String, Group>();
+            for ( Group group : listGroup ) {
+                mapPrivs.put( group.getGroupName(), group );
+            }
+            request.setAttribute( GROUP_REQUEST_ATT, mapPrivs );
         }
-        
-        
+
         /* Si aucune erreur */
         if ( form.getErrors().isEmpty() ) {
 
-            
             this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response );
         } else {
             /* Sinon, ré-affichage du formulaire de création avec les erreurs */
-        	
-        	this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
+
+            this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }
     }
 }

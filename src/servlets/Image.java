@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet( urlPatterns = "/images/*", initParams = @WebInitParam( name = "path", value = "/files/images/" ) )
+@WebServlet( urlPatterns = "/images/*", initParams = @WebInitParam( name = "path", value = "files/images/" ) )
 public class Image extends HttpServlet {
     public static final int TAILLE_TAMPON = 10240; // 10ko
 
