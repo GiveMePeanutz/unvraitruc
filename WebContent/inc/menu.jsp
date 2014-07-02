@@ -170,7 +170,7 @@
 		</c:forEach>
 		
 		
-		<c:if test="${sessionScope.userSession}">
+		<c:if test="${!empty sessionScope.userSession}">
 		<li><a href="<c:url value="/logout"/>">Logout</a></li>	  
 		</c:if>
 		
