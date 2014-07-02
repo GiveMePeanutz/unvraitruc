@@ -44,7 +44,7 @@
 						</c:forEach>
 					</td>
 					<td class="action">
-                        <a href="<c:url value="/profile"><c:param name="username" value="${ mapClients.key }" /></c:url>">
+                        <a href="<c:url value="/profile"><c:param name="username" value="${ mapClients.value.username }" /></c:url>">
                             <img src="<c:url value="/inc/info.gif"/>" alt="info" />
                         </a>
                     </td>
