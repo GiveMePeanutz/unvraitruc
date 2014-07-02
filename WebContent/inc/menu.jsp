@@ -168,6 +168,12 @@
 		<li><a href="<c:url value="/profile"><c:param name="username" value="${sessionScope.userSession.username}" /></c:url>">Profile</a></li>	  
 		</c:if>
 		</c:forEach>
+		
+		
+		<c:if test="${sessionScope.userSession}">
+		<li><a href="<c:url value="/logout"/>">Logout</a></li>	  
+		</c:if>
+		
 	
 	</ul>
 </div>
