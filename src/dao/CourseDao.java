@@ -13,6 +13,6 @@ public interface CourseDao {
 	
 	List<Course> list() throws DAOException;
 
-	void delete( Course course ) throws DAOException;
+	void delete( String courseName ) throws DAOException;
 	
 }

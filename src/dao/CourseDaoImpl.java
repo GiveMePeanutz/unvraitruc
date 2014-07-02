@@ -9,6 +9,7 @@ import static dao.DAOUtility.initialisationRequetePreparee;
 
 
 
+
 import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,6 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 
 
@@ -63,7 +65,7 @@ public class CourseDaoImpl implements CourseDao {
 		try {
 			connexion = daoFactory.getConnection();
 			preparedStatement1 = initialisationRequetePreparee(connexion,
-					SQL_INSERT, true, course.getCourseName(), course.getCourseYear(), course.getDescription(), course.getSchedule());
+					SQL_INSERT, true, course.getCourseName(), course.getCourseYear(), course.getCourseDescription(), course.getSchedule());
 			int statut1 = preparedStatement1.executeUpdate();
 			if (statut1 == 0) {
 				throw new DAOException(
@@ -161,13 +163,13 @@ public class CourseDaoImpl implements CourseDao {
 	}
 
 	@Override
-	public void delete(Course course) throws DAOException {
+	public void delete(String courseName) throws DAOException {
 		Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
             connection = daoFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connection, SQL_DELETE_BY_COURSENAME, true, course.getCourseName() );
+            preparedStatement = initialisationRequetePreparee( connection, SQL_DELETE_BY_COURSENAME, true, courseName );
             int statut = preparedStatement.executeUpdate();
             if ( statut == 0 ) {
                 throw new DAOException( "Failed to delete course, no row deleted." );
@@ -189,11 +191,14 @@ public class CourseDaoImpl implements CourseDao {
 		course.setCourseName(resultSet.getString("courseName"));
 		course.setCourseYear(resultSet.getInt("courseYear"));
 		course.setCourseDescription(resultSet.getString("courseDescription"));
-		course.setSchedule(resultSet.getString("schedule"));
+		course.setSchedule(resultSet.getString("courseSchedule"));
+		ArrayList<String> usernames = new ArrayList<String>();
 		resultSet2.beforeFirst();
 		while(resultSet2.next()) {
-			course.addUsername(resultSet2.getString("username"));
+			usernames.add(resultSet2.getString("username"));
 		}
+		course.setUsernames(usernames);
+		
 		return course;
 		
 	}

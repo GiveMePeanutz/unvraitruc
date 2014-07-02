@@ -9,7 +9,7 @@ import java.util.List;
 public class Course implements Serializable{
 	
 	private String courseName;
-	private String description;
+	private String courseDescription;
 	private int courseYear;
 	private String schedule;
 	private ArrayList<String> usernames;
@@ -21,11 +21,11 @@ public class Course implements Serializable{
 	public void setCourseName(String courseName) {
 		this.courseName = courseName;
 	}
-	public String getDescription() {
-		return description;
+	public String getCourseDescription() {
+		return courseDescription;
 	}
 	public void setCourseDescription(String description) {
-		this.description = description;
+		this.courseDescription = description;
 	}
 	public int getCourseYear() {
 		return courseYear;
