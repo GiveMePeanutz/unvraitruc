@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +13,7 @@ import beans.User;
 import dao.DAOFactory;
 import dao.UserDao;
 
-@WebServlet( "/profile" )
+@WebServlet( urlPatterns = "/profile", initParams = @WebInitParam( name = "path", value = "/files/images/" ) )
 public class Profile extends HttpServlet {
 
     public static final String CONF_DAO_FACTORY = "daofactory";

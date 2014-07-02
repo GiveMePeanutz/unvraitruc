@@ -46,7 +46,7 @@
 	  	</li>
 		<li><a href="<c:url value="/warehouseMaintenance"/>">WarehouseMaintenance</a></li>
 		<li><a href="<c:url value="/dataAnalysis"/>">Data Analysis</a></li>
-		<li><a href="<c:url value="/profile"/>">Profile</a></li>	  
+		<li><a href="<c:url value="/profile"><c:param name="username" value="${sessionScope.user.username}" /></c:url>">Profile</a></li>	  
 	</ul>
 </div>
 
