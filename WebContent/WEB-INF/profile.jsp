@@ -11,7 +11,7 @@
         <c:import url="/inc/menu.jsp" />             
         <h1><c:out value="${ user.firstName }"/> <c:out value="${ user.lastName }"/> Profile</h1>
         <br />      
-        <div id="corps">
+        <div id="normalForm">
             <p class="info">${ form.result }</p>
             <p>Username : <c:out value="${ user.username }"/></p>  
             <p>Password : <c:out value="${ user.password }"/></p>

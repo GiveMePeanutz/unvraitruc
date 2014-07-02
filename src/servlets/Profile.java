@@ -1,9 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +16,8 @@ import dao.UserDao;
 public class Profile extends HttpServlet {
 
     public static final String CONF_DAO_FACTORY = "daofactory";
+    public static final String USERNAME_PARAM   = "username";
+
     public static final String USER_REQUEST_ATT = "user";
     public static final String VIEW             = "/WEB-INF/profile.jsp";
 
@@ -30,10 +29,10 @@ public class Profile extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-
+        String username = getParameterValue( request, USERNAME_PARAM );
+        System.out.println( username );
         User user = userDao.find( username );
-
-        request.setAttribute( USER_REQUEST_ATT, mapUsers );
+        request.setAttribute( USER_REQUEST_ATT, user );
 
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
 
@@ -41,16 +40,16 @@ public class Profile extends HttpServlet {
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
-        List<User> listeUsers = userDao.list();
-        Map<String, User> mapUsers = new HashMap<String, User>();
-        for ( User user : listeUsers ) {
-            mapUsers.put( user.getUsername(), user );
+    }
+
+    private static String getParameterValue( HttpServletRequest request,
+            String nomChamp ) {
+        String value = request.getParameter( nomChamp );
+        if ( value == null || value.trim().length() == 0 ) {
+            return null;
+        } else {
+            return value;
         }
-
-        request.setAttribute( USER_REQUEST_ATT, mapUsers );
-
-        this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
-
     }
 
 }
