@@ -105,8 +105,6 @@ public final class LoginForm {
     }
 
     private void similarityValidation( String username, String password ) throws FormValidationException {
-        System.out.println(userDao.getPassword( username ));
-        System.out.println(password);
     	if ( !(userDao.getPassword( username )!=null && password!=null && userDao.getPassword( username ).equals(password )) ) {
             throw new FormValidationException( "This password doesn't match with this username" );
         }
