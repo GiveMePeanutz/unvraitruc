@@ -120,6 +120,11 @@ h1, h3
 	 text-align : center;
 }
 
+.important
+{
+    text-decoration: underline;
+    font-weight : bold;
+}
 /* Pictures --------------------------------------------------------------------------------------- */
 .stikom {
 

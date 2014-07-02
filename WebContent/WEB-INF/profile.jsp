@@ -12,45 +12,58 @@
         <h1>Profile of <c:out value="${ user.firstName }"/> <c:out value="${ user.lastName }"/> </h1>
         <br />      
         <div id="normalForm">
+
             <p class="info">${ form.result }</p>
-            <p>Username : <c:out value="${ user.username }"/></p>  
-            <p>Password : <c:out value="${ user.password }"/></p>
-            <p>Register Date : <c:out value="${ user.regDate }"/></p>           
+            <dl><dt class ="important">Username :</dt> <dd><c:out value="${ user.username }"/></dd></dl>  
+            <dl><dt class="important">Password :</dt> <dd><c:out value="${ user.password }"/></dd></dl>
+            <dl><dt class="important">Register Date :</dt> <dd><c:out value="${ user.regDate }"/></dd></dl>           
                      
-            <p>FirstName : <c:out value="${ user.firstName }"/></p>
-            <p>Last Name : <c:out value="${ user.lastName }"/></p>
-            <p>Sex : <c:out value="${ user.sex }"/></p>
-            <p>Birth Date : <c:out value="${ user.birthDate }"/></p>
-            <p>Address : <c:out value="${ user.address }"/></p>
-            <p>Phone Number : <c:out value="${ user.phone }"/></p>
-            <p>Email : <c:out value="${ user.email }"/></p>
-            <p>Promotion : <c:out value="${ user.promotion }"/></p>
-            <p>
+            <dl><dt class="important">FirstName :</dt> <dd><c:out value="${ user.firstName }"/></dd></dl>
+            <dl><dt class="important">Last Name :</dt> <dd><c:out value="${ user.lastName }"/></dd></dl>
+            <c:if test="${user.sex==0}">
+            <dl><dt class="important">Sex :</dt> <dd><c:out value="Male"/></dd></dl>
+            </c:if> 
+            <c:if test="${user.sex==1}">
+            <dl><dt class="important">Sex :</dt> <dd><c:out value="Female"/></dd></dl>
+            </c:if>
+            
+            <dl><dt class="important">Birth Date :</dt> <dd><c:out value="${ user.birthDate }"/></dd></dl>
+            <dl><dt class="important">Address :</dt> <dd><c:out value="${ user.address }"/></dd></dl>
+            <dl><dt class="important">Phone Number :</dt><dd><c:out value="${ user.phone }"/></dd></dl>
+            <dl><dt class="important">Email :</dt> <dd><c:out value="${ user.email }"/></dd></dl>
+            <dl><dt class="important">Promotion :</dt> <dd><c:out value="${ user.promotion }"/></dd></dl>
+            <dl>
              <c:if test="${ !empty user.photoURL }">
                             <c:set var="photo"><c:out value="${ user.photoURL }"/></c:set>
-                            Photo : <a href="<c:url value="/images/${ photo }"/>"><c:out value="${ user.photoURL }"/></a>
+                            <dt class="important">Photo :</dt> <dd><a href="<c:url value="/images/${ photo }"/>"><c:out value="${ user.photoURL }"/></a></dd>
                         </c:if>
-            </p>
-            <p>
-            Groups : 
-            <br>
+            </dl>
+            <dl>
+            <dt class="important">Groups :</dt> 
+            <dd>
+            <ul>
             	<c:forEach items="${ user.groupNames }" var="groups" >
-            		<c:out value="${ groups }"/>
+            		<li><c:out value="${ groups }"/></li>
             		<br/>
             	</c:forEach>
-            </p>
-            <p>
-            Courses : 
-            <br />
+            </ul>
+            </dd>
+            </dl>
+            <dl>
+            <dt class="important">Courses :</dt> 
+            <dd>
+            <ul>
             	<c:forEach items="${ user.courseNames }" var="courses">
-            		<c:out value="${ courses }"/>
+            		<li><c:out value="${ courses }"/></li>
             		<br/>
             	</c:forEach>
-            </p>
+            </ul>
+            </dd>
+            </dl>
             <br>
             <a href="<c:url value="/modifyUser"><c:param name="username" value="${user.username }" /></c:url>">           
             <input type="button" value="Modify"  />
-          	</a>         
+          	</a> 
         </div>
     </body>
 </html>
