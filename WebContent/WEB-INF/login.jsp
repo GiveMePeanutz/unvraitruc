@@ -15,27 +15,30 @@
 	        <form method="post" action="<c:url value="/login" />">
 			    <fieldset>
 	                <legend>Login</legend>
-	                <p>Please connect yourself to access the application.</p>
-					<c:if test="${empty sessionScope.sessionUser && !empty requestScope.intervalleConnexions}">
+	                
+					<c:if test="${empty sessionScope.userSession && !empty requestScope.intervalleConnexions}">
 	                	<p class="info">(Your last connection was ${requestScope.intervalleConnexions} ago)</p>
 	                </c:if>
-	                <label for="name">Username<span class="required">*</span></label>
-	                <input type="text" id="username" name="username" value="<c:out value="${User.username}"/>" size="20" maxlength="60" />
-	                <span class="error">${form.errors['username']}</span>
-	                <br />
-	
-	                <label for="password">Password <span class="required">*</span></label>
-	                <input type="password" id="password" name="password" value="" size="20" maxlength="20" />
-	                <span class="error">${form.errors['password']}</span>
-	                <br />
-	 				<br />
-	                <label for="remember">Remember Me ?</label>
-	                <input type="checkbox" id="remember" name="remember" />
-	                <br />
-	                
-	                <input type="submit" value="Connection" class="connectButton" />
-	                <br />
-	                
+	                <c:if test="${empty sessionScope.userSession}">
+	                	<p>Please connect yourself to access the application.</p>
+		                <label for="name">Username<span class="required">*</span></label>
+		                <input type="text" id="username" name="username" value="<c:out value="${User.username}"/>" size="20" maxlength="60" />
+		                <span class="error">${form.errors['username']}</span>
+		                <br />
+		
+		                <label for="password">Password <span class="required">*</span></label>
+		                <input type="password" id="password" name="password" value="" size="20" maxlength="20" />
+		                <span class="error">${form.errors['password']}</span>
+		                <br />
+		 				<br />
+		 			
+		                <label for="remember">Remember Me ?</label>
+		                <input type="checkbox" id="remember" name="remember" />
+		                <br />
+		                
+		                <input type="submit" value="Connection" class="connectButton" />
+		                <br />
+	                </c:if>
 	                <p class="${empty form.errors ? 'success' : 'error'}">${form.result}</p>
 	           		<%-- Vérification de la présence d'un objet utilisateur en session --%>
 	                <c:if test="${!empty sessionScope.userSession}">
