@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import staticData.Menu;
 import beans.Course;
 import beans.User;
 import beans.User;
@@ -261,9 +262,8 @@ public class UserDaoImpl implements UserDao {
             connection = daoFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connection, SQL_SELECT_USER_ACC_MENUS, false, username );
             resultSet = preparedStatement.executeQuery();
-            
             while ( resultSet.next() ) {
-            	menus.add(resultSet.getString("menuPath"));
+            	menus.add(Menu.getMenuName(Integer.parseInt(resultSet.getString("menuPath"))));
             }
         } catch ( SQLException e ) {
             throw new DAOException( e );

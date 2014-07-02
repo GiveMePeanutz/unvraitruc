@@ -12,27 +12,27 @@ public final class Menu {
                                       { "Add User" },
                                       { "Group",
                                       "Display Groups",
-                                      "Add Groups"
+                                      "Add Group"
                                       },
                                       { "Privilege",
-                                      "Displays Privileges",
-                                      "Add Privileges"
+                                      "Display Privileges",
+                                      "Add Privilege"
                                       }
                                       },
                                       {
                                       { "Course" },
                                       { "Display Courses" },
-                                      { "Add a Course" }
+                                      { "Add Course" }
                                       },
                                       {
                                       { "Teacher" },
                                       { "Display Teachers" },
-                                      { "Add a Teacher" }
+                                      { "Add Teacher" }
                                       },
                                       {
                                       { "Student" },
                                       { "Display Students" },
-                                      { "Add a Student" }
+                                      { "Add Student" }
                                       },
                                       {
                                       { "Warehouse Maintenance" }
