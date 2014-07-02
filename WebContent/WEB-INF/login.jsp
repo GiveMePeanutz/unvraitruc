@@ -38,9 +38,9 @@
 	                
 	                <p class="${empty form.errors ? 'success' : 'error'}">${form.result}</p>
 	           		<%-- Vérification de la présence d'un objet utilisateur en session --%>
-	                <c:if test="${!empty sessionScope.sessionUtilisateur}">
+	                <c:if test="${!empty sessionScope.userSession}">
 	                    <%-- Si l'utilisateur existe en session, alors on affiche son adresse email. --%>
-	                    <p class="succes">You are connected with the username : ${sessionScope.sessionUser.username}</p>
+	                    <p class="succes">You are connected with the username : ${sessionScope.userSession.username}</p>
 	                </c:if>
 	            </fieldset>
 	        </form>	        
