@@ -426,7 +426,6 @@ public final class UserCreationForm {
         {
             DateTimeFormatter formatter = DateTimeFormat.forPattern( "MM/dd/yyyy" );
             DateTime dt = formatter.parseDateTime( value );
-            System.out.println( dt );
             return dt;
         }
     }

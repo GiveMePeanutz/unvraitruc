@@ -9,7 +9,7 @@
     </head>
     <body>
         <c:import url="/inc/menu.jsp" />             
-        <h1><c:out value="${ user.firstName }"/> <c:out value="${ user.lastName }"/> Profile</h1>
+        <h1>Profile of <c:out value="${ user.firstName }"/> <c:out value="${ user.lastName }"/> </h1>
         <br />      
         <div id="normalForm">
             <p class="info">${ form.result }</p>
@@ -25,8 +25,12 @@
             <p>Phone Number : <c:out value="${ user.phone }"/></p>
             <p>Email : <c:out value="${ user.email }"/></p>
             <p>Promotion : <c:out value="${ user.promotion }"/></p>
-            <p>Photo : <c:out value="${ user.photoURL }"/></p>
-            
+            <p>
+             <c:if test="${ !empty user.photoURL }">
+                            <c:set var="photo"><c:out value="${ user.photoURL }"/></c:set>
+                            Photo : <a href="<c:url value="/images/${ photo }"/>"><c:out value="${ user.photoURL }"/></a>
+                        </c:if>
+            </p>
             <p>
             Groups : 
             <br>
@@ -44,8 +48,9 @@
             	</c:forEach>
             </p>
             <br>
+            <a href="<c:url value="/modifyUser"><c:param name="username" value="${user.username }" /></c:url>">           
             <input type="button" value="Modify"  />
-          
+          	</a>         
         </div>
     </body>
 </html>

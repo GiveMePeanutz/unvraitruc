@@ -30,7 +30,6 @@ public class Profile extends HttpServlet {
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         String username = getParameterValue( request, USERNAME_PARAM );
-        System.out.println( username );
         User user = userDao.find( username );
         request.setAttribute( USER_REQUEST_ATT, user );
 
