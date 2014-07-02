@@ -45,10 +45,17 @@
 	                    <%-- Si l'utilisateur existe en session, alors on affiche son adresse email. --%>
 	                    <p class="succes">You are connected with the username : ${sessionScope.userSession.username}</p>
 	                </c:if>
+	                <c:if test="${!empty sessionScope.userSession}">
+        				<a href="<c:url value="/logout"/>"  class="button">           
+							<input type="button" value="Logout" />
+						</a> 
+    				</c:if>
 	            </fieldset>
 	        </form>	        
         </div>
-        <img src="inc/stikom.gif" alt="StikomPicture" class="stikom" /> 
+        <img src="inc/stikom.gif" alt="StikomPicture" class="stikom" />
+        <br />
+        
     	
     </body>
 </html>
