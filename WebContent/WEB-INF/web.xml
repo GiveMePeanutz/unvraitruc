@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app>
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    version="3.0">
     <filter>
         <filter-name>Set Character Encoding</filter-name>
         <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
@@ -15,6 +19,22 @@
     <filter-mapping>
         <filter-name>Set Character Encoding</filter-name>
         <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>filters.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>DisplayUsersFilter</filter-name>
+        <filter-class>filters.DisplayUsersFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DisplayUsersFilter</filter-name>
+        <url-pattern>/displayUsers</url-pattern>
     </filter-mapping>
 	<function>
         <name>contains</name>
