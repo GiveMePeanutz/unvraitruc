@@ -31,6 +31,7 @@ public class ProfileGroup extends HttpServlet {
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         String groupName = getParameterValue( request, GROUPNAME_PARAM );
         Group group = groupDao.find( groupName );
+
         request.setAttribute( GROUP_REQUEST_ATT, group );
 
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );

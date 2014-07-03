@@ -20,7 +20,7 @@
             <dl>
             <dt class="important">Users :</dt> 
             <dd>
-            <ul>
+            <ul class="prof">
             	<c:forEach items="${ course.usernames }" var="users" >
             		<li><c:out value="${ users }"/></li>
             		<br/>

@@ -16,21 +16,21 @@
             <p class="info">${ form.result }</p>
             <dl><dt class ="important">Name :</dt> <dd><c:out value="${ group.groupName }"/></dd></dl>  
             <dl><dt class="important">Description :</dt> <dd><c:out value="${ group.groupDescription }"/></dd></dl>
-            <dl>
-            <dt class="important">Users :</dt> 
-            <dd>
-            <ul>
+            
+            <p class="important">Users :</p> 
+            
+            <ul class="prof">
             	<c:forEach items="${ group.usernames }" var="users" >
             		<li><c:out value="${ users }"/></li>
             		<br/>
             	</c:forEach>
             </ul>
-            </dd>
-            </dl>   
-            <br>
+ 
+			
             <a href="<c:url value="/modifyGroup"><c:param name="groupName" value="${group.groupName }" /></c:url>" class = "button">           
             <input type="button" value="Modify" />
-          	</a> 
+          	</a>
+          	 
         </div>
     </body>
 </html>

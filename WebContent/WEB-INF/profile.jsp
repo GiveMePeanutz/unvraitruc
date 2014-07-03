@@ -38,28 +38,23 @@
                             <dt class="important">Photo :</dt> <dd><a href="<c:url value="/images/${ photo }"/>"><c:out value="${ user.photoURL }"/></a></dd>
                         </c:if>
             </dl>
-            <dl>
-            <dt class="important">Groups :</dt> 
-            <dd>
-            <ul>
+
+            <p class="important">Groups :</p> 
+            <ul class="prof">
             	<c:forEach items="${ user.groupNames }" var="groups" >
             		<li><c:out value="${ groups }"/></li>
             		<br/>
             	</c:forEach>
             </ul>
-            </dd>
-            </dl>
-            <dl>
-            <dt class="important">Courses :</dt> 
-            <dd>
-            <ul>
+
+            <p class="important">Courses :</p> 
+            <ul class="prof">
             	<c:forEach items="${ user.courseNames }" var="courses">
             		<li><c:out value="${ courses }"/></li>
             		<br/>
             	</c:forEach>
             </ul>
-            </dd>
-            </dl>
+
             <br>
             <a  href="<c:url value="/modifyUser" ><c:param name="username" value="${user.username }" /></c:url>" class = "button">           
             <input type="button" value="Modify" />
