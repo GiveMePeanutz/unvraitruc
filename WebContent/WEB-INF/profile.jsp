@@ -61,7 +61,7 @@
             </dd>
             </dl>
             <br>
-            <a href="<c:url value="/modifyUser" ><c:param name="username" value="${user.username }" /></c:url>">           
+            <a  href="<c:url value="/modifyUser" ><c:param name="username" value="${user.username }" /></c:url>" class = "button">           
             <input type="button" value="Modify" />
           	</a> 
         </div>
