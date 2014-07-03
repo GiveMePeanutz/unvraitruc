@@ -12,11 +12,7 @@ import beans.Course;
 import dao.CourseDao;
 import dao.DAOFactory;
 
-<<<<<<< HEAD
 @WebServlet( "/profileCourse" )
-=======
-@WebServlet( "/profileCourse" ) 
->>>>>>> db054c8734f547f3072a00bafb6f939639cfbe08
 public class ProfileCourse extends HttpServlet {
 
     public static final String CONF_DAO_FACTORY   = "daofactory";
