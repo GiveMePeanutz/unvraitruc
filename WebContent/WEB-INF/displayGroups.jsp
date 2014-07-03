@@ -26,6 +26,7 @@
                 	<th>Group name</th>
                     <th>Description</th>
                     <th>Privileges</th>
+                    <th class="action">More</th>
                     <th class="action">Delete</th>                   
                 </tr>
                 <%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
@@ -40,6 +41,11 @@
 						    ${item} / 
 						</c:forEach>
 					</td>
+					<td class="action">
+                        <a href="<c:url value="/profileGroup"><c:param name="groupName" value="${ mapUsers.value.groupName }" /></c:url>">
+                            <img src="<c:url value="/inc/info.gif"/>" alt="info" />
+                        </a>
+                    </td>
                     <td class="action">
                         <a href="<c:url value="/deleteGroup"><c:param name="groupName" value="${ mapGroups.value.groupName }" /></c:url>">
                             <img src="<c:url value="/inc/supprimer.png"/>" alt="Delete" />

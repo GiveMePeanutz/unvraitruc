@@ -8,34 +8,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import beans.Course;
-import dao.CourseDao;
+import beans.Group;
 import dao.DAOFactory;
+import dao.GroupDao;
 
-<<<<<<< HEAD
-@WebServlet( "/profileCourse" )
-=======
-@WebServlet( "/profileCourse" ) 
->>>>>>> db054c8734f547f3072a00bafb6f939639cfbe08
-public class ProfileCourse extends HttpServlet {
+@WebServlet( "/profileGroup" )
+public class ProfileGroup extends HttpServlet {
 
-    public static final String CONF_DAO_FACTORY   = "daofactory";
-    public static final String COURSENAME_PARAM   = "courseName";
+    public static final String CONF_DAO_FACTORY  = "daofactory";
+    public static final String GROUPNAME_PARAM   = "groupName";
 
-    public static final String COURSE_REQUEST_ATT = "course";
-    public static final String VIEW               = "/WEB-INF/profileCourse.jsp";
+    public static final String GROUP_REQUEST_ATT = "group";
+    public static final String VIEW              = "/WEB-INF/profileGroup.jsp";
 
-    private CourseDao          courseDao;
+    private GroupDao           groupDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
-        this.courseDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getCourseDao();
+        this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        String courseName = getParameterValue( request, COURSENAME_PARAM );
-        Course course = courseDao.find( courseName );
-        request.setAttribute( COURSE_REQUEST_ATT, course );
+        String groupName = getParameterValue( request, GROUPNAME_PARAM );
+        Group group = groupDao.find( groupName );
+        request.setAttribute( GROUP_REQUEST_ATT, group );
 
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
 
