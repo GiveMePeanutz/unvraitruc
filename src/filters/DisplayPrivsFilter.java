@@ -30,7 +30,7 @@ public class DisplayPrivsFilter implements Filter {
 		HttpSession session = request.getSession();
 		
 		List menus = ((List<String>) session.getAttribute(USER_SESSION_ACCESS_ATT));
-		if(!menus.contains("Display Privs")){
+		if(!menus.contains("Display Privileges")){
 			request.getRequestDispatcher("/notAvailable.jsp").forward( req, res);
 			return;
 		}
