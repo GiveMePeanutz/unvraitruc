@@ -42,7 +42,7 @@
 						</c:forEach>
 					</td>
 					<td class="action">
-                        <a href="<c:url value="/profileGroup"><c:param name="groupName" value="${ mapUsers.value.groupName }" /></c:url>">
+                        <a href="<c:url value="/profileGroup"><c:param name="groupName" value="${ mapGroups.value.groupName }" /></c:url>">
                             <img src="<c:url value="/inc/info.gif"/>" alt="info" />
                         </a>
                     </td>
