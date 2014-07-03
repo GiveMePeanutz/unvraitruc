@@ -29,7 +29,7 @@
             </dd>
             </dl>   
             <br>
-            <a href="<c:url value="/modifyCourse"  class="button"><c:param name="courseName" value="${course.coursename }" /></c:url>">           
+            <a href="<c:url value="/modifyCourse"><c:param name="courseName" value="${course.courseName }" /></c:url>">           
             <input type="button" value="Modify" />
           	</a> 
         </div>
