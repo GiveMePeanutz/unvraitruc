@@ -122,8 +122,13 @@ h1, h3
 
 .important
 {
-    text-decoration: underline;
+	color: #0568CD;
+    font-size: 1.22em;
     font-weight : bold;
+}
+
+dd{
+	text-indent: 5em;
 }
 /* Pictures --------------------------------------------------------------------------------------- */
 .stikom {
