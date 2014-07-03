@@ -13,7 +13,7 @@ import beans.Course;
 import dao.CourseDao;
 import dao.DAOFactory;
 
-@WebServlet( urlPatterns = "/profile", initParams = @WebInitParam( name = "path", value = "/files/images/" ) )
+@WebServlet( "/profileCourse" ) 
 public class ProfileCourse extends HttpServlet {
 
     public static final String CONF_DAO_FACTORY   = "daofactory";

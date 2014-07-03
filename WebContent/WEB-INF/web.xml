@@ -28,6 +28,7 @@
         <filter-name>LoginFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    
     <filter>
         <filter-name>DisplayUsersFilter</filter-name>
         <filter-class>filters.DisplayUsersFilter</filter-class>
@@ -36,6 +37,116 @@
         <filter-name>DisplayUsersFilter</filter-name>
         <url-pattern>/displayUsers</url-pattern>
     </filter-mapping>
+    
+    <filter>
+        <filter-name>AddGroupFilter</filter-name>
+        <filter-class>filters.AddGroupFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AddGroupFilter</filter-name>
+        <url-pattern>/groupCreation</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>AddCourseFilter</filter-name>
+        <filter-class>filters.AddCourseFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AddCourseFilter</filter-name>
+        <url-pattern>/courseCreation</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>AddPrivFilter</filter-name>
+        <filter-class>filters.AddPrivFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AddPrivFilter</filter-name>
+        <url-pattern>/privCreation</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>AddStudentFilter</filter-name>
+        <filter-class>filters.AddStudentFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AddStudentFilter</filter-name>
+        <url-pattern>/studentCreation</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>AddTeacherFilter</filter-name>
+        <filter-class>filters.AddTeacherFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AddTeacherFilter</filter-name>
+        <url-pattern>/teacherCreation</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>AddUserFilter</filter-name>
+        <filter-class>filters.AddUserFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AddUserFilter</filter-name>
+        <url-pattern>/userCreation</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>DataAnalysisFilter</filter-name>
+        <filter-class>filters.DataAnalysisFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DataAnalysisFilter</filter-name>
+        <url-pattern>/dataAnalysis</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>DisplayCoursesFilter</filter-name>
+        <filter-class>filters.DisplayCoursesFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DisplayCoursesFilter</filter-name>
+        <url-pattern>/displayCourses</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>DisplayGroupsFilter</filter-name>
+        <filter-class>filters.DisplayGroupsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DisplayGroupsFilter</filter-name>
+        <url-pattern>/displayGroups</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>DisplayPrivsFilter</filter-name>
+        <filter-class>filters.DisplayPrivsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DisplayPrivsFilter</filter-name>
+        <url-pattern>/displayPrivs</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>DisplayStudentsFilter</filter-name>
+        <filter-class>filters.DisplayStudentsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DisplayStudentsFilter</filter-name>
+        <url-pattern>/displayStudents</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>DisplayTeachersFilter</filter-name>
+        <filter-class>filters.DisplayTeachersFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DisplayTeachersFilter</filter-name>
+        <url-pattern>/displayTeachers</url-pattern>
+    </filter-mapping>
+    
+    
 	<function>
         <name>contains</name>
         <function-class>utilities.Utility</function-class>
