@@ -4,14 +4,28 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Create a user</title>
+        <c:choose>
+        	<c:when test="${ empty requestScope.user }">
+       			<title>Create a user</title>
+        	</c:when>
+        	<c:otherwise>
+        		<title>Modify a user</title>
+        	</c:otherwise>
+        </c:choose>
         <link type="text/css" rel="stylesheet" href="<c:url value="/inc/design.css"/>" />
         
     </head>
     <body>
         <c:import url="/inc/menu.jsp" />
         <br />
-        	<h1>Create a User</h1>
+        <c:choose>
+        	<c:when test="${ empty requestScope.user }">
+        		<h1>Create a user</h1>
+        	</c:when>
+        	<c:otherwise>
+        		<h1>Modify ${user.username}</h1>
+        	</c:otherwise>
+        </c:choose>
        		<h3>Please, fill the following form and validate</h3>
         <div id="normalForm">
             <form method="post" action="<c:url value="/userCreation"/>" enctype="multipart/form-data">
@@ -37,7 +51,14 @@
         			</c:choose>
                 </fieldset>  
                 <p class="info">${ form.result }</p>
-                <input type="submit" value="Create"  />
+                <c:choose>
+        			<c:when test="${ empty requestScope.user }">
+        				<input type="submit" value="Create"  />
+        			</c:when>
+        			<c:otherwise>
+        				<input type="submit" value="Modify"  />
+        			</c:otherwise>
+        		</c:choose>
                 <input type="reset" value="Reset all" /> <br />
             </form>
         </div>

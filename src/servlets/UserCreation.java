@@ -30,6 +30,8 @@ public class UserCreation extends HttpServlet {
     public static final String USER_ATT          = "user";
     public static final String FORM_ATT          = "form";
     public static final String GROUP_REQUEST_ATT = "groups";
+    public static final String USERNAME_PARAM    = "username";
+    public static final String VERIFY_PARAM      = "modify";
 
     public static final String VUE_SUCCESS       = "/displayUsers";
     public static final String VUE_FORM          = "/WEB-INF/createUser.jsp";
@@ -44,6 +46,15 @@ public class UserCreation extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+        String modifiable = getParameterValue( request, VERIFY_PARAM );
+        if ( modifiable != null && modifiable.equals( "true" ) )
+        {
+            String userName = getParameterValue( request, USERNAME_PARAM );
+            User user = userDao.find( userName );
+            userDao.delete( userName );
+            request.setAttribute( USER_ATT, user );
+        }
+
         List<Group> listeGroup = groupDao.list();
         Map<String, Group> mapGroups = new HashMap<String, Group>();
         for ( Group group : listeGroup ) {
@@ -93,6 +104,16 @@ public class UserCreation extends HttpServlet {
             /* Sinon, ré-affichage du formulaire de création avec les erreurs */
 
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
+        }
+    }
+
+    private static String getParameterValue( HttpServletRequest request,
+            String nomChamp ) {
+        String value = request.getParameter( nomChamp );
+        if ( value == null || value.trim().length() == 0 ) {
+            return null;
+        } else {
+            return value;
         }
     }
 }
