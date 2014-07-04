@@ -18,11 +18,13 @@ import forms.CourseCreationForm;
 public class CourseCreation extends HttpServlet {
     public static final String CONF_DAO_FACTORY  = "daofactory";
     public static final String PATH              = "path";
-    public static final String GROUP_ATT         = "course";
+    public static final String COURSE_ATT        = "course";
     public static final String FORM_ATT          = "form";
     public static final String VUE_SUCCESS       = "/displayCourses";
     public static final String VUE_FORM          = "/WEB-INF/createCourse.jsp";
     public static final String GROUP_REQUEST_ATT = "courses";
+    public static final String VERIFY_PARAM      = "modify";
+    public static final String COURSENAME_PARAM  = "courseName";
 
     private CourseDao          courseDao;
 
@@ -33,6 +35,15 @@ public class CourseCreation extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+
+        String modifiable = getParameterValue( request, VERIFY_PARAM );
+        if ( modifiable != null && modifiable.equals( "true" ) )
+        {
+            String courseName = getParameterValue( request, COURSENAME_PARAM );
+            Course course = courseDao.find( courseName );
+            courseDao.delete( courseName );
+            request.setAttribute( COURSE_ATT, course );
+        }
 
         this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
     }
@@ -56,7 +67,7 @@ public class CourseCreation extends HttpServlet {
         }
 
         /* Ajout du bean et de l'objet métier à l'objet requête */
-        request.setAttribute( GROUP_ATT, course );
+        request.setAttribute( COURSE_ATT, course );
         request.setAttribute( FORM_ATT, form );
 
         /* Si aucune erreur */
@@ -69,6 +80,16 @@ public class CourseCreation extends HttpServlet {
         {
             /* Sinon, ré-affichage du formulaire de création avec les erreurs */
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
+        }
+    }
+
+    private static String getParameterValue( HttpServletRequest request,
+            String nomChamp ) {
+        String value = request.getParameter( nomChamp );
+        if ( value == null || value.trim().length() == 0 ) {
+            return null;
+        } else {
+            return value;
         }
     }
 }
