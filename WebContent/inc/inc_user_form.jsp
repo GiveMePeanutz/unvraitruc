@@ -65,6 +65,14 @@
 <span class="error">${form.errors['promotion']}</span>
 <br />
 <br />
+
+<c:if test="${!empty requestScope.user }">
+Last Photo : 
+	<c:set var="photo"><c:out value="${ user.photoURL }"/></c:set>
+    <a href="<c:url value="/images/${ photo }"/>"><c:out value="${ user.photoURL }"/></a>
+<br>
+Please select a photo again, could be the same.
+</c:if>
 <label for="photoURL">Photo</label>
 <input type="file" id="photoURL" name="photoURL" />
 <span class="error">${form.errors['photoURL']}</span>
