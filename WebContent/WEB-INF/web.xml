@@ -147,6 +147,7 @@
     </filter-mapping>
     
     
+    
 	<function>
         <name>contains</name>
         <function-class>utilities.Utility</function-class>

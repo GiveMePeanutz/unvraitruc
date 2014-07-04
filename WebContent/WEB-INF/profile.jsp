@@ -21,7 +21,7 @@
             <dl><dt class="important">FirstName :</dt> <dd><c:out value="${ user.firstName }"/></dd></dl>
             <dl><dt class="important">Last Name :</dt> <dd><c:out value="${ user.lastName }"/></dd></dl>
             <c:if test="${user.sex==0}">
-            <dl><dt class="important">Sex :</dt> <dd><c:out value="Male"/></dd></dl>
+            <dl><dt class="important">Sex :</dt> <dd>  <c:out value="Male"/></dd></dl>
             </c:if> 
             <c:if test="${user.sex==1}">
             <dl><dt class="important">Sex :</dt> <dd><c:out value="Female"/></dd></dl>

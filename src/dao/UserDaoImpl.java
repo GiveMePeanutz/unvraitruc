@@ -23,6 +23,8 @@ public class UserDaoImpl implements UserDao {
 	private DAOFactory daoFactory;
 	
 	private static final String SQL_SELECT = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex FROM User ORDER BY username";
+	private static final String SQL_SELECT_TEACHERS = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex FROM User WHERE username IN (SELECT username FROM user_group WHERE groupname='teacher') ORDER BY username";
+	private static final String SQL_SELECT_STUDENTS = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex FROM User WHERE username IN (SELECT username FROM user_group WHERE groupname='student') ORDER BY username";
 	private static final String SQL_SELECT_BY_USERNAME = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex FROM User WHERE username = ?";
 	private static final String SQL_SELECT_USER_COURSES = "SELECT courseName FROM course WHERE courseName IN (SELECT courseName FROM user_course WHERE username = ?) ORDER BY courseName";
 	private static final String SQL_SELECT_USER_GROUPS = "SELECT groupName FROM web_app_db.group WHERE groupName IN (SELECT groupName FROM user_group WHERE username = ?) ORDER BY groupName";
@@ -143,6 +145,48 @@ public class UserDaoImpl implements UserDao {
         try {
             connection = daoFactory.getConnection();
             preparedStatement = connection.prepareStatement( SQL_SELECT );
+            resultSet = preparedStatement.executeQuery();
+            
+            while ( resultSet.next() ) {
+            	preparedStatement2 = initialisationRequetePreparee(connection, SQL_SELECT_USER_COURSES, false, resultSet.getString("username") );
+                resultSet2 = preparedStatement2.executeQuery();
+                preparedStatement3 = initialisationRequetePreparee(connection, SQL_SELECT_USER_GROUPS, false, resultSet.getString("username") );
+                resultSet3 = preparedStatement3.executeQuery();
+                users.add( map( resultSet , resultSet2, resultSet3) );
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connection );
+            fermeturesSilencieuses( resultSet2, preparedStatement2, connection );
+            fermeturesSilencieuses( resultSet3, preparedStatement3, connection );
+        }
+
+        return users;
+	}
+	
+	
+	public List<User> listGroup(String group) throws DAOException {
+		Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement2 = null;
+        PreparedStatement preparedStatement3 = null;
+        ResultSet resultSet = null;
+        ResultSet resultSet2 = null;
+        ResultSet resultSet3 = null;
+        List<User> users = new ArrayList<User>();
+
+        try {
+            connection = daoFactory.getConnection();
+            if(group.equalsIgnoreCase("teacher")){
+            	preparedStatement = connection.prepareStatement( SQL_SELECT_TEACHERS );
+            }
+            else if(group.equalsIgnoreCase("student")){
+            	preparedStatement = connection.prepareStatement( SQL_SELECT_STUDENTS );
+            }
+            else{
+            	preparedStatement = connection.prepareStatement( SQL_SELECT );
+            }
             resultSet = preparedStatement.executeQuery();
             
             while ( resultSet.next() ) {

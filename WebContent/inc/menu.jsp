@@ -109,7 +109,7 @@
 	    			<c:set var="contains" value="false" />
 					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 					<c:if test="${item eq 'Display Teachers'}">
-	      			<li><a href="<c:url value="/displayUsers"/>">Display Teachers</a></li>
+	      			<li><a href="<c:url value="/displayTeachers"/>">Display Teachers</a></li>
 	      			</c:if>
 					</c:forEach>
 					
@@ -133,7 +133,7 @@
 	    			<c:set var="contains" value="false" />
 					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 					<c:if test="${item eq 'Display Students'}">
-	      			<li><a href="<c:url value="/displayUsers"/>">Display Students</a></li>
+	      			<li><a href="<c:url value="/displayStudents"/>">Display Students</a></li>
 	      			</c:if>
 					</c:forEach>
 					

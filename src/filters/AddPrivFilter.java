@@ -30,7 +30,7 @@ public class AddPrivFilter implements Filter {
 		HttpSession session = request.getSession();
 		
 		List menus = ((List<String>) session.getAttribute(USER_SESSION_ACCESS_ATT));
-		if(!menus.contains("Add Priv")){
+		if(!menus.contains("Add Privilege")){
 			request.getRequestDispatcher("/notAvailable.jsp").forward( req, res);
 			return;
 		}
