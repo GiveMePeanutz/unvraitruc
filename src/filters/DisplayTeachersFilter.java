@@ -28,7 +28,6 @@ public class DisplayTeachersFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpSession session = request.getSession();
-		
 		List menus = ((List<String>) session.getAttribute(USER_SESSION_ACCESS_ATT));
 		if(!menus.contains("Display Teachers")){
 			request.getRequestDispatcher("/notAvailable.jsp").forward( req, res);

@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class DisplayPrivs extends HttpServlet{
 	 public void doGet (HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 	 
 		List<Priv> listPrivs = privDao.list();
-		Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
+		LinkedHashMap<String, Priv> mapPrivs = new LinkedHashMap<String, Priv>();
 		for (Priv priv : listPrivs) {
 			priv.convertPaths();
 			mapPrivs.put(priv.getPrivName(), priv);

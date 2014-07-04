@@ -5,7 +5,7 @@ import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Group implements Serializable{
+public class Group implements Serializable, Comparable<Group>{
 
 
 	private String groupName;
@@ -46,6 +46,10 @@ public class Group implements Serializable{
 	public void addPrivName(String privName){
 		this.usernames.add(privName);
 	}
+	
+	public int compareTo(Group other) {
+        return groupName.compareTo(other.groupName);
+    }
 	
 	
 }

@@ -1,7 +1,9 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -43,7 +46,8 @@ public class DisplayGroups extends HttpServlet{
 	 public void doGet (HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 	 
 		List<Group> listeGroups = groupDao.list();
-		Map<String, Group> mapGroups = new HashMap<String, Group>();
+		LinkedHashMap<String, Group> mapGroups = new LinkedHashMap<String, Group>();
+		
 		for (Group group : listeGroups) {
 			mapGroups.put(group.getGroupName(), group);
 		}

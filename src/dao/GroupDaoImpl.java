@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import beans.Group;
@@ -142,7 +143,7 @@ public class GroupDaoImpl implements GroupDao {
             fermeturesSilencieuses( resultSet2, preparedStatement2, connection );
             fermeturesSilencieuses( resultSet3, preparedStatement3, connection );
         }
-
+        
         return groups;
     }
 
