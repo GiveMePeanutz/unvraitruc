@@ -27,7 +27,7 @@
             </ul>
  
 			
-            <a href="<c:url value="/modifyGroup"><c:param name="groupName" value="${group.groupName }" /></c:url>" class = "button">           
+            <a href="<c:url value="/groupCreation"><c:param name="groupName" value="${group.groupName }" /><c:param name="modify" value="true" /></c:url>" class = "button">           
             <input type="button" value="Modify" />
           	</a>
           	 

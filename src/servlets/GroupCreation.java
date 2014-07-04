@@ -29,6 +29,8 @@ public class GroupCreation extends HttpServlet {
     public static final String VUE_SUCCESS       = "/displayGroups";
     public static final String VUE_FORM          = "/WEB-INF/createGroup.jsp";
     public static final String GROUP_REQUEST_ATT = "groups";
+    public static final String GROUPNAME_PARAM   = "groupName";
+    public static final String VERIFY_PARAM      = "modify";
 
     private GroupDao           groupDao;
     private PrivDao            privDao;
@@ -41,15 +43,34 @@ public class GroupCreation extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+        String modifiable = getParameterValue( request, VERIFY_PARAM );
+        System.out.println( modifiable );
+        if ( modifiable != null && modifiable.equals( "true" ) )
+        {
 
-        List<Priv> listePriv = privDao.list();
-        Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
-        for ( Priv priv : listePriv ) {
-            mapPrivs.put( priv.getPrivName(), priv );
+            String path = this.getServletConfig().getInitParameter( PATH );
+
+            String groupName = getParameterValue( request, GROUPNAME_PARAM );
+            System.out.println( groupName );
+            Group group = groupDao.find( groupName );
+            System.out.println( group.getGroupName() );
+            System.out.println( group.getGroupDescription() );
+            System.out.println( group.getPrivNames() );
+            groupDao.delete( groupName );
+            request.setAttribute( GROUP_ATT, group );
+        }
+        if ( request.getAttribute( PRIV_REQUEST_ATT ) == null )
+        {
+            List<Priv> listePriv = privDao.list();
+            Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
+            for ( Priv priv : listePriv ) {
+                mapPrivs.put( priv.getPrivName(), priv );
+            }
+            request.setAttribute( PRIV_REQUEST_ATT, mapPrivs );
         }
 
-        request.setAttribute( PRIV_REQUEST_ATT, mapPrivs );
         this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
+
     }
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -62,8 +83,8 @@ public class GroupCreation extends HttpServlet {
         /* Préparation de l'objet formulaire */
         GroupCreationForm form = new GroupCreationForm( groupDao );
 
-        /* Traitement de la requête et récupération du bean en résultant */
         Group group = null;
+
         try {
             group = form.createGroup( request, path );
         } catch ( ParseException e ) {
@@ -94,4 +115,15 @@ public class GroupCreation extends HttpServlet {
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }
     }
+
+    private static String getParameterValue( HttpServletRequest request,
+            String nomChamp ) {
+        String value = request.getParameter( nomChamp );
+        if ( value == null || value.trim().length() == 0 ) {
+            return null;
+        } else {
+            return value;
+        }
+    }
+
 }
