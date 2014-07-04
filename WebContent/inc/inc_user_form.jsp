@@ -23,8 +23,20 @@
 <br />
 
 <label for="sex">Sex </label>
+<c:choose>
+<c:when test="${requestScope.user.sex==0 }">
+<input type="radio" id="sex" name="sex" value="<c:out value="0"/>" checked/>Male 
+<input type="radio" id="sex" name="sex" value="<c:out value="1"/>" />Female
+</c:when>
+<c:when test="${requestScope.user.sex==1 }">
+<input type="radio" id="sex" name="sex" value="<c:out value="0"/>" />Male 
+<input type="radio" id="sex" name="sex" value="<c:out value="1"/>" checked/>Female
+</c:when>
+<c:otherwise>
 <input type="radio" id="sex" name="sex" value="<c:out value="0"/>" />Male 
 <input type="radio" id="sex" name="sex" value="<c:out value="1"/>" />Female
+</c:otherwise>
+</c:choose>
 <span class="error">${form.errors['sex']}</span>
 <br />
 <br />
@@ -43,7 +55,7 @@
 <span class="error">${form.errors['email']}</span>
 <br />
 
-<label for="birthDate">Date of Birth (DD/MM/YYY)</label>
+<label for="birthDate">Date of Birth (MM/DD/YYY)</label>
 <input type="text" id="birthDate" name="birthDate" value="<c:out value="${user.birthDate}"/>" size="30" maxlength="60" />
 <span class="error">${form.errors['birthDate']}</span>
 <br />
