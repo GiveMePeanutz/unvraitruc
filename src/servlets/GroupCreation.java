@@ -44,30 +44,20 @@ public class GroupCreation extends HttpServlet {
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         String modifiable = getParameterValue( request, VERIFY_PARAM );
-        System.out.println( modifiable );
         if ( modifiable != null && modifiable.equals( "true" ) )
         {
-
-            String path = this.getServletConfig().getInitParameter( PATH );
-
             String groupName = getParameterValue( request, GROUPNAME_PARAM );
-            System.out.println( groupName );
             Group group = groupDao.find( groupName );
-            System.out.println( group.getGroupName() );
-            System.out.println( group.getGroupDescription() );
-            System.out.println( group.getPrivNames() );
             groupDao.delete( groupName );
             request.setAttribute( GROUP_ATT, group );
         }
-        if ( request.getAttribute( PRIV_REQUEST_ATT ) == null )
-        {
-            List<Priv> listePriv = privDao.list();
-            Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
-            for ( Priv priv : listePriv ) {
-                mapPrivs.put( priv.getPrivName(), priv );
-            }
-            request.setAttribute( PRIV_REQUEST_ATT, mapPrivs );
+
+        List<Priv> listePriv = privDao.list();
+        Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
+        for ( Priv priv : listePriv ) {
+            mapPrivs.put( priv.getPrivName(), priv );
         }
+        request.setAttribute( PRIV_REQUEST_ATT, mapPrivs );
 
         this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
 
