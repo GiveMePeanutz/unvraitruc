@@ -36,7 +36,7 @@
                     <td><c:out value="${ mapPrivs.value.privName }"/></td>
                     <td><c:out value="${ mapPrivs.value.privDescription }"/></td>
                     <td>
-	                    <c:forEach items="${mapPrivs.value.menuPaths}" var="item">
+	                    <c:forEach items="${mapPrivs.value.menuNames}" var="item">
 						    ${item} / 
 						</c:forEach>
 					</td>

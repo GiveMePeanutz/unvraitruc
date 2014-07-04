@@ -5,6 +5,8 @@ import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import staticData.Menu;
+
 public class Priv implements Serializable {
 
 
@@ -12,6 +14,7 @@ public class Priv implements Serializable {
     private String        privDescrition;
     private ArrayList<String> groupNames;
     private ArrayList<Integer> menuPaths;
+    private ArrayList<String> menuNames;
 
     public String getPrivName() {
         return privName;
@@ -53,5 +56,21 @@ public class Priv implements Serializable {
 	public void addGroupName(String groupName){
 		this.groupNames.add(groupName)
 ;	}
+
+	public ArrayList<String> getMenuNames() {
+		return menuNames;
+	}
+
+	public void setMenuNames(ArrayList<String> menuNames) {
+		this.menuNames = menuNames;
+	}
+	
+	public void convertPaths(){
+		ArrayList<String> menuNames = new ArrayList<String>();
+		for(int i : menuPaths){
+			menuNames.add(Menu.getMenuName(i));
+		}
+		this.setMenuNames(menuNames);
+	}
 
 }

@@ -46,6 +46,7 @@ public class DisplayPrivs extends HttpServlet{
 		List<Priv> listPrivs = privDao.list();
 		Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
 		for (Priv priv : listPrivs) {
+			priv.convertPaths();
 			mapPrivs.put(priv.getPrivName(), priv);
 		}
 		
@@ -61,6 +62,7 @@ public class DisplayPrivs extends HttpServlet{
 		List<Priv> listPrivs = privDao.list();
 		Map<String, Priv> mapPrivs = new HashMap<String, Priv>();
 		for (Priv priv : listPrivs) {
+			
 			mapPrivs.put(priv.getPrivName(), priv);
 		}
 		
