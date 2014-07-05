@@ -26,6 +26,7 @@
                 	<th>Privilege name</th>
                     <th>Description</th>
                     <th>Menus</th>
+                    <th class="action">Modify</th>
                     <th class="action">Delete</th>                   
                 </tr>
                 <%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
@@ -40,6 +41,11 @@
 						    ${item} / 
 						</c:forEach>
 					</td>
+					<td class="action">
+                        <a href="<c:url value="/privCreation"><c:param name="privName" value="${ mapPrivs.value.privName }" /><c:param name="modify" value="true" /></c:url>">
+                            <img src="<c:url value="/inc/modify.gif"/>" alt="mod" />
+                        </a>
+                    </td>
                     <td class="action">
                         <a href="<c:url value="/deletePriv"><c:param name="privName" value="${ mapPrivs.value.privName }" /></c:url>">
                             <img src="<c:url value="/inc/supprimer.png"/>" alt="Delete" />

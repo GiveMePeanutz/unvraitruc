@@ -23,8 +23,10 @@ public class PrivilegeCreation extends HttpServlet {
     public static final String PRIV_ATT         = "priv";
     public static final String FORM_ATT         = "form";
     public static final String MENU_REQUEST_ATT = "menus";
+    public static final String PRIVNAME_PARAM   = "privName";
+    public static final String VERIFY_PARAM     = "modify";
 
-    public static final String VUE_SUCCESS      = "/displayPrivs";
+    public static final String VUE_SUCCESS      = "/Project/displayPrivs";
     public static final String VUE_FORM         = "/WEB-INF/createPrivilege.jsp";
 
     private PrivDao            privDao;
@@ -35,6 +37,16 @@ public class PrivilegeCreation extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+        String modifiable = getParameterValue( request, VERIFY_PARAM );
+        if ( modifiable != null && modifiable.equals( "true" ) )
+        {
+            String privName = getParameterValue( request, PRIVNAME_PARAM );
+            Priv priv = privDao.find( privName );
+            privDao.delete( privName );
+            request.setAttribute( PRIV_ATT, priv );
+
+        }
+
         Map<Integer, String> mapMenus = Menu.list();
 
         request.setAttribute( MENU_REQUEST_ATT, mapMenus );
@@ -63,17 +75,32 @@ public class PrivilegeCreation extends HttpServlet {
         request.setAttribute( PRIV_ATT, priv );
         request.setAttribute( FORM_ATT, form );
 
+        Map<Integer, String> mapMenus = Menu.list();
+
+        request.setAttribute( MENU_REQUEST_ATT, mapMenus );
+
         /* Si aucune erreur */
         if ( form.getErrors().isEmpty() ) {
 
             /* Affichage de la fiche récapitulative */
-            this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response );
-        } else {
-            Map<Integer, String> mapMenus = Menu.list();
+            response.sendRedirect( VUE_SUCCESS );
 
-            request.setAttribute( MENU_REQUEST_ATT, mapMenus );
+            // this.getServletContext().getRequestDispatcher( VUE_SUCCESS
+            // ).forward( request, response );
+        } else {
+
             /* Sinon, ré-affichage du formulaire de création avec les erreurs */
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
+        }
+    }
+
+    private static String getParameterValue( HttpServletRequest request,
+            String nomChamp ) {
+        String value = request.getParameter( nomChamp );
+        if ( value == null || value.trim().length() == 0 ) {
+            return null;
+        } else {
+            return value;
         }
     }
 }

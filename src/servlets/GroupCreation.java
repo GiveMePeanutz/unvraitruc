@@ -26,7 +26,7 @@ public class GroupCreation extends HttpServlet {
     public static final String GROUP_ATT         = "group";
     public static final String FORM_ATT          = "form";
     public static final String PRIV_REQUEST_ATT  = "privs";
-    public static final String VUE_SUCCESS       = "/displayGroups";
+    public static final String VUE_SUCCESS       = "/Project/displayGroups";
     public static final String VUE_FORM          = "/WEB-INF/createGroup.jsp";
     public static final String GROUP_REQUEST_ATT = "groups";
     public static final String GROUPNAME_PARAM   = "groupName";
@@ -98,7 +98,9 @@ public class GroupCreation extends HttpServlet {
         if ( form.getErrors().isEmpty() ) {
 
             /* Affichage de la fiche récapitulative */
-            this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response );
+            response.sendRedirect( VUE_SUCCESS );
+            // this.getServletContext().getRequestDispatcher( VUE_SUCCESS
+            // ).forward( request, response );
         } else {
 
             /* Sinon, ré-affichage du formulaire de création avec les erreurs */

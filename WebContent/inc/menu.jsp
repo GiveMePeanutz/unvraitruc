@@ -92,7 +92,7 @@
 					<c:set var="contains" value="false" />
 					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 					<c:if test="${item eq 'Add Course'}">
-	      			<li><a href="<c:url value="/userCreation"/>">Add Course</a></li>
+	      			<li><a href="<c:url value="/courseCreation"/>">Add Course</a></li>
 	      			</c:if>
 					</c:forEach>
 	    		</ul>

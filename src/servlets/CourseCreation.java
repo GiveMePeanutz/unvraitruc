@@ -20,7 +20,7 @@ public class CourseCreation extends HttpServlet {
     public static final String PATH              = "path";
     public static final String COURSE_ATT        = "course";
     public static final String FORM_ATT          = "form";
-    public static final String VUE_SUCCESS       = "/displayCourses";
+    public static final String VUE_SUCCESS       = "/Project/displayCourses";
     public static final String VUE_FORM          = "/WEB-INF/createCourse.jsp";
     public static final String GROUP_REQUEST_ATT = "courses";
     public static final String VERIFY_PARAM      = "modify";
@@ -74,7 +74,10 @@ public class CourseCreation extends HttpServlet {
         if ( form.getErrors().isEmpty() )
         {
             /* Affichage de la fiche récapitulative */
-            this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response );
+            response.sendRedirect( VUE_SUCCESS );
+
+            // this.getServletContext().getRequestDispatcher( VUE_SUCCESS
+            // ).forward( request, response );
         }
         else
         {

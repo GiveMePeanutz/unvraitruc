@@ -33,7 +33,7 @@ public class UserCreation extends HttpServlet {
     public static final String USERNAME_PARAM    = "username";
     public static final String VERIFY_PARAM      = "modify";
 
-    public static final String VUE_SUCCESS       = "/displayUsers";
+    public static final String VUE_SUCCESS       = "/Project/displayUsers";
     public static final String VUE_FORM          = "/WEB-INF/createUser.jsp";
 
     private UserDao            userDao;
@@ -98,8 +98,10 @@ public class UserCreation extends HttpServlet {
 
         /* Si aucune erreur */
         if ( form.getErrors().isEmpty() ) {
+            response.sendRedirect( VUE_SUCCESS );
 
-            this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response );
+            // this.getServletContext().getRequestDispatcher( VUE_SUCCESS
+            // ).forward( request, response );
         } else {
             /* Sinon, ré-affichage du formulaire de création avec les erreurs */
 
