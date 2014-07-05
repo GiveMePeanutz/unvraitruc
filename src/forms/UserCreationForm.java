@@ -516,4 +516,14 @@ public final class UserCreationForm {
             }
         }
     }
+
+    private static String getParameterValue( HttpServletRequest request,
+            String nomChamp ) {
+        String value = request.getParameter( nomChamp );
+        if ( value == null || value.trim().length() == 0 ) {
+            return null;
+        } else {
+            return value;
+        }
+    }
 }
