@@ -30,12 +30,14 @@ public class UserDaoImpl implements UserDao {
 	private static final String SQL_SELECT_USER_GROUPS = "SELECT groupName FROM web_app_db.group WHERE groupName IN (SELECT groupName FROM user_group WHERE username = ?) ORDER BY groupName";
 	private static final String SQL_SELECT_USER_ACC_MENUS = "SELECT DISTINCT menuPath from priv_menu where privname IN (SELECT privName FROM group_priv WHERE groupname IN ( SELECT groupName FROM user_group WHERE username = ? ))";
 	
+	private static final String SQL_MODIFY_USER = "UPDATE user SET password=?, firstName=?, lastName=?, email=?, phone=?, photoURL=?, address=?, sex=?, birthDate=?, promotion=? WHERE username=?";
 	
 	private static final String SQL_INSERT = "INSERT INTO User (username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, sex, regDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String SQL_INSERT_USER_COURSE = "INSERT INTO user_course (username , courseName) VALUES (? , ?)";
 	private static final String SQL_INSERT_USER_GROUP = "INSERT INTO user_group (username , groupName) VALUES (? , ?)";
 	
 	private static final String SQL_DELETE_BY_USERNAME = "DELETE FROM User WHERE username = ?";
+	private static final String SQL_DELETE_USER_GROUPS = "DELETE FROM user_group WHERE username = ?";
 
 	UserDaoImpl(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -316,6 +318,55 @@ public class UserDaoImpl implements UserDao {
         }
 
         return menus;
+	}
+
+	@Override
+	public void modify(User user) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement1 = null;
+		PreparedStatement preparedStatement2 = null;
+		PreparedStatement preparedStatement3 = null;
+
+		try {
+			connection = daoFactory.getConnection();
+			preparedStatement1 = initialisationRequetePreparee(connection,
+					SQL_MODIFY_USER, true,  user.getPassword(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getPhotoURL(), user.getAddress(), user.getSex(), new Timestamp(user.getBirthDate().getMillis()), user.getPromotion(), user.getUsername());
+			int statut1 = preparedStatement1.executeUpdate();
+			if (statut1 == 0) {
+				throw new DAOException(
+						"Failed to modify client. No row modified");
+			}
+			
+			
+			preparedStatement2 = initialisationRequetePreparee(connection, SQL_DELETE_USER_GROUPS, true, user.getUsername());
+			int statut2 = preparedStatement2.executeUpdate();
+			if (statut2 == 0) {
+				throw new DAOException(
+						"Failed to delete client groups. No rows deleted");
+			}
+			
+			
+			
+			for (String groupName : user.getGroupNames()) {
+				preparedStatement3 = initialisationRequetePreparee( connection,
+	                    SQL_INSERT_USER_GROUP, true, user.getUsername(), groupName );
+	            int statut3 = preparedStatement3.executeUpdate();
+	            if ( statut3 == 0 ) {
+	                throw new DAOException(
+	                        "Failed to create user-group association. No row added" );
+	            }
+			}
+			
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			fermeturesSilencieuses(preparedStatement1,
+					connection);
+			fermeturesSilencieuses(preparedStatement2,
+					connection);
+			fermeturesSilencieuses(preparedStatement3,
+					connection);
+		}		
 	}
 	
 }
