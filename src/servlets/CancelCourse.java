@@ -12,8 +12,8 @@ import dao.DAOException;
 import dao.DAOFactory;
 import dao.UserDao;
 
-@WebServlet( "/InscriptionCourse" )
-public class InscriptionCourse extends HttpServlet {
+@WebServlet( "/cancelCourse" )
+public class CancelCourse extends HttpServlet {
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String COURSENAME_PARAM = "courseName";
     public static final String USERNAME_PARAM   = "username";
@@ -36,7 +36,7 @@ public class InscriptionCourse extends HttpServlet {
         if ( courseName != null && username != null ) {
             try {
 
-                UserDao.addCourse( username, courseName );
+                UserDao.deleteCourse( username, courseName );
             } catch ( DAOException e ) {
                 e.printStackTrace();
             }

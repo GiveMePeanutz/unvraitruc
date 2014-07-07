@@ -37,7 +37,7 @@
 		                    <td><c:out value="${ mapCourses.value.courseName }"/></td>
 		                    <td><c:out value="${ mapCourses.value.courseDescription }"/></td>
 		                    <td class="action">
-		                        <a href="<c:url value="/inscriptionCourse"><c:param name="courseName" value="${  mapCourses.value.courseName }" /><c:param name="userame" value="${ requestScope.username }" /></c:url>">
+		                        <a href="<c:url value="/inscriptionCourse"><c:param name="courseName" value="${  mapCourses.value.courseName }" /><c:param name="username" value="${ requestScope.username }" /></c:url>">
 		                            <img src="<c:url value="/inc/inscription.gif"/>" alt="info" />
 		                        </a>
 		                    </td>				                    
