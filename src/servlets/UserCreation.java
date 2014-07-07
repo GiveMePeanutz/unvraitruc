@@ -33,7 +33,7 @@ public class UserCreation extends HttpServlet {
     public static final String USERNAME_PARAM    = "username";
     public static final String VERIFY_PARAM      = "modify";
     public static final String GRP_PARAM         = "grp";
-    public static final String AUTOGRP_ATT       = "grp";
+    public static final String VERIFY_PARAM2     = "Create";
 
     public static final String VUE_SUCCESS       = "/Project/displayUsers";
     public static final String VUE_SUCCESS_TEA   = "/Project/displayTeachers";
@@ -58,7 +58,6 @@ public class UserCreation extends HttpServlet {
         {
             String userName = getParameterValue( request, USERNAME_PARAM );
             User user = userDao.find( userName );
-            userDao.delete( userName );
             request.setAttribute( USER_ATT, user );
         }
 
@@ -85,10 +84,26 @@ public class UserCreation extends HttpServlet {
 
         /* Traitement de la requête et récupération du bean en résultant */
         User user = null;
-        try {
-            user = form.createUser( request, path );
-        } catch ( ParseException | FormValidationException e ) {
-            e.printStackTrace();
+        String modify = request.getParameter( VERIFY_PARAM2 );
+        if ( modify.equals( "Modify" ) )
+        {
+            try {
+
+                user = form.modifyUser( request, path );
+
+            } catch ( ParseException e ) {
+                e.printStackTrace();
+            } catch ( FormValidationException e ) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                user = form.createUser( request, path );
+            } catch ( ParseException | FormValidationException e ) {
+                e.printStackTrace();
+            }
         }
 
         /* Ajout du bean et de l'objet métier à l'objet requête */

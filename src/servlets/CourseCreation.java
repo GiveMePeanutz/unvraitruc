@@ -25,6 +25,7 @@ public class CourseCreation extends HttpServlet {
     public static final String GROUP_REQUEST_ATT = "courses";
     public static final String VERIFY_PARAM      = "modify";
     public static final String COURSENAME_PARAM  = "courseName";
+    public static final String VERIFY_PARAM2     = "Create";
 
     private CourseDao          courseDao;
 
@@ -41,7 +42,6 @@ public class CourseCreation extends HttpServlet {
         {
             String courseName = getParameterValue( request, COURSENAME_PARAM );
             Course course = courseDao.find( courseName );
-            courseDao.delete( courseName );
             request.setAttribute( COURSE_ATT, course );
         }
 
@@ -60,10 +60,21 @@ public class CourseCreation extends HttpServlet {
 
         /* Traitement de la requête et récupération du bean en résultant */
         Course course = null;
-        try {
-            course = form.createCourse( request, path );
-        } catch ( ParseException e ) {
-            e.printStackTrace();
+        String modify = request.getParameter( VERIFY_PARAM2 );
+        if ( modify.equals( "Modify" ) )
+        {
+            try {
+                course = form.modifyCourse( request, path );
+            } catch ( ParseException e ) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                course = form.createCourse( request, path );
+            } catch ( ParseException e ) {
+                e.printStackTrace();
+            }
         }
 
         /* Ajout du bean et de l'objet métier à l'objet requête */

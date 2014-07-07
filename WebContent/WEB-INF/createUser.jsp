@@ -89,12 +89,12 @@
            						 <input type="submit" name = "Create" value="Create a Teacher" />
         					</c:when>
         					<c:otherwise>
-        						<input type="submit" value="Create"  />
+        						<input type="submit" name = "Create" value="Create"  />
         				    </c:otherwise>
         				</c:choose>
         			</c:when>
         			<c:otherwise>
-        				<input type="submit" value="Modify"  />
+        				<input type="submit" name="Create" value="Modify"  />
         			</c:otherwise>
         		</c:choose>
                 <input type="reset" value="Reset all" /> <br />

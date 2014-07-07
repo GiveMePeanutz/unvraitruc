@@ -25,6 +25,7 @@ public class PrivilegeCreation extends HttpServlet {
     public static final String MENU_REQUEST_ATT = "menus";
     public static final String PRIVNAME_PARAM   = "privName";
     public static final String VERIFY_PARAM     = "modify";
+    public static final String VERIFY_PARAM2    = "Create";
 
     public static final String VUE_SUCCESS      = "/Project/displayPrivs";
     public static final String VUE_FORM         = "/WEB-INF/createPrivilege.jsp";
@@ -42,7 +43,6 @@ public class PrivilegeCreation extends HttpServlet {
         {
             String privName = getParameterValue( request, PRIVNAME_PARAM );
             Priv priv = privDao.find( privName );
-            privDao.delete( privName );
             request.setAttribute( PRIV_ATT, priv );
 
         }
@@ -65,10 +65,21 @@ public class PrivilegeCreation extends HttpServlet {
 
         /* Traitement de la requête et récupération du bean en résultant */
         Priv priv = null;
-        try {
-            priv = form.createPriv( request, path );
-        } catch ( ParseException e ) {
-            e.printStackTrace();
+        String modify = request.getParameter( VERIFY_PARAM2 );
+        if ( modify.equals( "Modify" ) )
+        {
+            try {
+                priv = form.modifyPriv( request, path );
+            } catch ( ParseException e ) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                priv = form.createPriv( request, path );
+            } catch ( ParseException e ) {
+                e.printStackTrace();
+            }
         }
 
         /* Ajout du bean et de l'objet métier à l'objet requête */

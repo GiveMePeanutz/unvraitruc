@@ -53,10 +53,10 @@
                 <p class="info">${ form.result }</p>
                 <c:choose>
         			<c:when test="${ empty requestScope.course }">
-        				<input type="submit" value="Create"  />
+        				<input type="submit" name="Create" value="Create"  />
         			</c:when>
         			<c:otherwise>
-        				<input type="submit" value="Modify"  />
+        				<input type="submit" name="Create" value="Modify"  />
         			</c:otherwise>
         		</c:choose>
                 <input type="reset" value="Reset all" /> <br />

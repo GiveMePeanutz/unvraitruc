@@ -60,6 +60,33 @@ public final class PrivilegeCreationForm {
         return priv;
     }
 
+    public Priv modifyPriv( HttpServletRequest request, String path ) throws ParseException {
+
+        String privName = getFieldValue( request, NAME_FIELD );
+        String privDescription = getFieldValue( request, DESCRIPTION_FIELD );
+        ArrayList<Integer> menus = getSelectedValues( request, MENU_FIELD );
+
+        Priv priv = new Priv();
+        handlePrivName( privName, priv );
+        handlePrivDescription( privDescription, priv );
+        handleMenus( menus, priv );
+
+        try {
+            if ( errors.isEmpty() ) {
+                privDao.modify( priv );
+                result = "Priv modification succeed";
+            } else {
+                result = "Priv modification failed !.";
+            }
+        } catch ( DAOException e ) {
+            setError( "unexpected", "Unexpected mistake, please retry later. " );
+            result = "Priv modification failed : Unexpected mistake, please retry later.";
+            e.printStackTrace();
+        }
+
+        return priv;
+    }
+
     private void handlePrivName( String privName, Priv priv ) {
         try {
             privNameValidation( privName );

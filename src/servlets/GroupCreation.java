@@ -31,6 +31,7 @@ public class GroupCreation extends HttpServlet {
     public static final String GROUP_REQUEST_ATT = "groups";
     public static final String GROUPNAME_PARAM   = "groupName";
     public static final String VERIFY_PARAM      = "modify";
+    public static final String VERIFY_PARAM2     = "Create";
 
     private GroupDao           groupDao;
     private PrivDao            privDao;
@@ -48,7 +49,6 @@ public class GroupCreation extends HttpServlet {
         {
             String groupName = getParameterValue( request, GROUPNAME_PARAM );
             Group group = groupDao.find( groupName );
-            groupDao.delete( groupName );
             request.setAttribute( GROUP_ATT, group );
         }
 
@@ -74,11 +74,22 @@ public class GroupCreation extends HttpServlet {
         GroupCreationForm form = new GroupCreationForm( groupDao );
 
         Group group = null;
+        String modify = request.getParameter( VERIFY_PARAM2 );
+        if ( modify.equals( "Modify" ) )
+        {
+            try {
+                group = form.modifyGroup( request, path );
+            } catch ( ParseException e ) {
+                e.printStackTrace();
+            }
+        }
+        else {
 
-        try {
-            group = form.createGroup( request, path );
-        } catch ( ParseException e ) {
-            e.printStackTrace();
+            try {
+                group = form.createGroup( request, path );
+            } catch ( ParseException e ) {
+                e.printStackTrace();
+            }
         }
 
         /* Ajout du bean et de l'objet métier à l'objet requête */

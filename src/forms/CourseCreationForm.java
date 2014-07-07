@@ -59,6 +59,33 @@ public final class CourseCreationForm {
         return course;
     }
 
+    public Course modifyCourse( HttpServletRequest request, String path ) throws ParseException {
+
+        String courseName = getFieldValue( request, NAME_FIELD );
+        int courseYear = getIntValue( request, YEAR_FIELD );
+        String courseDescription = getFieldValue( request, DESCRIPTION_FIELD );
+
+        Course course = new Course();
+        handleCourseName( courseName, course );
+        handleCourseDescription( courseDescription, course );
+        handleCourseYear( courseYear, course );
+
+        try {
+            if ( errors.isEmpty() ) {
+                courseDao.modify( course );
+                result = "Course modification succeed";
+            } else {
+                result = "Course modification failed !.";
+            }
+        } catch ( DAOException e ) {
+            setError( "unexpected", "Unexpected mistake, please retry later. " );
+            result = "Course modification failed : Unexpected mistake, please retry later.";
+            e.printStackTrace();
+        }
+
+        return course;
+    }
+
     private void handleCourseName( String courseName, Course course ) {
         try {
             courseNameValidation( courseName );

@@ -104,6 +104,52 @@ public final class UserCreationForm {
         return user;
     }
 
+    public User modifyUser( HttpServletRequest request, String path ) throws ParseException, FormValidationException {
+        String username = getFieldValue( request, USERNAME_FIELD );
+        String password = getFieldValue( request, PASSWORD_FIELD );
+        String lastName = getFieldValue( request, NAME_FIELD );
+        String firstName = getFieldValue( request, FIRSTNAME_FIELD );
+        String sex = getFieldValue( request, SEX_FIELD );
+        String address = getFieldValue( request, ADDRESS_FIELD );
+        String phone = getFieldValue( request, PHONE_FIELD );
+        String email = getFieldValue( request, EMAIL_FIELD );
+        DateTime birthDate = getDateValue( request, BIRTH_FIELD );
+        String promotion = getFieldValue( request, PROMOTION_FIELD );
+        ArrayList<String> groups = getSelectedValues( request, GROUP_FIELD );
+
+        User user = new User();
+        handleUsername( username, user );
+        handlePassword( password, user );
+        handleLastName( lastName, user );
+        handleFirstName( firstName, user );
+        handleSex( sex, user );
+        handleAddress( address, user );
+        handlePhone( phone, user );
+        handleEmail( email, user );
+        handleBirthDate( birthDate, user );
+        handlePromotion( promotion, user );
+        handlePhoto( user, request, path );
+        handleGroups( groups, user );
+
+        DateTime today = new DateTime();
+        user.setRegDate( today );
+
+        try {
+            if ( errors.isEmpty() ) {
+                userDao.modify( user );
+                result = "User modification succeed";
+            } else {
+                result = "User modification failed !.";
+            }
+        } catch ( DAOException e ) {
+            setError( "unexpected", "Unexpected mistake, please retry later. " );
+            result = "User modification failed : Unexpected mistake, please retry later.";
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
     private void handleGroups( ArrayList<String> groups, User user ) {
         try {
             groupValidation( groups );

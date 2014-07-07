@@ -36,7 +36,7 @@ public final class GroupCreationForm {
     public Group createGroup( HttpServletRequest request, String path ) throws ParseException {
 
         String groupName = getFieldValue( request, NAME_FIELD );
-        
+
         String groupDescription = getFieldValue( request, DESCRIPTION_FIELD );
         ArrayList<String> privileges = getSelectedValues( request, PRIV_FIELD );
 
@@ -55,6 +55,34 @@ public final class GroupCreationForm {
         } catch ( DAOException e ) {
             setError( "unexpected", "Unexpected mistake, please retry later. " );
             result = "Group creation failed : Unexpected mistake, please retry later.";
+            e.printStackTrace();
+        }
+
+        return group;
+    }
+
+    public Group modifyGroup( HttpServletRequest request, String path ) throws ParseException {
+
+        String groupName = getFieldValue( request, NAME_FIELD );
+
+        String groupDescription = getFieldValue( request, DESCRIPTION_FIELD );
+        ArrayList<String> privileges = getSelectedValues( request, PRIV_FIELD );
+
+        Group group = new Group();
+        handleGroupName( groupName, group );
+        handleGroupDescription( groupDescription, group );
+        handlePrivs( privileges, group );
+
+        try {
+            if ( errors.isEmpty() ) {
+                groupDao.modify( group );
+                result = "Group modification succeed";
+            } else {
+                result = "Group modification failed !.";
+            }
+        } catch ( DAOException e ) {
+            setError( "unexpected", "Unexpected mistake, please retry later. " );
+            result = "Group modification failed : Unexpected mistake, please retry later.";
             e.printStackTrace();
         }
 
