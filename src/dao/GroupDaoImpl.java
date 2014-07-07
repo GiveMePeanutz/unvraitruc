@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,10 +23,13 @@ public class GroupDaoImpl implements GroupDao {
     private static final String SQL_SELECT_GROUP_PRIVS  = "SELECT privName FROM Priv WHERE privName IN (SELECT privName FROM Group_Priv WHERE groupName = ?) ORDER BY privName";
     private static final String SQL_SELECT_GROUP_USERS  = "SELECT * FROM user WHERE username IN (SELECT username FROM user_group WHERE groupName = ?) ORDER BY username";
 
+    private static final String SQL_MODIFY_GROUP		= "UPDATE web_app_db.group SET groupDescription=? WHERE groupName=?";
+    
     private static final String SQL_INSERT              = "INSERT INTO web_app_db.Group ( groupName, groupDescription) VALUES ( ?, ?)";
     private static final String SQL_INSERT_GROUP_PRIV   = "INSERT INTO Group_Priv (groupName , privName) VALUES (? , ?)";
 
     private static final String SQL_DELETE_BY_GROUPNAME = "DELETE FROM web_app_db.Group WHERE groupName = ?";
+    private static final String SQL_DELETE_GROUP_PRIVS	= "DELETE FROM group_priv WHERE groupName= ? ";
 
     GroupDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
@@ -193,5 +197,54 @@ public class GroupDaoImpl implements GroupDao {
 
         return group;
     }
+
+	@Override
+	public void modify(Group group) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement1 = null;
+		PreparedStatement preparedStatement2 = null;
+		PreparedStatement preparedStatement3 = null;
+
+		try {
+			connection = daoFactory.getConnection();
+			preparedStatement1 = initialisationRequetePreparee(connection,
+					SQL_MODIFY_GROUP, true, group.getGroupDescription(), group.getGroupName());
+			int statut1 = preparedStatement1.executeUpdate();
+			if (statut1 == 0) {
+				throw new DAOException(
+						"Failed to modify group. No row modified");
+			}
+			
+			
+			preparedStatement2 = initialisationRequetePreparee(connection, SQL_DELETE_GROUP_PRIVS, true, group.getGroupName());
+			int statut2 = preparedStatement2.executeUpdate();
+			if (statut2 == 0) {
+				throw new DAOException(
+						"Failed to delete group privs. No rows deleted");
+			}
+			
+			
+			
+			for (String privName : group.getPrivNames()) {
+				preparedStatement3 = initialisationRequetePreparee( connection,
+	                    SQL_INSERT_GROUP_PRIV, true, group.getGroupName(), privName );
+	            int statut3 = preparedStatement3.executeUpdate();
+	            if ( statut3 == 0 ) {
+	                throw new DAOException(
+	                        "Failed to create group_privilege association. No row added" );
+	            }
+			}
+			
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			fermeturesSilencieuses(preparedStatement1,
+					connection);
+			fermeturesSilencieuses(preparedStatement2,
+					connection);
+			fermeturesSilencieuses(preparedStatement3,
+					connection);
+		}				
+	}
 
 }

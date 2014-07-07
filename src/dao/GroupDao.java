@@ -14,4 +14,6 @@ public interface GroupDao {
 
 	void delete( String groupName ) throws DAOException;
 	
+	void modify (Group group) throws DAOException;
+	
 }
