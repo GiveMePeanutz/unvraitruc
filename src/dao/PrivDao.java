@@ -14,4 +14,6 @@ public interface PrivDao {
 
 	void delete( String privName ) throws DAOException;
 	
+	void modify ( Priv priv ) throws DAOException;
+	
 }

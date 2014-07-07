@@ -17,17 +17,20 @@ public class PrivDaoImpl implements PrivDao {
 
     private DAOFactory          daoFactory;
 
-    private static final String SQL_SELECT           = "SELECT privName, privDescription FROM Priv ORDER BY privName";
-    private static final String SQL_SELECT_BY_PRIVNAME = "SELECT privName, privDescription FROM Priv WHERE privName = ?";
-    private static final String SQL_SELECT_PRIV_MENUPATHS = "SELECT menuPath FROM priv_menu WHERE privName = ? ORDER BY menuPath";
-    private static final String SQL_SELECT_PRIV_GROUPS = "SELECT groupName FROM web_app_db.group WHERE groupName IN (SELECT groupName FROM user_group WHERE username = ?) ORDER BY groupName";
+    private static final String SQL_SELECT           		= "SELECT privName, privDescription FROM Priv ORDER BY privName";
+    private static final String SQL_SELECT_BY_PRIVNAME 		= "SELECT privName, privDescription FROM Priv WHERE privName = ?";
+    private static final String SQL_SELECT_PRIV_MENUPATHS 	= "SELECT menuPath FROM priv_menu WHERE privName = ? ORDER BY menuPath";
+    private static final String SQL_SELECT_PRIV_GROUPS 		= "SELECT groupName FROM web_app_db.group WHERE groupName IN (SELECT groupName FROM user_group WHERE username = ?) ORDER BY groupName";
 
-    private static final String SQL_INSERT           = "INSERT INTO Priv ( privName, privDescription) VALUES ( ?, ?)";
-    private static final String SQL_INSERT_PRIV_MENU = "INSERT INTO priv_menu (menuPath , privName) VALUES (? , ?)";
-    private static final String SQL_INSERT_PRIV_GROUP= "INSERT INTO Group_Priv (groupName , privName) VALUES (? , ?)";
+    private static final String SQL_MODIFY_PRIV				= "UPDATE priv SET privDescription = ? WHERE privName  = ?";
+    
+    private static final String SQL_INSERT           		= "INSERT INTO Priv ( privName, privDescription) VALUES ( ?, ?)";
+    private static final String SQL_INSERT_PRIV_MENU 		= "INSERT INTO priv_menu (menuPath , privName) VALUES (? , ?)";
+    private static final String SQL_INSERT_PRIV_GROUP		= "INSERT INTO Group_Priv (groupName , privName) VALUES (? , ?)";
 
     
-    private static final String SQL_DELETE_BY_PRIVNAME = "DELETE FROM Priv WHERE privName = ?";
+    private static final String SQL_DELETE_BY_PRIVNAME 		= "DELETE FROM Priv WHERE privName = ?";
+    private static final String SQL_DELETE_PRIV_MENUPATHS	= "DELETE FROM priv_menus WHERE privName = ?";
 
     PrivDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
@@ -196,5 +199,54 @@ public class PrivDaoImpl implements PrivDao {
         
         return priv;
     }
+
+	@Override
+	public void modify(Priv priv) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement1 = null;
+		PreparedStatement preparedStatement2 = null;
+		PreparedStatement preparedStatement3 = null;
+
+		try {
+			connection = daoFactory.getConnection();
+			preparedStatement1 = initialisationRequetePreparee(connection,
+					SQL_MODIFY_PRIV, true, priv.getPrivDescription(), priv.getPrivName());
+			int statut1 = preparedStatement1.executeUpdate();
+			if (statut1 == 0) {
+				throw new DAOException(
+						"Failed to modify priv. No row modified");
+			}
+			
+			
+			preparedStatement2 = initialisationRequetePreparee(connection, SQL_DELETE_PRIV_MENUPATHS, true, priv.getPrivName());
+			int statut2 = preparedStatement2.executeUpdate();
+			if (statut2 == 0) {
+				throw new DAOException(
+						"Failed to delete privilege menus. No rows deleted");
+			}
+			
+			
+			
+			for (Integer menuPath : priv.getMenuPaths()) {
+				preparedStatement3 = initialisationRequetePreparee( connection,
+	                    SQL_INSERT_PRIV_MENU, true, menuPath, priv.getPrivName() );
+	            int statut3 = preparedStatement3.executeUpdate();
+	            if ( statut3 == 0 ) {
+	                throw new DAOException(
+	                        "Failed to create menu_privilege association. No row added" );
+	            }
+			}
+			
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			fermeturesSilencieuses(preparedStatement1,
+					connection);
+			fermeturesSilencieuses(preparedStatement2,
+					connection);
+			fermeturesSilencieuses(preparedStatement3,
+					connection);
+		}
+	}
 
 }
