@@ -4,20 +4,15 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <c:set var="student" value="Student"/>
-        <c:set var="teacher" value="Teacher"/>
         <c:choose>
         	<c:when test="${ empty requestScope.user }">
         		<c:choose>
         		<c:when test="${ empty requestScope.grp }"> 
         			<title>Create a user</title>
         		</c:when>
-        		<c:when test="${requestScope.grp eq student }"> 
-        			<title>Create a student</title>
-        		</c:when>
-        		<c:when test="${ requestScope.grp eq teacher }"> 
-        			<title>Create a teacher</title>
-        		</c:when>
+        		<c:otherwise>         			
+        			<title>Create a ${ requestScope.grp}</title>
+        		</c:otherwise>
         		</c:choose>
         	</c:when>
         	<c:otherwise>
@@ -36,12 +31,9 @@
         		<c:when test="${ empty requestScope.grp }"> 
         			<h1>Create a user</h1>
         		</c:when>
-        		<c:when test="${requestScope.grp eq student }"> 
-        			<h1>Create a student</h1>
-        		</c:when>
-        		<c:when test="${ requestScope.grp eq teacher }"> 
-        			<h1>Create a teacher</h1>
-        		</c:when>
+        		<c:otherwise>         			
+        			<h1>Create a ${ requestScope.grp}</h1>
+        		</c:otherwise>
         		</c:choose>
         	</c:when>
         	<c:otherwise>
