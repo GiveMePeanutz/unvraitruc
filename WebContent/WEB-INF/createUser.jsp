@@ -62,16 +62,16 @@
 					                    		<option value='<c:out value="${mapGroups.value.groupName}"/>'><c:out value="${mapGroups.value.groupName}"/></option>                    
 					                		</c:forEach>
 					                	</select>
-					                	
+					                	<span class="error">${form.errors['groups']}</span>
 			                		</c:when>
         							<c:otherwise>
-        								<select name="groups" id = "groups" multiple="multiple" disabled="disabled">																				
+        								<select name="groups" id = "groups" multiple="multiple">																				
 					                    	<option  value='<c:out value="${requestScope.grp}"/>' selected="selected" ><c:out value="${requestScope.grp}"/></option>                    
 					                	</select>
+					                	<span class="error">${form.errors['groups']}</span>
         							</c:otherwise>
         						</c:choose>
-        						<span class="error">${form.errors['groups']}</span>
-	                		</c:otherwise>
+        							                		</c:otherwise>
 	        			</c:choose>
         			
         			
