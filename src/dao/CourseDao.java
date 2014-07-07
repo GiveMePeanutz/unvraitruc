@@ -15,4 +15,6 @@ public interface CourseDao {
 
 	void delete( String courseName ) throws DAOException;
 	
+	void modify ( Course course ) throws DAOException;
+	
 }
