@@ -116,7 +116,12 @@
 					<c:set var="contains" value="false" />
 					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 					<c:if test="${item eq 'Add Teacher'}">
-	      			<li><a href="<c:url value="/userCreation"/>">Add Teacher</a></li>
+	      			<c:set var="titleURL">  
+	               			<c:url value="/userCreation">    
+	                  			<c:param name="grp" value="Teacher"/>       
+	                		</c:url>    
+	           			</c:set>              
+		      			<li><a href="${titleURL}">Add Teacher</a></li>
 	      			</c:if>
 					</c:forEach>
 	    		</ul>
@@ -142,7 +147,7 @@
 					<c:if test="${item eq 'Add Student'}">
 						<c:set var="titleURL">  
 	               			<c:url value="/userCreation">    
-	                  			<c:param name="autoGroup" value="student"/>       
+	                  			<c:param name="grp" value="Student"/>       
 	                		</c:url>    
 	           			</c:set>              
 		      			<li><a href="${titleURL}">Add Student</a></li>

@@ -32,7 +32,7 @@ public class UserCreation extends HttpServlet {
     public static final String GROUP_REQUEST_ATT = "groups";
     public static final String USERNAME_PARAM    = "username";
     public static final String VERIFY_PARAM      = "modify";
-    public static final String GRP_PARAM         = "autoGroup";
+    public static final String GRP_PARAM         = "grp";
     public static final String AUTOGRP_ATT       = "grp";
 
     public static final String VUE_SUCCESS       = "/Project/displayUsers";
@@ -49,7 +49,7 @@ public class UserCreation extends HttpServlet {
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         String grp = getParameterValue( request, GRP_PARAM );
-        request.setAttribute( AUTOGRP_ATT, grp );
+        request.setAttribute( GRP_PARAM, grp );
 
         String modifiable = getParameterValue( request, VERIFY_PARAM );
         if ( modifiable != null && modifiable.equals( "true" ) )

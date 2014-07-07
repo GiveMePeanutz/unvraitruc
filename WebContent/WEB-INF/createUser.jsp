@@ -10,18 +10,18 @@
         	<c:when test="${ empty requestScope.user }">
         		<c:choose>
         		<c:when test="${ empty requestScope.grp }"> 
-        			<h1>Create a user</h1>
+        			<title>Create a user</title>
         		</c:when>
         		<c:when test="${requestScope.grp eq student }"> 
-        			<h1>Create a student</h1>
+        			<title>Create a student</title>
         		</c:when>
         		<c:when test="${ requestScope.grp eq teacher }"> 
-        			<h1>Create a teacher</h1>
+        			<title>Create a teacher</title>
         		</c:when>
         		</c:choose>
         	</c:when>
         	<c:otherwise>
-        		<h1>Modify users</h1>
+        		<title>Modify users</title>
         	</c:otherwise>
         </c:choose>
         <link type="text/css" rel="stylesheet" href="<c:url value="/inc/design.css"/>" />
@@ -55,24 +55,34 @@
                     <legend>User Information</legend>
                     <c:import url="/inc/inc_user_form.jsp" />
                     <br />
-                    <c:if test="${ empty requestScope.grp }">
+                    
                     	<label for="groups">Please assign groups<br /> to the user</label>                                      
 	                    <c:choose>
 	            			<c:when test="${ empty requestScope.groups }">
 	                		<p class="error">No groups in database</p>
 	            			</c:when>
 	            			<c:otherwise>
-			                    <select name="groups" id = "groups" multiple="multiple">																				
-									<%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
-			                		<c:forEach items="${ requestScope.groups }" var="mapGroups" varStatus="boucle">
-			                    		<option value='<c:out value="${mapGroups.value.groupName}"/>'><c:out value="${mapGroups.value.groupName}"/></option>                    
-			                		</c:forEach>
-			                	</select>
-			                	<span class="error">${form.errors['groups']}</span>
-			                	
+	            				<c:choose>
+                    				<c:when test="${ empty requestScope.grp }">
+					                    <select name="groups" id = "groups" multiple="multiple">																				
+											<%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
+					                		<c:forEach items="${ requestScope.groups }" var="mapGroups" varStatus="boucle">
+					                    		<option value='<c:out value="${mapGroups.value.groupName}"/>'><c:out value="${mapGroups.value.groupName}"/></option>                    
+					                		</c:forEach>
+					                	</select>
+					                	
+			                		</c:when>
+        							<c:otherwise>
+        								<select name="groups" id = "groups" multiple="multiple" disabled="disabled">																				
+					                    	<option  value='<c:out value="${requestScope.grp}"/>' selected="selected" ><c:out value="${requestScope.grp}"/></option>                    
+					                	</select>
+        							</c:otherwise>
+        						</c:choose>
+        						<span class="error">${form.errors['groups']}</span>
 	                		</c:otherwise>
 	        			</c:choose>
-        			</c:if>
+        			
+        			
                 </fieldset>  
                 <p class="info">${ form.result }</p>
                 <c:choose>
