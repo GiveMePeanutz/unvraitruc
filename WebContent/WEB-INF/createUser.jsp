@@ -4,8 +4,8 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <c:set var="student" value="student"/>
-        <c:set var="teacher" value="teacher"/>
+        <c:set var="student" value="Student"/>
+        <c:set var="teacher" value="Teacher"/>
         <c:choose>
         	<c:when test="${ empty requestScope.user }">
         		<c:choose>
