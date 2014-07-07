@@ -36,6 +36,8 @@ public class UserCreation extends HttpServlet {
     public static final String AUTOGRP_ATT       = "grp";
 
     public static final String VUE_SUCCESS       = "/Project/displayUsers";
+    public static final String VUE_SUCCESS_TEA   = "/Project/displayTeachers";
+    public static final String VUE_SUCCESS_STU   = "/Project/displayUsers";
     public static final String VUE_FORM          = "/WEB-INF/createUser.jsp";
 
     private UserDao            userDao;
@@ -102,17 +104,44 @@ public class UserCreation extends HttpServlet {
             request.setAttribute( GROUP_REQUEST_ATT, mapPrivs );
         }
 
-        /* Si aucune erreur */
-        if ( form.getErrors().isEmpty() ) {
-            response.sendRedirect( VUE_SUCCESS );
+        String tea = request.getParameter( "Create" );
 
-            // this.getServletContext().getRequestDispatcher( VUE_SUCCESS
-            // ).forward( request, response );
-        } else {
-            /* Sinon, ré-affichage du formulaire de création avec les erreurs */
-
-            this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
+        if ( tea.equals( "Create a Teacher" ) )
+        {
+            if ( form.getErrors().isEmpty() ) {
+                response.sendRedirect( VUE_SUCCESS_TEA );
+            } else {
+                request.setAttribute( GRP_PARAM, "Teacher" );
+                this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
+            }
         }
+        else if ( tea.equals( "Create a Student" ) )
+        {
+            if ( form.getErrors().isEmpty() ) {
+                response.sendRedirect( VUE_SUCCESS_STU );
+            } else {
+                request.setAttribute( GRP_PARAM, "Student" );
+                this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
+            }
+        }
+
+        else {
+
+            /* Si aucune erreur */
+            if ( form.getErrors().isEmpty() ) {
+                response.sendRedirect( VUE_SUCCESS );
+
+                // this.getServletContext().getRequestDispatcher( VUE_SUCCESS
+                // ).forward( request, response );
+            } else {
+                /*
+                 * Sinon, ré-affichage du formulaire de création avec les
+                 * erreurs
+                 */
+                this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
+            }
+        }
+
     }
 
     private static String getParameterValue( HttpServletRequest request,

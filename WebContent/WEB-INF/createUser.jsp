@@ -65,7 +65,7 @@
 					                	<span class="error">${form.errors['groups']}</span>
 			                		</c:when>
         							<c:otherwise>
-        								<select name="groups" id = "groups" multiple="multiple">																				
+        								<select name="groups" id = "groups" multiple="multiple" required>																				
 					                    	<option  value='<c:out value="${requestScope.grp}"/>' selected="selected" ><c:out value="${requestScope.grp}"/></option>                    
 					                	</select>
 					                	<span class="error">${form.errors['groups']}</span>
@@ -79,7 +79,19 @@
                 <p class="info">${ form.result }</p>
                 <c:choose>
         			<c:when test="${ empty requestScope.user }">
-        				<input type="submit" value="Create"  />
+        			<c:set var="student" value="Student" />
+        			<c:set var="teacher" value="Teacher" />
+        				<c:choose>
+        					<c:when test="${ requestScope.grp eq  student  }">
+           						 <input type="submit" name="Create" value="Create a Student" >
+        					</c:when>
+        					<c:when test="${ requestScope.grp eq teacher  }">
+           						 <input type="submit" name = "Create" value="Create a Teacher" />
+        					</c:when>
+        					<c:otherwise>
+        						<input type="submit" value="Create"  />
+        				    </c:otherwise>
+        				</c:choose>
         			</c:when>
         			<c:otherwise>
         				<input type="submit" value="Modify"  />
