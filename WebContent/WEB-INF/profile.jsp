@@ -58,7 +58,10 @@
             <br>
             <a  href="<c:url value="/userCreation" ><c:param name="username" value="${user.username }" /><c:param name="modify" value="true" /></c:url>" class = "button">           
             <input type="button" value="Modify" />
-          	</a> 
+          	</a>
+            <a  href="<c:url value="/availableCourses" ><c:param name="username" value="${user.username }" /></c:url>" class = "button">           
+            <input type="button" value="Inscription" />
+          	</a>  
         </div>
     </body>
 </html>

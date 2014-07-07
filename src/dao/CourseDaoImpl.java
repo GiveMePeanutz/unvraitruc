@@ -20,8 +20,8 @@ public class CourseDaoImpl implements CourseDao {
     private static final String SQL_SELECT_BY_COURSENAME = "SELECT  courseName, courseYear, courseDescription, courseschedule FROM Course WHERE courseName = ?";
     private static final String SQL_SELECT_COURSE_USERS  = "SELECT username FROM user WHERE username IN (SELECT username FROM user_course WHERE courseName = ?) ORDER BY username";
 
-    private static final String SQL_MODIFY_COURSE		 = "UPDATE course SET courseDescription= ?, courseYear = ? WHERE courseName = ?";
-    
+    private static final String SQL_MODIFY_COURSE        = "UPDATE course SET courseDescription= ?, courseYear = ? WHERE courseName = ?";
+
     private static final String SQL_INSERT               = "INSERT INTO Course ( courseName, courseYear, courseDescription, courseschedule) VALUES ( ?, ?, ?, ?)";
     private static final String SQL_INSERT_COURSE_USER   = "INSERT INTO user_course (username , courseName) VALUES (? , ?)";
 
@@ -167,29 +167,28 @@ public class CourseDaoImpl implements CourseDao {
 
     }
 
-	@Override
-	public void modify(Course course) throws DAOException {
-		Connection connection = null;
-		PreparedStatement preparedStatement1 = null;
+    @Override
+    public void modify( Course course ) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement1 = null;
 
-		try {
-			connection = daoFactory.getConnection();
-			preparedStatement1 = initialisationRequetePreparee(connection,
-					SQL_MODIFY_COURSE, true, course.getCourseDescription(), course.getCourseName());
-			int statut1 = preparedStatement1.executeUpdate();
-			if (statut1 == 0) {
-				throw new DAOException(
-						"Failed to modify priv. No row modified");
-			}
-			
-			
-			
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			fermeturesSilencieuses(preparedStatement1,
-					connection);
-		}		
-	}
+        try {
+            connection = daoFactory.getConnection();
+            preparedStatement1 = initialisationRequetePreparee( connection,
+                    SQL_MODIFY_COURSE, true, course.getCourseDescription(), course.getCourseYear(),
+                    course.getCourseName() );
+            int statut1 = preparedStatement1.executeUpdate();
+            if ( statut1 == 0 ) {
+                throw new DAOException(
+                        "Failed to modify priv. No row modified" );
+            }
+
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            fermeturesSilencieuses( preparedStatement1,
+                    connection );
+        }
+    }
 
 }
