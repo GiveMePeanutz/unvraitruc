@@ -368,5 +368,30 @@ public class UserDaoImpl implements UserDao {
 					connection);
 		}		
 	}
+
+	@Override
+	public void addCourse(String username, String courseName)
+			throws DAOException {
+		
+		Connection connection = null;
+		PreparedStatement preparedStatement1 = null;
+
+		try {
+			connection = daoFactory.getConnection();
+			preparedStatement1 = initialisationRequetePreparee(connection,
+					SQL_INSERT_USER_COURSE, true, username, courseName);
+			int statut1 = preparedStatement1.executeUpdate();
+			if (statut1 == 0) {
+				throw new DAOException(
+						"Failed to create user-course association. No row added");
+			}
+			
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			fermeturesSilencieuses(preparedStatement1,
+					connection);
+		}
+	}
 	
 }

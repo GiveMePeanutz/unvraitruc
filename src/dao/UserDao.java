@@ -21,4 +21,6 @@ public interface UserDao {
 	List<String> listAccMenus( String username ) throws DAOException;
 	
 	void modify( User user ) throws DAOException;
+	
+	void addCourse ( String username, String courseName ) throws DAOException;
 }
