@@ -46,36 +46,43 @@
             		<br/>
             	</c:forEach>
             </ul>
-
-            <p class="important">Courses :</p> 
-            <table class="profcourses" >
-	            <tr>
-	            	<th>Course name</th>
-	            	<th class="action">More</th>		                    
-	                <th class="action">Cancel</th>				                                     
-	            </tr>
-	            <%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
-				<c:forEach items="${ user.courseNames }" var="course">
-		             <%-- Simple test de parité sur l'index de parcours, pour alterner la couleur de fond de chaque ligne du tableau. --%>
-		             <tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
-		                 <%-- Affichage des propriétés du bean Client, qui est stocké en tant que valeur de l'entrée courante de la map --%>
-		                 <td><c:out value="${ course }"/></td>	
-		                 <td class="action">
-	                        <a href="<c:url value="/profileCourse"><c:param name="courseName" value="${  course }" /></c:url>">
-	                            <img src="<c:url value="/inc/info.gif"/>" alt="info" />
-	                        </a>
-                    	</td>
-                    		                  
-		                <td class="action">
-		                    <a href="<c:url value="/cancelCourse"><c:param name="courseName" value="${  course }" /><c:param name="username" value="${ user.username }" /></c:url>">
-		                        <img src="<c:url value="/inc/supprimer.png"/>" alt="cancel" />
-		                    </a>
-		                </td>				                    
-		             </tr>
-	            </c:forEach>
-		    </table>           
+			
+	            <p class="important">Courses :</p>
+	            <c:if test="${ !empty user.courseNames }"> 
+	            <table class="profcourses" >
+		            <tr>
+		            	<th>Course name</th>
+		            	<th class="action">More</th>		                    
+		                <th class="action">Cancel</th>				                                     
+		            </tr>
+		            
+		            <%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
+					<c:forEach items="${ user.courseNames }" var="course">
+			             <%-- Simple test de parité sur l'index de parcours, pour alterner la couleur de fond de chaque ligne du tableau. --%>
+			             <tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
+			                 <%-- Affichage des propriétés du bean Client, qui est stocké en tant que valeur de l'entrée courante de la map --%>
+			                 <td><c:out value="${ course }"/></td>	
+			                 <td class="action">
+		                        <a href="<c:url value="/profileCourse"><c:param name="courseName" value="${  course }" /></c:url>">
+		                            <img src="<c:url value="/inc/info.gif"/>" alt="info" />
+		                        </a>
+	                    	</td>
+	                    		                  
+			                <td class="action">
+			                    <a href="<c:url value="/cancelCourse"><c:param name="courseName" value="${  course }" /><c:param name="username" value="${ user.username }" /></c:url>">
+			                        <img src="<c:url value="/inc/supprimer.png"/>" alt="cancel" />
+			                    </a>
+			                </td>				                    
+			             </tr>
+		            </c:forEach>
+			    </table>
+		    </c:if>
+		    <c:if test="${ empty user.courseNames }">
+		    	<p>No course for this user.</p>
+		    </c:if>
 		    <br />
-           <br />
+		    <br />
+		    
             <a  href="<c:url value="/userCreation" ><c:param name="username" value="${user.username }" /><c:param name="modify" value="true" /></c:url>" class = "button">           
             <input type="button" value="Modify" />
           	</a>
