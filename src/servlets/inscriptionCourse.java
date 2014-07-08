@@ -12,7 +12,7 @@ import dao.DAOException;
 import dao.DAOFactory;
 import dao.UserDao;
 
-@WebServlet( "/InscriptionCourse" )
+@WebServlet( "/inscriptionCourse" )
 public class InscriptionCourse extends HttpServlet {
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String COURSENAME_PARAM = "courseName";
