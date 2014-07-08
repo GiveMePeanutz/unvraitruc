@@ -17,17 +17,14 @@
             <dl><dt class ="important">Name :</dt> <dd><c:out value="${ course.courseName }"/></dd></dl>  
             <dl><dt class="important">Description :</dt> <dd><c:out value="${ course.courseDescription }"/></dd></dl>
             <dl><dt class="important">Course Year :</dt> <dd><c:out value="${ course.courseYear }"/></dd></dl>           
-            <dl>
-            <dt class="important">Users :</dt> 
-            <dd>
+      
+            <p class="important">Users :</p> 
             <ul class="prof">
             	<c:forEach items="${ course.usernames }" var="users" >
             		<li><c:out value="${ users }"/></li>
             		<br/>
             	</c:forEach>
             </ul>
-            </dd>
-            </dl>   
             <br>
             <a href="<c:url value="/courseCreation"><c:param name="courseName" value="${course.courseName }" /><c:param name="modify" value="true" /></c:url>" class = "button">           
             <input type="button" value="Modify" />
