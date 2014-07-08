@@ -22,9 +22,9 @@ import dao.UserDao;
 import forms.FormValidationException;
 import forms.UserCreationForm;
 
-@WebServlet( urlPatterns = "/userCreation", initParams = @WebInitParam( name = "path", value = "/files/images/" ) )
+@WebServlet( urlPatterns = "/studentCreation", initParams = @WebInitParam( name = "path", value = "/files/images/" ) )
 @MultipartConfig( location = "c:/files/images", maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 5, fileSizeThreshold = 1024 * 1024 * 3 )
-public class UserCreation extends HttpServlet {
+public class StudentCreation extends HttpServlet {
     public static final String CONF_DAO_FACTORY  = "daofactory";
     public static final String PATH              = "path";
     public static final String USER_ATT          = "user";
@@ -33,8 +33,8 @@ public class UserCreation extends HttpServlet {
     public static final String USERNAME_PARAM    = "username";
     public static final String VERIFY_PARAM      = "modify";
 
-    public static final String VUE_SUCCESS       = "/Project/displayUsers";
-    public static final String VUE_FORM          = "/WEB-INF/createUser.jsp";
+    public static final String VUE_SUCCESS       = "/Project/displayStudents";
+    public static final String VUE_FORM          = "/WEB-INF/createStudent.jsp";
 
     private UserDao            userDao;
     private GroupDao           groupDao;

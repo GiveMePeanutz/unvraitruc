@@ -4,19 +4,12 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <c:choose>
+         <c:choose>
         	<c:when test="${ empty requestScope.user }">
-        		<c:choose>
-        		<c:when test="${ empty requestScope.grp }"> 
-        			<title>Create a user</title>
-        		</c:when>
-        		<c:otherwise>         			
-        			<title>Create a ${ requestScope.grp}</title>
-        		</c:otherwise>
-        		</c:choose>
+        	<title>Create a Student</title>
         	</c:when>
         	<c:otherwise>
-        		<title>Modify users</title>
+        		<title>Modify student</title>
         	</c:otherwise>
         </c:choose>
         <link type="text/css" rel="stylesheet" href="<c:url value="/inc/design.css"/>" />
@@ -27,14 +20,7 @@
         <br />
         <c:choose>
         	<c:when test="${ empty requestScope.user }">
-        		<c:choose>
-        		<c:when test="${ empty requestScope.grp }"> 
-        			<h1>Create a user</h1>
-        		</c:when>
-        		<c:otherwise>         			
-        			<h1>Create a ${ requestScope.grp}</h1>
-        		</c:otherwise>
-        		</c:choose>
+        		<h1>Create a student</h1>
         	</c:when>
         	<c:otherwise>
         		<h1>Modify ${user.username}</h1>
@@ -53,45 +39,18 @@
 	            			<c:when test="${ empty requestScope.groups }">
 	                		<p class="error">No groups in database</p>
 	            			</c:when>
-	            			<c:otherwise>
-	            				<c:choose>
-                    				<c:when test="${ empty requestScope.grp }">
-					                    <select name="groups" id = "groups" multiple="multiple">																				
-											<%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
-					                		<c:forEach items="${ requestScope.groups }" var="mapGroups" varStatus="boucle">
-					                    		<option value='<c:out value="${mapGroups.value.groupName}"/>'><c:out value="${mapGroups.value.groupName}"/></option>                    
-					                		</c:forEach>
-					                	</select>
-					                	<span class="error">${form.errors['groups']}</span>
-			                		</c:when>
-        							<c:otherwise>
-        								<select name="groups" id = "groups" multiple="multiple" required>																				
-					                    	<option  value='<c:out value="${requestScope.grp}"/>' selected="selected" ><c:out value="${requestScope.grp}"/></option>                    
-					                	</select>
-					                	<span class="error">${form.errors['groups']}</span>
-        							</c:otherwise>
-        						</c:choose>
-        							                		</c:otherwise>
-	        			</c:choose>
-        			
-        			
+            		        <c:otherwise>
+            					<select name="groups" id = "groups"  required>																				
+				                    <option  value='Student' selected="selected" >Student</option>                    
+				                </select>
+				                	<span class="error">${form.errors['groups']}</span>
+       						</c:otherwise>
+        				</c:choose>       							                		
                 </fieldset>  
                 <p class="info">${ form.result }</p>
-                <c:choose>
+                 <c:choose>
         			<c:when test="${ empty requestScope.user }">
-        			<c:set var="student" value="Student" />
-        			<c:set var="teacher" value="Teacher" />
-        				<c:choose>
-        					<c:when test="${ requestScope.grp eq  student  }">
-           						 <input type="submit" name="Create" value="Create a Student" >
-        					</c:when>
-        					<c:when test="${ requestScope.grp eq teacher  }">
-           						 <input type="submit" name = "Create" value="Create a Teacher" />
-        					</c:when>
-        					<c:otherwise>
-        						<input type="submit" name = "Create" value="Create"  />
-        				    </c:otherwise>
-        				</c:choose>
+        				<input type="submit" name = "Create" value="Create"  /> 			
         			</c:when>
         			<c:otherwise>
         				<input type="submit" name="Create" value="Modify"  />

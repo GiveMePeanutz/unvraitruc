@@ -6,10 +6,10 @@
         <meta charset="utf-8" />
         <c:choose>
         	<c:when test="${ empty requestScope.user }">
-        	<title>Create a user</title>
+        	<title>Create a teacher</title>
         	</c:when>
         	<c:otherwise>
-        		<title>Modify user</title>
+        		<title>Modify teacher</title>
         	</c:otherwise>
         </c:choose>
         <link type="text/css" rel="stylesheet" href="<c:url value="/inc/design.css"/>" />
@@ -18,9 +18,9 @@
     <body>
         <c:import url="/inc/menu.jsp" />
         <br />
-        <c:choose>
+       <c:choose>
         	<c:when test="${ empty requestScope.user }">
-        		<h1>Create a user</h1>
+        		<h1>Create a teacher</h1>
         	</c:when>
         	<c:otherwise>
         		<h1>Modify ${user.username}</h1>
@@ -35,25 +35,20 @@
                     <br />
                     
                     	<label for="groups">Please assign groups<br /> to the user</label>                                      
-	                    <c:choose>
+	                     <c:choose>
 	            			<c:when test="${ empty requestScope.groups }">
 	                		<p class="error">No groups in database</p>
 	            			</c:when>
-	            			<c:otherwise>
-			                    <select name="groups" id = "groups" multiple="multiple" size=10>																				
-									<%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
-			                		<c:forEach items="${ requestScope.groups }" var="mapGroups" varStatus="boucle">
-			                    		<option value='<c:out value="${mapGroups.value.groupName}"/>'><c:out value="${mapGroups.value.groupName}"/></option>                    
-			                		</c:forEach>
-			                	</select>
-			                	<span class="error">${form.errors['groups']}</span>
-        					</c:otherwise>
-	        			</c:choose>
-        			
-        			
+            		        <c:otherwise>
+            					<select name="groups" id = "groups"  required>																				
+				                    <option  value='Teacher' selected="selected" >Teacher</option>                    
+				                </select>
+				                	<span class="error">${form.errors['groups']}</span>
+       						</c:otherwise>
+        				</c:choose>
                 </fieldset>  
                 <p class="info">${ form.result }</p>
-                <c:choose>
+                 <c:choose>
         			<c:when test="${ empty requestScope.user }">
         				<input type="submit" name = "Create" value="Create"  /> 			
         			</c:when>
