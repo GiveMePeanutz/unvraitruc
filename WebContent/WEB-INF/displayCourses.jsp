@@ -26,7 +26,13 @@
                 	<th>Course name</th>
                     <th>Description</th>
                     <th class="action">More</th>
-                    <th class="action">Delete</th>                   
+                    
+                    <c:set var="contains" value="false" />
+					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
+					<c:if test="${item eq 'Delete Course'}">
+                    	<th class="action">Delete</th>
+                    </c:if>
+					</c:forEach>                   
                 </tr>
                 <%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
                 <c:forEach items="${ requestScope.courses }" var="mapCourses" varStatus="boucle">
@@ -40,11 +46,16 @@
                             <img src="<c:url value="/inc/info.gif"/>" alt="info" />
                         </a>
                     </td>
-                    <td class="action">
-                        <a href="<c:url value="/deleteCourse"><c:param name="courseName" value="${ mapCourses.value.courseName }" /></c:url>">
-                            <img src="<c:url value="/inc/supprimer.png"/>" alt="Delete" />
-                        </a>
-                    </td>
+                    <c:set var="contains" value="false" />
+					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
+					<c:if test="${item eq 'Delete Course'}">
+	                    <td class="action">
+	                        <a href="<c:url value="/deleteCourse"><c:param name="courseName" value="${ mapCourses.value.courseName }" /></c:url>">
+	                            <img src="<c:url value="/inc/supprimer.png"/>" alt="Delete" />
+	                        </a>
+	                    </td>
+	                </c:if>
+					</c:forEach>
                 </tr>
                 </c:forEach>
             </table>

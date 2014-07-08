@@ -22,17 +22,23 @@ public final class Menu {
                                       {
                                       { "Course" },
                                       { "Display Courses" },
-                                      { "Add Course" }
+                                      { "Add Course" },
+                                      { "Delete Course" },
+                                      { "Modify Course" }
                                       },
                                       {
                                       { "Teacher" },
                                       { "Display Teachers" },
-                                      { "Add Teacher" }
+                                      { "Add Teacher" },
+                                      { "Delete Teacher" },
+                                      { "Modify Teacher" }
                                       },
                                       {
                                       { "Student" },
                                       { "Display Students" },
-                                      { "Add Student" }
+                                      { "Add Student" },
+                                      { "Delete Student" },
+                                      { "Modify Student" }
                                       },
                                       {
                                       { "Warehouse Maintenance" }

@@ -30,11 +30,12 @@ public class AddUserFilter implements Filter {
 		HttpSession session = request.getSession();
 		
 		List menus = ((List<String>) session.getAttribute(USER_SESSION_ACCESS_ATT));
-		if(!menus.contains("Add User")){
-			request.getRequestDispatcher("/notAvailable.jsp").forward( req, res);
+		if(menus.contains("Add User")){
+			chain.doFilter(req, res);
 			return;
 		}
-		chain.doFilter(req, res);
+		request.getRequestDispatcher("/notAvailable.jsp").forward( req, res);
+		
 	}
 
 	public void destroy() {
