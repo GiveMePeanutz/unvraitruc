@@ -40,10 +40,13 @@
 	                		<p class="error">No groups in database</p>
 	            			</c:when>
             		        <c:otherwise>
+            		        	<p class="hidden">
             					<select name="groups" id = "groups"  required>																				
 				                    <option  value='Teacher' selected="selected" >Teacher</option>                    
 				                </select>
 				                	<span class="error">${form.errors['groups']}</span>
+				                </p>
+				                Teacher <br>(you can't affect users to an other group.)
        						</c:otherwise>
         				</c:choose>
                 </fieldset>  
