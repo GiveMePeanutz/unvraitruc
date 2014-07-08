@@ -23,4 +23,6 @@ public interface UserDao {
 	void modify( User user ) throws DAOException;
 	
 	void addCourse ( String username, String courseName ) throws DAOException;
+	
+	void deleteCourse ( String username, String courseName ) throws DAOException;
 }

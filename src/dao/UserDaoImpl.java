@@ -38,6 +38,7 @@ public class UserDaoImpl implements UserDao {
 	
 	private static final String SQL_DELETE_BY_USERNAME = "DELETE FROM User WHERE username = ?";
 	private static final String SQL_DELETE_USER_GROUPS = "DELETE FROM user_group WHERE username = ?";
+	private static final String SQL_DELETE_USER_COURSE = "DELETE FROM user_course WHERE username = ?";
 
 	UserDaoImpl(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -392,6 +393,28 @@ public class UserDaoImpl implements UserDao {
 			fermeturesSilencieuses(preparedStatement1,
 					connection);
 		}
+	}
+
+	@Override
+	public void deleteCourse(String username, String courseName)
+			throws DAOException {
+		Connection connexion = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connexion = daoFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connexion, SQL_DELETE_USER_COURSE, true, username , courseName );
+            int statut = preparedStatement.executeUpdate();
+            if ( statut == 0 ) {
+                throw new DAOException( "Failed to delete user_course association, no row deleted." );
+            } else {
+            	//course.setICourseID( null );
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            fermeturesSilencieuses( preparedStatement, connexion );
+        }
+		
 	}
 	
 }
