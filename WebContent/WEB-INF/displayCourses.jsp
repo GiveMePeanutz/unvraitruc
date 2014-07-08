@@ -26,7 +26,8 @@
                 	<th>Course name</th>
                     <th>Description</th>
                     <th class="action">More</th>
-                    <th class="action">Delete</th>                   
+                    <th class="action">Delete</th>
+                    <th class="action">Inscription</th>                   
                 </tr>
                 <%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
                 <c:forEach items="${ requestScope.courses }" var="mapCourses" varStatus="boucle">
@@ -45,6 +46,11 @@
                             <img src="<c:url value="/inc/supprimer.png"/>" alt="Delete" />
                         </a>
                     </td>
+                    <td>
+                    <a  href="<c:url value="/inscriptionCourse" ><c:param name="courseName" value="${ mapCourses.value.courseName }" /><c:param name="username" value="${sessionScope.userSession.username }" /></c:url>" class = "button">           
+            			<img src="<c:url value="/inc/inscription.gif"/>" alt="Inscription" />
+          			</a>  
+          			</td>
                 </tr>
                 </c:forEach>
             </table>

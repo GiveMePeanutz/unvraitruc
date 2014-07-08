@@ -18,7 +18,7 @@ public class InscriptionCourse extends HttpServlet {
     public static final String COURSENAME_PARAM = "courseName";
     public static final String USERNAME_PARAM   = "username";
 
-    public static final String VIEW             = "/profile";
+    public static final String VIEW             = "/displayCourses";
 
     private UserDao            UserDao;
 
