@@ -5,7 +5,7 @@
     <head>
         <meta charset="utf-8" />
         <c:choose>
-        	<c:when test="${ empty requestScope.user }">
+        	<c:when test="${ empty requestScope.modify }">
         	<title>Create a teacher</title>
         	</c:when>
         	<c:otherwise>
@@ -19,7 +19,7 @@
         <c:import url="/inc/menu.jsp" />
         <br />
        <c:choose>
-        	<c:when test="${ empty requestScope.user }">
+        	<c:when test="${ empty requestScope.modify }">
         		<h1>Create a teacher</h1>
         	</c:when>
         	<c:otherwise>
@@ -28,7 +28,7 @@
         </c:choose>
        		<h3>Please, fill the following form and validate</h3>
         <div id="normalForm">
-            <form method="post" action="<c:url value="/userCreation"/>" enctype="multipart/form-data">
+            <form method="post" action="<c:url value="/teacherCreation"/>" enctype="multipart/form-data">
                 <fieldset>
                     <legend>User Information</legend>
                     <c:import url="/inc/inc_user_form.jsp" />

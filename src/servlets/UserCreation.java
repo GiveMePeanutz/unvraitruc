@@ -32,6 +32,7 @@ public class UserCreation extends HttpServlet {
     public static final String GROUP_REQUEST_ATT = "groups";
     public static final String USERNAME_PARAM    = "username";
     public static final String VERIFY_PARAM      = "modify";
+    public static final String VERIFY_PARAM2     = "Create";
 
     public static final String VUE_SUCCESS       = "/Project/displayUsers";
     public static final String VUE_FORM          = "/WEB-INF/createUser.jsp";
@@ -53,6 +54,8 @@ public class UserCreation extends HttpServlet {
             String userName = getParameterValue( request, USERNAME_PARAM );
             User user = userDao.find( userName );
             request.setAttribute( USER_ATT, user );
+            request.setAttribute( VERIFY_PARAM, modifiable );
+
         }
 
         List<Group> listeGroup = groupDao.list();
@@ -78,7 +81,7 @@ public class UserCreation extends HttpServlet {
 
         /* Traitement de la requête et récupération du bean en résultant */
         User user = null;
-        String modify = request.getParameter( VERIFY_PARAM );
+        String modify = request.getParameter( VERIFY_PARAM2 );
         if ( modify.equals( "Modify" ) )
         {
             try {

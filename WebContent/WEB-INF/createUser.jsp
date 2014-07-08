@@ -5,7 +5,7 @@
     <head>
         <meta charset="utf-8" />
         <c:choose>
-        	<c:when test="${ empty requestScope.user }">
+        	<c:when test="${ empty requestScope.modify }">
         	<title>Create a user</title>
         	</c:when>
         	<c:otherwise>
@@ -19,7 +19,7 @@
         <c:import url="/inc/menu.jsp" />
         <br />
         <c:choose>
-        	<c:when test="${ empty requestScope.user }">
+        	<c:when test="${ empty requestScope.modify }">
         		<h1>Create a user</h1>
         	</c:when>
         	<c:otherwise>
