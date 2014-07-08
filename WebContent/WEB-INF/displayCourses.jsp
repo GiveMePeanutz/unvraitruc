@@ -26,6 +26,7 @@
                 	<th>Course name</th>
                     <th>Description</th>
                     <th class="action">More</th>
+<<<<<<< HEAD
                     
                     <c:set var="contains" value="false" />
 					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
@@ -33,6 +34,10 @@
                     	<th class="action">Delete</th>
                     </c:if>
 					</c:forEach>                   
+=======
+                    <th class="action">Delete</th>
+                    <th class="action">Inscription</th>                   
+>>>>>>> origin/master
                 </tr>
                 <%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
                 <c:forEach items="${ requestScope.courses }" var="mapCourses" varStatus="boucle">
@@ -46,6 +51,7 @@
                             <img src="<c:url value="/inc/info.gif"/>" alt="info" />
                         </a>
                     </td>
+<<<<<<< HEAD
                     <c:set var="contains" value="false" />
 					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 					<c:if test="${item eq 'Delete Course'}">
@@ -56,6 +62,18 @@
 	                    </td>
 	                </c:if>
 					</c:forEach>
+=======
+                    <td class="action">
+                        <a href="<c:url value="/deleteCourse"><c:param name="courseName" value="${ mapCourses.value.courseName }" /></c:url>">
+                            <img src="<c:url value="/inc/supprimer.png"/>" alt="Delete" />
+                        </a>
+                    </td>
+                    <td>
+                    <a  href="<c:url value="/inscriptionCourse" ><c:param name="courseName" value="${ mapCourses.value.courseName }" /><c:param name="username" value="${sessionScope.userSession.username }" /></c:url>" class = "button">           
+            			<img src="<c:url value="/inc/inscription.gif"/>" alt="Inscription" />
+          			</a>  
+          			</td>
+>>>>>>> origin/master
                 </tr>
                 </c:forEach>
             </table>

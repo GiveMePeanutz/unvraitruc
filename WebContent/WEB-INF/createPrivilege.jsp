@@ -45,7 +45,7 @@
                 		<p class="error">No menus in database</p>
             			</c:when>
             			<c:otherwise>
-		                    <select name="menus" id = "menus" multiple="multiple" >																				
+		                    <select name="menus" id = "menus" multiple="multiple" size=20>																				
 								<%-- Parcours de la Map des menus en session, et utilisation de l'objet varStatus. --%>
 		                		<c:forEach items="${ requestScope.menus }" var="mapMenus" varStatus="boucle">
 		                    		<option value='<c:out value="${mapMenus.key}"/>'><c:out value="${mapMenus.value}"/></option>                    
