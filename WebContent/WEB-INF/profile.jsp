@@ -48,7 +48,7 @@
             </ul>
 
             <p class="important">Courses :</p> 
-            <table >
+            <table class="profcourses" >
 	            <tr>
 	            	<th>Course name</th>
 	            	<th class="action">More</th>		                    
@@ -64,7 +64,8 @@
 	                        <a href="<c:url value="/profileCourse"><c:param name="courseName" value="${  course }" /></c:url>">
 	                            <img src="<c:url value="/inc/info.gif"/>" alt="info" />
 	                        </a>
-                    	</td>	                  
+                    	</td>
+                    		                  
 		                <td class="action">
 		                    <a href="<c:url value="/cancelCourse"><c:param name="courseName" value="${  course }" /><c:param name="username" value="${ user.username }" /></c:url>">
 		                        <img src="<c:url value="/inc/supprimer.png"/>" alt="cancel" />
@@ -73,8 +74,8 @@
 		             </tr>
 	            </c:forEach>
 		    </table>           
-		    
-           <br>
+		    <br />
+           <br />
             <a  href="<c:url value="/userCreation" ><c:param name="username" value="${user.username }" /><c:param name="modify" value="true" /></c:url>" class = "button">           
             <input type="button" value="Modify" />
           	</a>

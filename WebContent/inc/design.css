@@ -153,6 +153,11 @@ table{
 	border-collapse: collapse;
 	margin: 0 auto;
 }
+table.profcourses
+{
+	postion : absolute;
+	margin-left: 0;
+}
 tr.pair{
 	background-color: #efefef;
 }
