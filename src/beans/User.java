@@ -149,4 +149,8 @@ public class User implements Serializable {
         this.groupNames.add( groupName );
     }
 
+    public void removeCourse ( String courseName){
+    	this.courseNames.remove(courseName);
+    }
+    
 }
