@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
@@ -8,6 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import beans.User;
 import dao.DAOFactory;
@@ -18,8 +21,10 @@ public class Profile extends HttpServlet {
 
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String USERNAME_PARAM   = "username";
+    public static final String	USER_SESSION_ACCESS_ATT = "userSessionAccess";
 
     public static final String USER_REQUEST_ATT = "user";
+    public static final String USER_MODIFIABLE_ATT = "userModifiable";
     public static final String VIEW             = "/WEB-INF/profile.jsp";
 
     private UserDao            userDao;
@@ -30,9 +35,21 @@ public class Profile extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        String username = getParameterValue( request, USERNAME_PARAM );
+    	HttpSession session = request.getSession();
+    	String username = getParameterValue( request, USERNAME_PARAM );
         User user = userDao.find( username );
         request.setAttribute( USER_REQUEST_ATT, user );
+        
+        
+        List<String> menus = ((List<String>) session.getAttribute(USER_SESSION_ACCESS_ATT));
+        
+        if( menus.contains("Add User") || ( menus.contains("Modify Teacher") && user.getGroupNames().contains("teacher")) || ( menus.contains("Modify Student") && user.getGroupNames().contains("student"))){
+        	request.setAttribute( USER_MODIFIABLE_ATT, true );
+        }else{
+        	request.setAttribute( USER_MODIFIABLE_ATT, false );
+        }
+        
+        
 
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
 
