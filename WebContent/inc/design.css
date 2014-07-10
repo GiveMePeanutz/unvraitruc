@@ -156,6 +156,7 @@ ul.prof
 table{
 	border-collapse: collapse;
 	margin: 0 auto;
+	
 }
 table.profcourses
 {
@@ -184,3 +185,6 @@ td{
 td.action{
 	text-align: center;
 }
+
+
+

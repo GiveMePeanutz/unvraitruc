@@ -20,7 +20,7 @@
             </c:when>
             <%-- Sinon, affichage du tableau. --%>
             <c:otherwise>
-            <CENTER>
+            <h3>Available Courses  </h3>
             <table >
                 <tr>
                 	<th>Course name</th>
@@ -68,7 +68,6 @@
                 </tr>
                 </c:forEach>
             </table>
-            </CENTER>
             </c:otherwise>
             </c:choose>
             <c:choose>
@@ -77,7 +76,8 @@
             </c:when>
             <%-- Sinon, affichage du tableau. --%>
             <c:otherwise>
-            <CENTER>
+            <h3>Your Courses  </h3>
+            <div class="course">
             <table >
                 <tr>
                 	<th>Course name</th>
@@ -125,7 +125,7 @@
                 </tr>
                 </c:forEach>
             </table>
-            </CENTER>
+            </div>
             </c:otherwise>
         </c:choose>
         </div>

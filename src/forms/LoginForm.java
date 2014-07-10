@@ -43,6 +43,7 @@ public final class LoginForm {
         try {
             if ( errors.isEmpty() ) {
                 result = "Connection is a success.";
+                user = userDao.find( username );
             } else {
                 result = "Connection failed.";
             }
@@ -105,7 +106,8 @@ public final class LoginForm {
     }
 
     private void similarityValidation( String username, String password ) throws FormValidationException {
-    	if ( !(userDao.getPassword( username )!=null && password!=null && userDao.getPassword( username ).equals(password )) ) {
+        if ( !( userDao.getPassword( username ) != null && password != null && userDao.getPassword( username ).equals(
+                password ) ) ) {
             throw new FormValidationException( "This password doesn't match with this username" );
         }
 

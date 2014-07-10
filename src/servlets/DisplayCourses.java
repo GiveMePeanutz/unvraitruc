@@ -40,10 +40,8 @@ public class DisplayCourses extends HttpServlet {
         List<Course> listeCourses = courseDao.list();
         LinkedHashMap<String, Course> mapAvailableCourses = new LinkedHashMap<String, Course>();
         LinkedHashMap<String, Course> mapUserCourses = new LinkedHashMap<String, Course>();
-        System.out.println( "hehe" + user.getCourseNames() );
         if ( user.getCourseNames().isEmpty() )
         {
-            System.out.println( "if" );
 
             for ( Course course : listeCourses )
             {
@@ -53,10 +51,7 @@ public class DisplayCourses extends HttpServlet {
         else
         {
             List<String> userCourseList = user.getCourseNames();
-            System.out.println( "else" );
             for ( Course course : listeCourses ) {
-                System.out.println( "Coucou" );
-                System.out.println( userCourseList.contains( course.getCourseName() ) );
                 if ( userCourseList.contains( course.getCourseName() ) )
                 {
                     mapUserCourses.put( course.getCourseName(), course );
