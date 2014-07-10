@@ -1,6 +1,6 @@
 package staticData;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public final class Menu {
 
@@ -60,9 +60,9 @@ public final class Menu {
         return menus[path / 10000][( path - ( path / 10000 ) * 10000 ) / 100][( path - ( path / 100 ) * 100 )];
     }
 
-    public static HashMap<Integer, String> list()
+    public static LinkedHashMap<Integer, String> list()
     {
-        HashMap<Integer, String> mapMenus = new HashMap<Integer, String>();
+        LinkedHashMap<Integer, String> mapMenus = new LinkedHashMap<Integer, String>();
         for ( int i = 0; i < menus.length; i++ )
         {
 

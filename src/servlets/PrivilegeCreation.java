@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -86,7 +87,7 @@ public class PrivilegeCreation extends HttpServlet {
         request.setAttribute( PRIV_ATT, priv );
         request.setAttribute( FORM_ATT, form );
 
-        Map<Integer, String> mapMenus = Menu.list();
+        LinkedHashMap<Integer, String> mapMenus = Menu.list();
 
         request.setAttribute( MENU_REQUEST_ATT, mapMenus );
 
