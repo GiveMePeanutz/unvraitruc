@@ -7,7 +7,7 @@ public final class Menu {
     private static String[][][] menus =
                                       {
                                       {
-                                      { "User" , "Delete User" , "Modify User" },
+                                      { "User", "Delete User", "Modify User" },
                                       { "Display Users" },
                                       { "Add User" },
                                       { "Group",
@@ -27,18 +27,15 @@ public final class Menu {
                                       { "Modify Course" }
                                       },
                                       {
-                                      { "Teacher" , "Delete Teacher" , "Modify Teacher" },
+                                      { "Teacher", "Delete Teacher", "Modify Teacher" },
                                       { "Display Teachers" },
                                       { "Add Teacher" },
-                                      { "Delete Teacher" },
-                                      { "Modify Teacher" }
                                       },
                                       {
-                                      { "Student" , "Delete Student" , "Modify Student"},
+                                      { "Student", "Delete Student", "Modify Student" },
                                       { "Display Students" },
                                       { "Add Student" },
-                                      { "Delete Student" },
-                                      { "Modify Student" }
+
                                       },
                                       {
                                       { "Warehouse Maintenance" }
