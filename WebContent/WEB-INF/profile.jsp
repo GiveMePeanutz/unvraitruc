@@ -99,11 +99,12 @@
 		    </c:if>
 		    <br />
 		    <br />
-		    
+		   Test modifiable : ${requestScope.userModifiable}
+			<c:if test="${requestScope.userModifiable}">
             <a  href="<c:url value="/userCreation" ><c:param name="username" value="${user.username }" /><c:param name="modify" value="true" /></c:url>" class = "button">           
             <input type="button" value="Modify" />
           	</a>
-            
+          	</c:if>            
         </div>
     </body>
 </html>
