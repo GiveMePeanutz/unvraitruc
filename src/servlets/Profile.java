@@ -42,8 +42,13 @@ public class Profile extends HttpServlet {
         
         
         List<String> menus = ((List<String>) session.getAttribute(USER_SESSION_ACCESS_ATT));
+     
         
-        if( menus.contains("Add User") || ( menus.contains("Modify Teacher") && user.getGroupNames().contains("teacher")) || ( menus.contains("Modify Student") && user.getGroupNames().contains("student"))){
+        if( menus.contains("Modify User") 
+        		|| ( menus.contains("Modify Teacher") && 
+        				(user.getGroupNames().contains("Teacher") || user.getGroupNames().contains("TeacherOfficial"))) 
+        		|| ( menus.contains("Modify Student") && 
+        				(user.getGroupNames().contains("Student") || user.getGroupNames().contains("StudentOfficial")))){
         	request.setAttribute( USER_MODIFIABLE_ATT, true );
         }else{
         	request.setAttribute( USER_MODIFIABLE_ATT, false );
