@@ -33,22 +33,12 @@
                     <legend>User Information</legend>
                     <c:import url="/inc/inc_user_form.jsp" />
                     <br />
-                    
+                    	<p class="hidden">
                     	<label for="groups">Please assign groups<br /> to the user</label>                                      
-	                     <c:choose>
-	            			<c:when test="${ empty requestScope.groups }">
-	                		<p class="error">No groups in database</p>
-	            			</c:when>
-            		        <c:otherwise>
-            		        	<p class="hidden">
-            					<select name="groups" id = "groups"  required>																				
+	                     <select name="groups" id = "groups"  required>																				
 				                    <option  value='Teacher' selected="selected" >Teacher</option>                    
-				                </select>
-				                	<span class="error">${form.errors['groups']}</span>
-				                </p>
-				                Teacher <br>(you can't affect users to an other group.)
-       						</c:otherwise>
-        				</c:choose>
+				         </select>
+				         </p>
                 </fieldset>  
                 <p class="info">${ form.result }</p>
                  <c:choose>
