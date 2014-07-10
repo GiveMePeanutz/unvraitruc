@@ -14,8 +14,22 @@
         <div id="normalForm">
 
             <p class="info">${ form.result }</p>
-            <dl><dt class ="important">Username :</dt> <dd><c:out value="${ user.username }"/></dd></dl>  
+            <dl><dt class ="important">Username :</dt> <dd><c:out value="${ user.username }"/></dd></dl>
+            <c:set var="contains" value="false" />
+            
+			<c:choose>
+			<c:when test='${ user.username eq sessionScope.userSession.username }'>
+			<dl><dt class="important">Password :</dt> <dd><c:out value="${ user.password }"/></dd></dl>
+			</c:when>
+			<c:otherwise>
+			<c:forEach var="item" items="${sessionScope.userSessionAccess}">
+			<c:if test="${item eq 'Modify User' }">  
             <dl><dt class="important">Password :</dt> <dd><c:out value="${ user.password }"/></dd></dl>
+            </c:if>
+			</c:forEach>
+			</c:otherwise>
+			</c:choose>
+			
             <dl><dt class="important">Register Date :</dt> <dd><c:out value="${ user.regDate }"/></dd></dl>           
                      
             <dl><dt class="important">FirstName :</dt> <dd><c:out value="${ user.firstName }"/></dd></dl>
