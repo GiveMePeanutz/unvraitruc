@@ -22,8 +22,13 @@ public class User implements Serializable {
     private ArrayList<String> groupNames;
     private ArrayList<String> courseNames;
 
-   
-    
+    public User() {
+        super();
+        ArrayList<String> list = new ArrayList<String>();
+        this.courseNames = list;
+
+    }
+
     public String getPassword() {
         return password;
     }
