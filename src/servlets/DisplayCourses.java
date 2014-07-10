@@ -55,6 +55,7 @@ public class DisplayCourses extends HttpServlet {
                 if ( userCourseList.contains( course.getCourseName() ) )
                 {
                     mapUserCourses.put( course.getCourseName(), course );
+                    user.addCourseName( course.getCourseName() );
                 }
                 else
                 {
