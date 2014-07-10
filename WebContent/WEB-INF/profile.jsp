@@ -66,8 +66,10 @@
 	            <table class="profcourses" >
 		            <tr>
 		            	<th>Course name</th>
-		            	<th class="action">More</th>		                    
-		                <th class="action">Cancel</th>				                                     
+		            	<th class="action">More</th>
+		            	<c:if test='${ user.username eq sessionScope.userSession.username }'>
+		                <th class="action">Cancel</th>	
+		                </c:if>			                                     
 		            </tr>
 		            
 		            <%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
@@ -81,12 +83,13 @@
 		                            <img src="<c:url value="/inc/info.gif"/>" alt="info" />
 		                        </a>
 	                    	</td>
-	                    		                  
+	                    	<c:if test='${ user.username eq sessionScope.userSession.username }'>	                  
 			                <td class="action">
 			                    <a href="<c:url value="/cancelCourse"><c:param name="courseName" value="${  course }" /><c:param name="username" value="${ user.username }" /></c:url>">
 			                        <img src="<c:url value="/inc/supprimer.png"/>" alt="cancel" />
 			                    </a>
-			                </td>				                    
+			                </td>
+			                </c:if>				                    
 			             </tr>
 		            </c:forEach>
 			    </table>
