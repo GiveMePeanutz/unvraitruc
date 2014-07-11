@@ -13,7 +13,7 @@ public class DateDaoImpl implements DateDao {
 
     private DAOFactory          daoFactory;
 
-    private static final String SQL_INSERT = "INSERT INTO Date (dateId, minute, hour, day, dayName, week, month, monthName, quarter, year) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_INSERT = "INSERT INTO Date (dateId, minute, hour, day, dayName, week, monthName, quarter, year) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     DateDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
@@ -28,7 +28,7 @@ public class DateDaoImpl implements DateDao {
             connexion = daoFactory.getConnection();
             preparedStatement1 = initialisationRequetePreparee( connexion,
                     SQL_INSERT, true, date.getDateID(), date.getMinute(), date.getHour(), date.getDay(),
-                    date.getDayName(), date.getWeek(), date.getMonth(), date.getMonthName(), date.getQuarter(),
+                    date.getDayName(), date.getWeek(), date.getMonthName(), date.getQuarter(),
                     date.getYear() );
             int statut1 = preparedStatement1.executeUpdate();
             if ( statut1 == 0 ) {

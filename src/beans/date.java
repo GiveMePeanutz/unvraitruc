@@ -1,5 +1,7 @@
 package beans;
 
+import org.joda.time.DateTime;
+
 public class Date {
     private int    dateID;
     private int    minute;
@@ -7,10 +9,22 @@ public class Date {
     private int    day;
     private String dayName;
     private int    week;
-    private int    month;
     private String monthName;
     private int    quarter;
     private int    year;
+
+    public Date( DateTime dateTime )
+    {
+        this.minute = dateTime.getMinuteOfHour();
+        this.hour = dateTime.getHourOfDay();
+        this.day = dateTime.getDayOfMonth();
+        this.dayName = dateTime.getDayOfWeek();
+        this.week=dateTime.getWeekOfWeekyear();
+        this.monthName=dateTime.getMonthOfYear();
+        this.quarter=;
+        this.year=dateTime.getYear();
+
+    }
 
     public int getDateID() {
         return dateID;
@@ -58,14 +72,6 @@ public class Date {
 
     public void setWeek( int week ) {
         this.week = week;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth( int month ) {
-        this.month = month;
     }
 
     public String getMonthName() {
