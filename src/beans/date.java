@@ -13,16 +13,113 @@ public class Date {
     private int    quarter;
     private int    year;
 
-    public Date( DateTime dateTime )
+    public Date()
     {
+        DateTime dateTime = new DateTime();
+
         this.minute = dateTime.getMinuteOfHour();
         this.hour = dateTime.getHourOfDay();
         this.day = dateTime.getDayOfMonth();
-        this.dayName = dateTime.getDayOfWeek();
-        this.week=dateTime.getWeekOfWeekyear();
-        this.monthName=dateTime.getMonthOfYear();
-        this.quarter=;
-        this.year=dateTime.getYear();
+        this.week = dateTime.getWeekOfWeekyear();
+        this.year = dateTime.getYear();
+
+        switch ( dateTime.getMonthOfYear() ) {
+        case 1:
+            this.monthName = "January";
+            break;
+        case 2:
+            this.monthName = "February";
+            break;
+        case 3:
+            this.monthName = "March";
+            break;
+        case 4:
+            this.monthName = "April";
+            break;
+        case 5:
+            this.monthName = "May";
+            break;
+        case 6:
+            this.monthName = "June";
+            break;
+        case 7:
+            this.monthName = "July";
+            break;
+        case 8:
+            this.monthName = "August";
+            break;
+        case 9:
+            this.monthName = "September";
+            break;
+        case 10:
+            this.monthName = "October";
+            break;
+        case 11:
+            this.monthName = "November";
+            break;
+        case 12:
+            this.monthName = "December";
+            break;
+        default:
+            this.monthName = "Invalid month";
+            break;
+        }
+
+        switch ( dateTime.getMonthOfYear() ) {
+        case 1:
+        case 3:
+        case 2:
+            this.quarter = 1;
+            break;
+        case 5:
+        case 6:
+        case 4:
+            this.quarter = 2;
+            break;
+        case 7:
+        case 8:
+        case 9:
+            this.quarter = 3;
+            break;
+
+        case 10:
+        case 11:
+        case 12:
+            this.quarter = 4;
+            break;
+
+        default:
+            this.quarter = 0;
+            break;
+        }
+
+        switch ( dateTime.getDayOfWeek() ) {
+        case 1:
+            this.dayName = "Sunday";
+            break;
+        case 2:
+            this.dayName = "Monday";
+            break;
+        case 3:
+            this.dayName = "Tuesday";
+            break;
+        case 4:
+            this.dayName = "Wednesday";
+            break;
+        case 5:
+            this.dayName = "Thursday";
+            break;
+        case 6:
+            this.dayName = "Friday";
+            break;
+        case 7:
+            this.dayName = "Saturday";
+            break;
+
+        default:
+            this.dayName = "Invalid day";
+            break;
+        }
 
     }
 
