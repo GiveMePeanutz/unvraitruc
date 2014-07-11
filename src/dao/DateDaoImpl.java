@@ -23,7 +23,6 @@ public class DateDaoImpl implements DateDao {
     {
         Connection connexion = null;
         PreparedStatement preparedStatement1 = null;
-        PreparedStatement preparedStatement2 = null;
 
         try {
             connexion = daoFactory.getConnection();
@@ -42,8 +41,7 @@ public class DateDaoImpl implements DateDao {
         } finally {
             fermeturesSilencieuses( preparedStatement1,
                     connexion );
-            fermeturesSilencieuses( preparedStatement2,
-                    connexion );
+
         }
 
         return date;

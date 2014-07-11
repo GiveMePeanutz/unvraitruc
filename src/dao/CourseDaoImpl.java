@@ -38,7 +38,6 @@ public class CourseDaoImpl implements CourseDao {
     public void create( Course course ) throws DAOException {
         Connection connexion = null;
         PreparedStatement preparedStatement1 = null;
-        PreparedStatement preparedStatement2 = null;
 
         try {
             connexion = daoFactory.getConnection();
@@ -48,15 +47,13 @@ public class CourseDaoImpl implements CourseDao {
             int statut1 = preparedStatement1.executeUpdate();
             if ( statut1 == 0 ) {
                 throw new DAOException(
-                        "Failed to create client. No row added" );
+                        "Failed to create course. No row added" );
             }
 
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } finally {
             fermeturesSilencieuses( preparedStatement1,
-                    connexion );
-            fermeturesSilencieuses( preparedStatement2,
                     connexion );
         }
     }
