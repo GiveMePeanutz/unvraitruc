@@ -7,7 +7,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
 import dao.UserDao;
@@ -17,6 +19,7 @@ public class InscriptionCourse extends HttpServlet {
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String COURSENAME_PARAM = "courseName";
     public static final String USERNAME_PARAM   = "username";
+    public static final String USER_SESSION_ATT            = "userSession";
 
     public static final String VIEW             = "/displayCourses";
 
@@ -28,15 +31,22 @@ public class InscriptionCourse extends HttpServlet {
 
     public void doGet( HttpServletRequest request, HttpServletResponse response )
             throws ServletException, IOException {
-
+    	
         String courseName = getParameterValue( request, COURSENAME_PARAM );
         String username = getParameterValue( request, USERNAME_PARAM );
+        
+        HttpSession session = request.getSession();
+        User user = new User();
+        user = (User) session.getAttribute( USER_SESSION_ATT );
 
         /* Si l'id du client et la Map des clients ne sont pas vides */
         if ( courseName != null && username != null ) {
             try {
 
                 UserDao.addCourse( username, courseName );
+
+                user.addCourseName( courseName );
+                session.setAttribute(USER_SESSION_ATT, user);
             } catch ( DAOException e ) {
                 e.printStackTrace();
             }

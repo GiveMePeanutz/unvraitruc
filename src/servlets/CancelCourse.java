@@ -21,7 +21,7 @@ public class CancelCourse extends HttpServlet {
     public static final String USERNAME_PARAM   = "username";
     public static final String USER_SESSION_ATT = "userSession";
 
-    public static final String VIEW             = "/profile";
+    public static final String VIEW             = "/displayCourses";
 
     private UserDao            UserDao;
 
@@ -45,6 +45,7 @@ public class CancelCourse extends HttpServlet {
 
                 UserDao.deleteCourse( username, courseName );
                 user.removeCourse( courseName );
+                session.setAttribute(USER_SESSION_ATT, user);
             } catch ( DAOException e ) {
                 e.printStackTrace();
             }

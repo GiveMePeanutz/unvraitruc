@@ -51,11 +51,16 @@ public class DisplayCourses extends HttpServlet {
         else
         {
             List<String> userCourseList = user.getCourseNames();
+            
+            for( String s : userCourseList){
+            	System.out.println(s);
+            }
+            
             for ( Course course : listeCourses ) {
                 if ( userCourseList.contains( course.getCourseName() ) )
                 {
                     mapUserCourses.put( course.getCourseName(), course );
-                    user.addCourseName( course.getCourseName() );
+                    
                 }
                 else
                 {
@@ -66,13 +71,12 @@ public class DisplayCourses extends HttpServlet {
 
         request.setAttribute( USERCOURSE_REQUEST_ATT, mapUserCourses );
         request.setAttribute( AVAILABLECOURSE_REQUEST_ATT, mapAvailableCourses );
-
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
 
     }
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-
+    	
     }
 
 }
