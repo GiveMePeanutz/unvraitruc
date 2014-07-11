@@ -2,8 +2,10 @@ package dao;
 
 import org.joda.time.DateTime;
 
+import beans.Date;
+
 public interface DateDao {
 
-	void createDate(DateTime dateTime) throws DAOException;
+	Date createDate(DateTime dateTime) throws DAOException;
 	
 }
