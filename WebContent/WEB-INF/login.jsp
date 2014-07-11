@@ -15,10 +15,7 @@
 	        <form method="post" action="<c:url value="/login" />">
 			    <fieldset>
 	                <legend>Login</legend>
-	                
-					<c:if test="${empty sessionScope.userSession && !empty requestScope.intervalleConnexions}">
-	                	<p class="info">(Your last connection was ${requestScope.intervalleConnexions} ago)</p>
-	                </c:if>
+					
 	                <c:if test="${empty sessionScope.userSession}">
 	                	<p>Please connect yourself to access the application.</p>
 		                <label for="name">Username<span class="required">*</span></label>
@@ -31,11 +28,7 @@
 		                <span class="error">${form.errors['password']}</span>
 		                <br />
 		 				<br />
-		 			
-		                <label for="remember">Remember Me ?</label>
-		                <input type="checkbox" id="remember" name="remember" />
-		                <br />
-		                
+
 		                <input type="submit" value="Connection" class="connectButton" />
 		                <br />
 	                </c:if>
