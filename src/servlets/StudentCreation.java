@@ -127,6 +127,11 @@ public class StudentCreation extends HttpServlet {
             // this.getServletContext().getRequestDispatcher( VUE_SUCCESS
             // ).forward( request, response );
         } else {
+
+            if ( modify.equals( "Modify" ) )
+            {
+                request.setAttribute( VERIFY_PARAM, "true" );
+            }
             /*
              * Sinon, ré-affichage du formulaire de création avec les erreurs
              */

@@ -98,8 +98,13 @@ public class CourseCreation extends HttpServlet {
         }
         else
         {
-            /* Sinon, ré-affichage du formulaire de création avec les erreurs */
+            if ( modify.equals( "Modify" ) )
+            {
+                request.setAttribute( VERIFY_PARAM, "true" );
+            }
+
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
+
         }
     }
 
