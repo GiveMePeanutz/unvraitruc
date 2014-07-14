@@ -105,15 +105,17 @@ public class DAOFactory {
     public GroupDao getGroupDao() {
         return new GroupDaoImpl( this );
     }
-    
-    
+
     public PrivDao getPrivDao() {
         return new PrivDaoImpl( this );
     }
-    
+
     public UserDao getUserDao() {
         return new UserDaoImpl( this );
     }
-    
-    
+
+    public FactTableDao getFactTableDao() {
+        return new FactTableDaoImpl( this );
+    }
+
 }
