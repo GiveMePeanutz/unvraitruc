@@ -5,12 +5,7 @@ import static dao.DAOUtility.initialisationRequetePreparee;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.joda.time.DateTime;
-
-import beans.Date;
 
 public class FactTableDaoImpl implements FactTableDao {
 
