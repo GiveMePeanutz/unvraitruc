@@ -60,7 +60,7 @@
 					</c:forEach>
                    
                     <td>
-                    <a  href="<c:url value="/inscriptionCourse" ><c:param name="courseName" value="${ mapCourses.value.courseName }" /><c:param name="username" value="${sessionScope.userSession.username }" /></c:url>" class = "button">           
+                    <a  href="<c:url value="/inscriptionCourse" ><c:param name="courseName" value="${ mapCourses.value.courseName }" /></c:url>" class = "button">           
             			<img src="<c:url value="/inc/inscription.gif"/>" alt="Inscription" />
           			</a>  
           			</td>
@@ -117,7 +117,7 @@
 					</c:forEach>
                    
                     <td>
-                    <a  href="<c:url value="/cancelCourse" ><c:param name="courseName" value="${ mapCourses.value.courseName }" /><c:param name="username" value="${sessionScope.userSession.username }" /></c:url>" class = "button">           
+                    <a  href="<c:url value="/cancelCourse" ><c:param name="courseName" value="${ mapCourses.value.courseName }" /></c:url>" class = "button">           
             			<img src="<c:url value="/inc/supprimer.png"/>" alt="cancel" />
           			</a>  
           			</td>

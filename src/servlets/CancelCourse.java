@@ -21,7 +21,6 @@ import dao.UserDao;
 public class CancelCourse extends HttpServlet {
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String COURSENAME_PARAM = "courseName";
-    public static final String USERNAME_PARAM   = "username";
     public static final String USER_SESSION_ATT = "userSession";
 
     public static final String VIEW             = "/displayCourses";
@@ -45,7 +44,7 @@ public class CancelCourse extends HttpServlet {
         user = (User) session.getAttribute( USER_SESSION_ATT );
 
         String courseName = getParameterValue( request, COURSENAME_PARAM );
-        String username = getParameterValue( request, USERNAME_PARAM );
+        String username = user.getUsername();
 
         /* Si l'id du client et la Map des clients ne sont pas vides */
         if ( courseName != null && username != null ) {
@@ -65,7 +64,7 @@ public class CancelCourse extends HttpServlet {
         }
 
         /* Redirection vers la fiche récapitulative */
-        response.sendRedirect( request.getContextPath() + VIEW + "?username=" + username );
+        response.sendRedirect( request.getContextPath() + VIEW );
     }
 
     /*

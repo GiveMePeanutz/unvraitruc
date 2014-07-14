@@ -85,7 +85,7 @@
 	                    	</td>
 	                    	<c:if test='${ user.username eq sessionScope.userSession.username }'>	                  
 			                <td class="action">
-			                    <a href="<c:url value="/cancelCourse"><c:param name="courseName" value="${  course }" /><c:param name="username" value="${ user.username }" /></c:url>">
+			                    <a href="<c:url value="/cancelCourse"><c:param name="courseName" value="${  course }" /></c:url>">
 			                        <img src="<c:url value="/inc/supprimer.png"/>" alt="cancel" />
 			                    </a>
 			                </td>
