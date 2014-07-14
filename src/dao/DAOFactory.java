@@ -106,28 +106,13 @@ public class DAOFactory {
         return new GroupDaoImpl( this );
     }
     
-    public GroupPrivDao getGroupPrivDao() {
-        return new GroupPrivDaoImpl( this );
-    }
     
     public PrivDao getPrivDao() {
         return new PrivDaoImpl( this );
     }
     
-    public PrivMenuDao getDao() {
-        return new PrivMenuDaoImpl( this );
-    }
-    
-    public UserCourseDao getUserCourseDao() {
-        return new UserCourseDaoImpl( this );
-    }
-    
     public UserDao getUserDao() {
         return new UserDaoImpl( this );
-    }
-    
-    public UserGroupDao getUserGroupDao() {
-        return new UserGroupDaoImpl( this );
     }
     
     
