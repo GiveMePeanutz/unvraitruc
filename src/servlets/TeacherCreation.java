@@ -13,10 +13,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import beans.Date;
 import beans.Group;
 import beans.User;
 import dao.DAOFactory;
+import dao.DateDao;
 import dao.FactTableDao;
 import dao.GroupDao;
 import dao.UserDao;
@@ -34,6 +37,7 @@ public class TeacherCreation extends HttpServlet {
     public static final String USERNAME_PARAM    = "username";
     public static final String VERIFY_PARAM      = "modify";
     public static final String VERIFY_PARAM2     = "Create";
+    public static final String USER_SESSION_ATT  = "userSession";
 
     public static final String VUE_SUCCESS       = "/Project/displayTeachers";
     public static final String VUE_FORM          = "/WEB-INF/createTeacher.jsp";
@@ -41,13 +45,14 @@ public class TeacherCreation extends HttpServlet {
 
     private UserDao            userDao;
     private GroupDao           groupDao;
-    private FactTableDao       FactTableDao;
+    private FactTableDao       factTableDao;
+    private DateDao			   dateDao;
 
     public void init() throws ServletException {
         this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
-
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
-        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
+        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -119,22 +124,34 @@ public class TeacherCreation extends HttpServlet {
             request.setAttribute( GROUP_REQUEST_ATT, mapPrivs );
         }
 
+        Date date = dateDao.create();
+        HttpSession session = request.getSession();
+		User userSession = new User();
+        userSession = (User) session.getAttribute( USER_SESSION_ATT );
+
         /* Si aucune erreur */
         if ( form.getErrors().isEmpty() ) {
+        	if ( modify.equals( "Modify" ) )
+            {
+        		factTableDao.addFact(userSession.getUsername(), "Teacher modified", date.getDateID());
+            }else{
+            	factTableDao.addFact(userSession.getUsername(), "Teacher created", date.getDateID());
+            }
             response.sendRedirect( VUE_SUCCESS );
-
-            // this.getServletContext().getRequestDispatcher( VUE_SUCCESS
-            // ).forward( request, response );
         } else {
 
             if ( modify.equals( "Modify" ) )
             {
+            	factTableDao.addFact(userSession.getUsername(), "Teacher modification errors", date.getDateID());
                 request.setAttribute( VERIFY_PARAM, "true" );
+            }else{
+            	factTableDao.addFact(userSession.getUsername(), "Teacher creation errors", date.getDateID());
             }
 
             /*
              * Sinon, ré-affichage du formulaire de création avec les erreurs
              */
+            
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }
     }

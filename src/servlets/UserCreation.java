@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import beans.Date;
 import beans.Group;
@@ -36,6 +37,7 @@ public class UserCreation extends HttpServlet {
     public static final String USERNAME_PARAM    = "username";
     public static final String VERIFY_PARAM      = "modify";
     public static final String VERIFY_PARAM2     = "Create";
+    public static final String USER_SESSION_ATT  = "userSession";
 
     public static final String VUE_SUCCESS       = "/Project/displayUsers";
     public static final String VUE_FORM          = "/WEB-INF/createUser.jsp";
@@ -123,24 +125,27 @@ public class UserCreation extends HttpServlet {
         }
         
         Date date = dateDao.create();
+        HttpSession session = request.getSession();
+		User userSession = new User();
+        userSession = (User) session.getAttribute( USER_SESSION_ATT );
 
         /* Si aucune erreur */
         if ( form.getErrors().isEmpty() ) {
         	if ( modify.equals( "Modify" ) )
             {
-        		factTableDao.addFact(user.getUsername(), "User modified", date.getDateID());
+        		factTableDao.addFact(userSession.getUsername(), "User modified", date.getDateID());
             }else{
-            	factTableDao.addFact(user.getUsername(), "User created", date.getDateID());
+            	factTableDao.addFact(userSession.getUsername(), "User created", date.getDateID());
             }
             response.sendRedirect( VUE_SUCCESS );
         } else {
 
             if ( modify.equals( "Modify" ) )
             {
-            	factTableDao.addFact(user.getUsername(), "User modification failed", date.getDateID());
+            	factTableDao.addFact(userSession.getUsername(), "User modification failed", date.getDateID());
                 request.setAttribute( VERIFY_PARAM, "true" );
             }else{
-            	factTableDao.addFact(user.getUsername(), "User creation failed", date.getDateID());
+            	factTableDao.addFact(userSession.getUsername(), "User creation failed", date.getDateID());
             }
 
             /*

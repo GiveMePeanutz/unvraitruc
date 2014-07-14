@@ -11,10 +11,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import beans.Date;
 import beans.Group;
 import beans.Priv;
+import beans.User;
 import dao.DAOFactory;
+import dao.DateDao;
 import dao.FactTableDao;
 import dao.GroupDao;
 import dao.PrivDao;
@@ -34,17 +38,20 @@ public class GroupCreation extends HttpServlet {
     public static final String VERIFY_PARAM      = "modify";
     public static final String VERIFY_PARAM2     = "Create";
     public static final String ACTIVITY_NAME     = "groupCreation";
+    public static final String USER_SESSION_ATT  = "userSession";
+
 
     private GroupDao           groupDao;
     private PrivDao            privDao;
-    private FactTableDao       FactTableDao;
+    private FactTableDao       factTableDao;
+    private DateDao 		   dateDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.privDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getPrivDao();
-
+        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
         this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
-        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -110,19 +117,34 @@ public class GroupCreation extends HttpServlet {
             request.setAttribute( PRIV_REQUEST_ATT, mapPrivs );
         }
 
+        Date date = dateDao.create();
+        HttpSession session = request.getSession();
+		User userSession = new User();
+        userSession = (User) session.getAttribute( USER_SESSION_ATT );
+        
         /* Si aucune erreur */
         if ( form.getErrors().isEmpty() ) {
-
-            /* Affichage de la fiche récapitulative */
+        	if ( modify.equals( "Modify" ) )
+            {
+        		factTableDao.addFact(userSession.getUsername(), "Group modified", date.getDateID());
+            }else{
+            	factTableDao.addFact(userSession.getUsername(), "Group created", date.getDateID());
+            }
             response.sendRedirect( VUE_SUCCESS );
-            // this.getServletContext().getRequestDispatcher( VUE_SUCCESS
-            // ).forward( request, response );
         } else {
+
             if ( modify.equals( "Modify" ) )
             {
+            	factTableDao.addFact(userSession.getUsername(), "Group modification errors", date.getDateID());
                 request.setAttribute( VERIFY_PARAM, "true" );
+            }else{
+            	factTableDao.addFact(userSession.getUsername(), "Group creation errors", date.getDateID());
             }
-            /* Sinon, ré-affichage du formulaire de création avec les erreurs */
+
+            /*
+             * Sinon, ré-affichage du formulaire de création avec les erreurs
+             */
+            
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }
     }

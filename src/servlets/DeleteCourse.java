@@ -22,12 +22,12 @@ public class DeleteCourse extends HttpServlet {
     public static final String ACTIVITY_NAME    = "deleteCourse";
 
     private CourseDao          CourseDao;
-    private FactTableDao       FactTableDao;
+    private FactTableDao       factTableDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.CourseDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getCourseDao();
-        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response )

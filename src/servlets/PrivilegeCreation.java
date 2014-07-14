@@ -10,10 +10,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import staticData.Menu;
+import beans.Date;
 import beans.Priv;
+import beans.User;
 import dao.DAOFactory;
+import dao.DateDao;
 import dao.FactTableDao;
 import dao.PrivDao;
 import forms.PrivilegeCreationForm;
@@ -28,18 +32,24 @@ public class PrivilegeCreation extends HttpServlet {
     public static final String PRIVNAME_PARAM   = "privName";
     public static final String VERIFY_PARAM     = "modify";
     public static final String VERIFY_PARAM2    = "Create";
+    public static final String USER_SESSION_ATT  = "userSession";
+
 
     public static final String VUE_SUCCESS      = "/Project/displayPrivs";
     public static final String VUE_FORM         = "/WEB-INF/createPrivilege.jsp";
     public static final String ACTIVITY_NAME    = "privCreation";
 
     private PrivDao            privDao;
-    private FactTableDao       FactTableDao;
+    private FactTableDao       factTableDao;
+    private DateDao 		   dateDao;
+
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.privDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getPrivDao();
-        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
+
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -96,21 +106,34 @@ public class PrivilegeCreation extends HttpServlet {
 
         request.setAttribute( MENU_REQUEST_ATT, mapMenus );
 
+        Date date = dateDao.create();
+        HttpSession session = request.getSession();
+		User userSession = new User();
+        userSession = (User) session.getAttribute( USER_SESSION_ATT );
+        
         /* Si aucune erreur */
         if ( form.getErrors().isEmpty() ) {
-
-            /* Affichage de la fiche récapitulative */
+        	if ( modify.equals( "Modify" ) )
+            {
+        		factTableDao.addFact(userSession.getUsername(), "Privilege modified", date.getDateID());
+            }else{
+            	factTableDao.addFact(userSession.getUsername(), "Privilege created", date.getDateID());
+            }
             response.sendRedirect( VUE_SUCCESS );
-
-            // this.getServletContext().getRequestDispatcher( VUE_SUCCESS
-            // ).forward( request, response );
         } else {
 
             if ( modify.equals( "Modify" ) )
             {
+            	factTableDao.addFact(userSession.getUsername(), "Privilege modification errors", date.getDateID());
                 request.setAttribute( VERIFY_PARAM, "true" );
+            }else{
+            	factTableDao.addFact(userSession.getUsername(), "Privilege creation errors", date.getDateID());
             }
-            /* Sinon, ré-affichage du formulaire de création avec les erreurs */
+
+            /*
+             * Sinon, ré-affichage du formulaire de création avec les erreurs
+             */
+            
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }
     }
