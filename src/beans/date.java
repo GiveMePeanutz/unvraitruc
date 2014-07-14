@@ -13,10 +13,13 @@ public class Date {
     private int    quarter;
     private int    year;
 
-    public Date(DateTime dateTime)
+    public Date()
     {
         
-
+    	DateTime dateTime = new DateTime();
+    	
+    	this.dateID=-1;
+    	
         this.minute = dateTime.getMinuteOfHour();
         this.hour = dateTime.getHourOfDay();
         this.day = dateTime.getDayOfMonth();
