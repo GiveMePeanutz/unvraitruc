@@ -26,6 +26,8 @@ public class LoginFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse res,
 			FilterChain chain) throws IOException, ServletException {
 		
+		System.out.println("/* filter");
+		
 		HttpServletRequest request = (HttpServletRequest) req;
 		
 		String path = request.getRequestURI().substring( request.getContextPath().length() );

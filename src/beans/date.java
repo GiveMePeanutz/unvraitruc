@@ -13,9 +13,9 @@ public class Date {
     private int    quarter;
     private int    year;
 
-    public Date()
+    public Date(DateTime dateTime)
     {
-        DateTime dateTime = new DateTime();
+        
 
         this.minute = dateTime.getMinuteOfHour();
         this.hour = dateTime.getHourOfDay();
