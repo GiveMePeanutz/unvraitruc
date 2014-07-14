@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import staticData.Menu;
 import beans.Priv;
 import dao.DAOFactory;
+import dao.FactTableDao;
 import dao.PrivDao;
 import forms.PrivilegeCreationForm;
 
@@ -30,12 +31,15 @@ public class PrivilegeCreation extends HttpServlet {
 
     public static final String VUE_SUCCESS      = "/Project/displayPrivs";
     public static final String VUE_FORM         = "/WEB-INF/createPrivilege.jsp";
+    public static final String ACTIVITY_NAME    = "privCreation";
 
     private PrivDao            privDao;
+    private FactTableDao       FactTableDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.privDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getPrivDao();
+        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import beans.Course;
 import dao.CourseDao;
 import dao.DAOFactory;
+import dao.FactTableDao;
 import forms.CourseCreationForm;
 
 @WebServlet( urlPatterns = "/courseCreation" )
@@ -27,12 +28,16 @@ public class CourseCreation extends HttpServlet {
     public static final String COURSENAME_PARAM  = "courseName";
     public static final String VERIFY_PARAM2     = "Create";
 
+    public static final String ACTIVITY_NAME     = "courseCreation";
+
     private CourseDao          courseDao;
+    private FactTableDao       FactTableDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
 
         this.courseDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getCourseDao();
+        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {

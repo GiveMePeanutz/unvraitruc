@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import beans.Priv;
 import dao.DAOFactory;
+import dao.FactTableDao;
 import dao.PrivDao;
 
 @WebServlet( "/displayPrivs" )
@@ -20,12 +21,15 @@ public class DisplayPrivs extends HttpServlet {
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String PRIV_REQUEST_ATT = "privs";
     public static final String VIEW             = "/WEB-INF/displayPrivs.jsp";
+    public static final String ACTIVITY_NAME    = "displayPrivs";
 
     private PrivDao            privDao;
+    private FactTableDao       FactTableDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.privDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getPrivDao();
+        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {

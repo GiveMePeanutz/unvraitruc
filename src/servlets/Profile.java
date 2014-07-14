@@ -10,51 +10,50 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import beans.User;
 import dao.DAOFactory;
+import dao.FactTableDao;
 import dao.UserDao;
 
 @WebServlet( urlPatterns = "/profile", initParams = @WebInitParam( name = "path", value = "/files/images/" ) )
 public class Profile extends HttpServlet {
 
-    public static final String CONF_DAO_FACTORY = "daofactory";
-    public static final String USERNAME_PARAM   = "username";
-    public static final String	USER_SESSION_ACCESS_ATT = "userSessionAccess";
+    public static final String CONF_DAO_FACTORY        = "daofactory";
+    public static final String USERNAME_PARAM          = "username";
+    public static final String USER_SESSION_ACCESS_ATT = "userSessionAccess";
 
-    public static final String USER_REQUEST_ATT = "user";
-    public static final String USER_MODIFIABLE_ATT = "userModifiable";
-    public static final String VIEW             = "/WEB-INF/profile.jsp";
+    public static final String USER_REQUEST_ATT        = "user";
+    public static final String USER_MODIFIABLE_ATT     = "userModifiable";
+    public static final String VIEW                    = "/WEB-INF/profile.jsp";
+    public static final String ACTIVITY_NAME           = "profile";
 
     private UserDao            userDao;
+    private FactTableDao       FactTableDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
+        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-    	HttpSession session = request.getSession();
-    	String username = getParameterValue( request, USERNAME_PARAM );
+        HttpSession session = request.getSession();
+        String username = getParameterValue( request, USERNAME_PARAM );
         User user = userDao.find( username );
         request.setAttribute( USER_REQUEST_ATT, user );
-        
-        
-        List<String> menus = ((List<String>) session.getAttribute(USER_SESSION_ACCESS_ATT));
-     
-        
-        if( menus.contains("Modify User") 
-        		|| ( menus.contains("Modify Teacher") && 
-        				(user.getGroupNames().contains("Teacher") || user.getGroupNames().contains("TeacherOfficial"))) 
-        		|| ( menus.contains("Modify Student") && 
-        				(user.getGroupNames().contains("Student") || user.getGroupNames().contains("StudentOfficial")))){
-        	request.setAttribute( USER_MODIFIABLE_ATT, true );
-        }else{
-        	request.setAttribute( USER_MODIFIABLE_ATT, false );
+
+        List<String> menus = ( (List<String>) session.getAttribute( USER_SESSION_ACCESS_ATT ) );
+
+        if ( menus.contains( "Modify User" )
+                || ( menus.contains( "Modify Teacher" ) &&
+                ( user.getGroupNames().contains( "Teacher" ) || user.getGroupNames().contains( "TeacherOfficial" ) ) )
+                || ( menus.contains( "Modify Student" ) &&
+                ( user.getGroupNames().contains( "Student" ) || user.getGroupNames().contains( "StudentOfficial" ) ) ) ) {
+            request.setAttribute( USER_MODIFIABLE_ATT, true );
+        } else {
+            request.setAttribute( USER_MODIFIABLE_ATT, false );
         }
-        
-        
 
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
 

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.DAOException;
 import dao.DAOFactory;
+import dao.FactTableDao;
 import dao.UserDao;
 
 @WebServlet( "/deleteUser" )
@@ -18,12 +19,15 @@ public class DeleteUser extends HttpServlet {
     public static final String USERNAME_PARAM   = "username";
 
     public static final String VIEW             = "/displayUsers";
+    public static final String ACTIVITY_NAME    = "deleteUser";
 
     private UserDao            userDao;
+    private FactTableDao       FactTableDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
+        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response )

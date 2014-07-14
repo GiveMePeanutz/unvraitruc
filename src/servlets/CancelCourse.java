@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
+import dao.FactTableDao;
 import dao.UserDao;
 
 @WebServlet( "/cancelCourse" )
@@ -22,11 +23,14 @@ public class CancelCourse extends HttpServlet {
     public static final String USER_SESSION_ATT = "userSession";
 
     public static final String VIEW             = "/displayCourses";
+    public static final String ACTIVITY_NAME    = "cancelCourse";
 
     private UserDao            UserDao;
+    private FactTableDao       FactTableDao;
 
     public void init() throws ServletException {
         this.UserDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
+        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response )
@@ -45,7 +49,7 @@ public class CancelCourse extends HttpServlet {
 
                 UserDao.deleteCourse( username, courseName );
                 user.removeCourse( courseName );
-                session.setAttribute(USER_SESSION_ATT, user);
+                session.setAttribute( USER_SESSION_ATT, user );
             } catch ( DAOException e ) {
                 e.printStackTrace();
             }

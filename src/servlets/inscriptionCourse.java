@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
+import dao.FactTableDao;
 import dao.UserDao;
 
 @WebServlet( "/inscriptionCourse" )
@@ -19,22 +20,25 @@ public class InscriptionCourse extends HttpServlet {
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String COURSENAME_PARAM = "courseName";
     public static final String USERNAME_PARAM   = "username";
-    public static final String USER_SESSION_ATT            = "userSession";
+    public static final String USER_SESSION_ATT = "userSession";
 
     public static final String VIEW             = "/displayCourses";
+    public static final String ACTIVITY_NAME    = "inscriptionCourse";
 
     private UserDao            UserDao;
+    private FactTableDao       FactTableDao;
 
     public void init() throws ServletException {
         this.UserDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
+        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response )
             throws ServletException, IOException {
-    	
+
         String courseName = getParameterValue( request, COURSENAME_PARAM );
         String username = getParameterValue( request, USERNAME_PARAM );
-        
+
         HttpSession session = request.getSession();
         User user = new User();
         user = (User) session.getAttribute( USER_SESSION_ATT );
@@ -46,7 +50,7 @@ public class InscriptionCourse extends HttpServlet {
                 UserDao.addCourse( username, courseName );
 
                 user.addCourseName( courseName );
-                session.setAttribute(USER_SESSION_ATT, user);
+                session.setAttribute( USER_SESSION_ATT, user );
             } catch ( DAOException e ) {
                 e.printStackTrace();
             }
