@@ -4,8 +4,10 @@
 <html>
     <head>
         <meta charset="utf-8" />
+		<c:set var="modif" value="true" />
+		
 		<c:choose>
-        	<c:when test="${ empty requestScope.priv }">
+        	<c:when test="${ !requestScope.modify eq modif }">
        			<title>Create a privilege</title>
         	</c:when>
         	<c:otherwise>
@@ -18,7 +20,7 @@
         <c:import url="/inc/menu.jsp" />
         <br />
         <c:choose>
-        	<c:when test="${ empty requestScope.priv }">
+        	<c:when test="${ !requestScope.modify eq modif }">
         		<h1>Create a privilege</h1>
         	</c:when>
         	<c:otherwise>
@@ -31,7 +33,16 @@
                 <fieldset>
                     <legend>Privilege Information</legend>
                     <label for="privName">Name</label>
-					<input type="text" id="privName" name="privName" value="<c:out value="${priv.privName}"/>" size="30" maxlength="30" />
+					<c:choose>
+        				<c:when test="${ !requestScope.modify eq modif }">
+							<input type="text" id="privName" name="privName" value="<c:out value="${priv.privName}"/>" size="30" maxlength="30" />
+						</c:when>
+        				<c:otherwise>							
+							<input type="text" id="privName" name="privName" value="<c:out value="${priv.privName}"/>" size="30" maxlength="30" disabled="disabled" />
+							<p class="hidden"><input type="text" id="privName" name="privName" value="<c:out value="${priv.privName}"/>" size="30" maxlength="30" /></p>
+						
+						</c:otherwise>
+        			</c:choose>
 					<span class="error">${form.errors['privName']}</span>
 					<br />
 
@@ -58,7 +69,7 @@
                 </fieldset>  
                 <p class="info">${ form.result }</p>
                 <c:choose>
-        			<c:when test="${ empty requestScope.priv }">
+        			<c:when test="${ !requestScope.modify eq modif }">
         				<input type="submit" name="Create" value="Create"  />
         			</c:when>
         			<c:otherwise>

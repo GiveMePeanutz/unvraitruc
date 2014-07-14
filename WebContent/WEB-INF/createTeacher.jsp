@@ -4,8 +4,9 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <c:set var="modif" value="true" />
         <c:choose>
-        	<c:when test="${ empty requestScope.modify }">
+        	<c:when test="${ !requestScope.modify eq modif }">
         	<title>Create a teacher</title>
         	</c:when>
         	<c:otherwise>
@@ -19,7 +20,7 @@
         <c:import url="/inc/menu.jsp" />
         <br />
        <c:choose>
-        	<c:when test="${ empty requestScope.modify }">
+        	<c:when test="${ !requestScope.modify eq modif }">
         		<h1>Create a teacher</h1>
         	</c:when>
         	<c:otherwise>
@@ -42,7 +43,7 @@
                 </fieldset>  
                 <p class="info">${ form.result }</p>
                  <c:choose>
-        			<c:when test="${ empty requestScope.user }">
+        			<c:when test="${ !requestScope.modify eq modif }">
         				<input type="submit" name = "Create" value="Create"  /> 			
         			</c:when>
         			<c:otherwise>

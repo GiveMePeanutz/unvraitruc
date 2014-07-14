@@ -7,8 +7,9 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <c:set var="modif" value="true" />
         <c:choose>
-        	<c:when test="${ empty requestScope.course }">
+        	<c:when test="${ !requestScope.modify eq modif }">
        			<title>Create a course</title>
         	</c:when>
         	<c:otherwise>
@@ -20,8 +21,9 @@
     <body>
         <c:import url="/inc/menu.jsp" />
         <br />
+       
         <c:choose>
-        	<c:when test="${ empty requestScope.course }">
+        	<c:when test="${ !requestScope.modify eq modif }">
         		<h1>Create a course</h1>
         	</c:when>
         	<c:otherwise>
@@ -34,7 +36,16 @@
                 <fieldset>
                     <legend>Course Information</legend>
                     <label for="courseName">Name </label>
-					<input type="text" id="courseName" name="courseName" value="<c:out value="${course.courseName}"/>" size="30" maxlength="30" />
+                    <c:choose>
+        				<c:when test="${ !requestScope.modify eq modif }">
+							<input type="text" id="courseName" name="courseName" value="<c:out value="${course.courseName}"/>" size="30" maxlength="30" />
+						</c:when>
+        				<c:otherwise>							
+							<input type="text" id="courseName" name="courseName"  disabled="disabled" value="<c:out value="${course.courseName}"/>" size="30" maxlength="30" />
+							<p class="hidden"><input type="text" id="courseName" name="courseName" value="<c:out value="${course.courseName}"/>" size="30" maxlength="30" /></p>
+						
+						</c:otherwise>
+        			</c:choose>
 					<span class="error">${form.errors['courseName']}</span>
 					<br />
 
@@ -44,7 +55,7 @@
 					<br />
 					
 					<label for="courseYear">Course Year</label>
-					<input type="number" name="courseYear" id="courseYear"  value="<c:out value="${course.courseYear}"/>"/>
+					<input type="number" name="courseYear" id="courseYear"  value="<c:out value="${course.courseYear}"/>" required/>
 					<span class="error">${form.errors['courseYear']}</span>
 					<br />
 					
@@ -52,7 +63,7 @@
                  
                 <p class="info">${ form.result }</p>
                 <c:choose>
-        			<c:when test="${ empty requestScope.course }">
+        	<c:when test="${ !requestScope.modify eq modif }">
         				<input type="submit" name="Create" value="Create"  />
         			</c:when>
         			<c:otherwise>

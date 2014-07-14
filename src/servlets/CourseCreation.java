@@ -47,6 +47,7 @@ public class CourseCreation extends HttpServlet {
         {
             String courseName = getParameterValue( request, COURSENAME_PARAM );
             Course course = courseDao.find( courseName );
+            request.setAttribute( VERIFY_PARAM, modifiable );
             request.setAttribute( COURSE_ATT, course );
         }
 

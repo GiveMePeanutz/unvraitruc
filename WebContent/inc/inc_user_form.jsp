@@ -2,7 +2,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <label for="username">Username </label>
-<input type="text" id="username" name="username" value="<c:out value="${user.username}"/>" size="30" maxlength="30" />
+<c:choose>
+	<c:when test="${ !requestScope.modify eq modif }">
+		<input type="text" id="username" name="username" value="<c:out value="${user.username}"/>" size="30" maxlength="30" />
+	</c:when>
+	<c:otherwise>							
+		<input type="text" id="username" name="username" value="<c:out value="${user.username}"/>" size="30" maxlength="30" disabled="disabled"/>
+		<p class="hidden"><input type="text" id="username" name="username" value="<c:out value="${user.username}"/>" size="30" maxlength="30" /></p>
+	</c:otherwise>
+</c:choose>
 <span class="error">${form.errors['username']}</span>
 <br />
 

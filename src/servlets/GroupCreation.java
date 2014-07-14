@@ -53,6 +53,7 @@ public class GroupCreation extends HttpServlet {
         {
             String groupName = getParameterValue( request, GROUPNAME_PARAM );
             Group group = groupDao.find( groupName );
+            request.setAttribute( VERIFY_PARAM, modifiable );
             request.setAttribute( GROUP_ATT, group );
         }
 

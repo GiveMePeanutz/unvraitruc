@@ -48,6 +48,7 @@ public class PrivilegeCreation extends HttpServlet {
         {
             String privName = getParameterValue( request, PRIVNAME_PARAM );
             Priv priv = privDao.find( privName );
+            request.setAttribute( VERIFY_PARAM, modifiable );
             request.setAttribute( PRIV_ATT, priv );
 
         }
