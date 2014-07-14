@@ -59,12 +59,8 @@ public class LoginFilter implements Filter {
 		if(user==null){
 			request.getRequestDispatcher("/login").forward( req, res);
 		}else{
-			System.out.println("/* filter   "+path);
-			
 			Date date = dateDao.create();
 			factTableDao.addFact(user.getUsername(), path, date.getDateID());
-			
-			
 			chain.doFilter(req, res);
 		}
 	}
