@@ -4,6 +4,6 @@ import beans.Date;
 
 public interface DateDao {
 
-    Date create( Date date ) throws DAOException;
+    Date create() throws DAOException;
 
 }

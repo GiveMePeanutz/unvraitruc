@@ -20,11 +20,12 @@ public class DateDaoImpl implements DateDao {
         this.daoFactory = daoFactory;
     }
 
-    public Date create( Date date ) throws DAOException
+    public Date create() throws DAOException
     {
         Connection connexion = null;
         PreparedStatement preparedStatement1 = null;
         ResultSet valeursAutoGenerees = null;
+        Date date = new Date();
 
         try {
             connexion = daoFactory.getConnection();
