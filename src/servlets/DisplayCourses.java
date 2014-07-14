@@ -15,7 +15,6 @@ import beans.Course;
 import beans.User;
 import dao.CourseDao;
 import dao.DAOFactory;
-import dao.FactTableDao;
 
 @WebServlet( "/displayCourses" )
 public class DisplayCourses extends HttpServlet {
@@ -25,15 +24,12 @@ public class DisplayCourses extends HttpServlet {
     public static final String USERCOURSE_REQUEST_ATT      = "userCourses";
     public static final String VIEW                        = "/WEB-INF/displayCourses.jsp";
     public static final String USER_SESSION_ATT            = "userSession";
-    public static final String ACTIVITY_NAME               = "displayCourses";
 
     private CourseDao          courseDao;
-    private FactTableDao       FactTableDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.courseDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getCourseDao();
-        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
