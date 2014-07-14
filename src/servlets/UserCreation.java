@@ -121,23 +121,32 @@ public class UserCreation extends HttpServlet {
             }
             request.setAttribute( GROUP_REQUEST_ATT, mapPrivs );
         }
+        
+        Date date = dateDao.create();
 
         /* Si aucune erreur */
         if ( form.getErrors().isEmpty() ) {
+        	if ( modify.equals( "Modify" ) )
+            {
+        		factTableDao.addFact(user.getUsername(), "User modified", date.getDateID());
+            }else{
+            	factTableDao.addFact(user.getUsername(), "User created", date.getDateID());
+            }
             response.sendRedirect( VUE_SUCCESS );
-
-            Date date = dateDao.create();
-			factTableDao.addFact(user.getUsername(), path, date.getDateID());
         } else {
 
             if ( modify.equals( "Modify" ) )
             {
+            	factTableDao.addFact(user.getUsername(), "User modification failed", date.getDateID());
                 request.setAttribute( VERIFY_PARAM, "true" );
+            }else{
+            	factTableDao.addFact(user.getUsername(), "User creation failed", date.getDateID());
             }
 
             /*
              * Sinon, ré-affichage du formulaire de création avec les erreurs
              */
+            
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }
     }
