@@ -19,14 +19,15 @@ public class LoginFilter implements Filter {
 	
 	
 	public void init(FilterConfig config) throws ServletException {
-
+		
 	}
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res,
 			FilterChain chain) throws IOException, ServletException {
 		
-		System.out.println("/* filter");
+		
+		
 		
 		HttpServletRequest request = (HttpServletRequest) req;
 		
@@ -35,6 +36,8 @@ public class LoginFilter implements Filter {
             chain.doFilter( req, res );
             return;
         }
+        System.out.println("/* filter   "+path);
+        
 		HttpSession session = request.getSession();
 		if((session.getAttribute("userSession")==null)){
 			request.getRequestDispatcher("/login").forward( req, res);
