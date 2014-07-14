@@ -118,4 +118,8 @@ public class DAOFactory {
         return new FactTableDaoImpl( this );
     }
 
+	public DateDao getDateDao() {
+		return new DateDaoImpl( this );
+	}
+
 }

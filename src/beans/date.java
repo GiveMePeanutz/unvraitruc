@@ -98,25 +98,25 @@ public class Date {
 
         switch ( dateTime.getDayOfWeek() ) {
         case 1:
-            this.dayName = "Sunday";
-            break;
-        case 2:
             this.dayName = "Monday";
             break;
-        case 3:
+        case 2:
             this.dayName = "Tuesday";
             break;
-        case 4:
+        case 3:
             this.dayName = "Wednesday";
             break;
-        case 5:
+        case 4:
             this.dayName = "Thursday";
             break;
-        case 6:
+        case 5:
             this.dayName = "Friday";
             break;
-        case 7:
+        case 6:
             this.dayName = "Saturday";
+            break;
+        case 7:
+            this.dayName = "Sunday";
             break;
 
         default:
