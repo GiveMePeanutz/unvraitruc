@@ -14,9 +14,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import beans.Date;
 import beans.Group;
 import beans.User;
 import dao.DAOFactory;
+import dao.DateDao;
 import dao.FactTableDao;
 import dao.GroupDao;
 import dao.UserDao;
@@ -37,17 +39,17 @@ public class UserCreation extends HttpServlet {
 
     public static final String VUE_SUCCESS       = "/Project/displayUsers";
     public static final String VUE_FORM          = "/WEB-INF/createUser.jsp";
-    public static final String ACTIVITY_NAME     = "userCreation";
 
     private UserDao            userDao;
     private GroupDao           groupDao;
-    private FactTableDao       FactTableDao;
+    private DateDao			   dateDao;
+    private FactTableDao       factTableDao;
 
     public void init() throws ServletException {
         this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
-
+        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
-        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -124,8 +126,8 @@ public class UserCreation extends HttpServlet {
         if ( form.getErrors().isEmpty() ) {
             response.sendRedirect( VUE_SUCCESS );
 
-            // this.getServletContext().getRequestDispatcher( VUE_SUCCESS
-            // ).forward( request, response );
+            Date date = dateDao.create();
+			factTableDao.addFact(user.getUsername(), path, date.getDateID());
         } else {
 
             if ( modify.equals( "Modify" ) )
