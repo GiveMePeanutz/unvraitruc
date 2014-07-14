@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import beans.Group;
 import dao.DAOFactory;
-import dao.FactTableDao;
 import dao.GroupDao;
 
 @WebServlet( "/profileGroup" )
@@ -21,15 +20,12 @@ public class ProfileGroup extends HttpServlet {
 
     public static final String GROUP_REQUEST_ATT = "group";
     public static final String VIEW              = "/WEB-INF/profileGroup.jsp";
-    public static final String ACTIVITY_NAME     = "profileGroup";
 
     private GroupDao           groupDao;
-    private FactTableDao       FactTableDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
-        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
