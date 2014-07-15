@@ -58,22 +58,33 @@
 					<input type="number" name="courseYear" id="courseYear"  value="<c:out value="${course.courseYear}"/>" required/>
 					<span class="error">${form.errors['courseYear']}</span>
 					<br />
-					
-					<label for="teacher">Teacher :</label>
-					<c:choose>
-            			<c:when test="${ empty requestScope.teachers }">
-                		<p class="error">No teachers in database</p>
-            			</c:when>
-            			<c:otherwise>
-		                    <select name="teacher" id = "teacher" >																				
-		                		<c:forEach items="${ requestScope.teachers }" var="mapTeachers" varStatus="boucle">
-		                    		<option value='<c:out value="${mapTeachers.value.username}"/>'><c:out value="${mapTeachers.value.username}"/></option>                    
-		                		</c:forEach>
-		                	</select>
-		                	<span class="error">${form.errors['teacher']}</span>
-		                	
-                		</c:otherwise>
-        			</c:choose>
+					<c:set var="bool" value="true" />
+					<c:forEach var="item" items="${sessionScope.userSession.groupNames}">
+						<c:if test="${item ne 'Teacher'}">
+							<c:set var="bool" value="false" />
+							<label for="teacher">Teacher :</label>
+							<c:choose>
+		            			<c:when test="${ empty requestScope.teachers }">
+		                		<p class="error">No teachers in database</p>
+		            			</c:when>
+		            			<c:otherwise>
+		            				<select name="teacher" id = "teacher" >																				
+				                		<c:forEach items="${ requestScope.teachers }" var="mapTeachers" varStatus="boucle">
+				                    		<option value='<c:out value="${mapTeachers.value.username}"/>'><c:out value="${mapTeachers.value.username}"/></option>                    
+				                		</c:forEach>
+				                	</select>
+                				</c:otherwise>
+        					</c:choose>
+        				</c:if>
+        				</c:forEach>
+        				<c:if test="${bool eq 'true' }">
+        				<p class="hidden">
+        					<select name="teacher" id = "teacher" >																				
+				                    		<option value='<c:out value="${sessionScope.userSession.username}"/>'><c:out value="${sessionScope.userSession.username}"/></option>                    
+				            </select>
+				       </p>
+				       </c:if>
+            		<span class="error">${form.errors['teacher']}</span>
 				</fieldset>
                  
                 <p class="info">${ form.result }</p>

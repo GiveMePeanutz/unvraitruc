@@ -28,14 +28,12 @@
 	      			<li>
 	      				Group
 		      				<ul class="step3">
-		      					<c:set var="contains" value="false" />
 								<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 								<c:if test="${item eq 'Display Groups'}">
 			      				<li><a href="<c:url value="/displayGroups"/>">Display groups</a></li>
 			      				</c:if>
 								</c:forEach>
 			      				
-			      				<c:set var="contains" value="false" />
 								<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 								<c:if test="${item eq 'Add Group'}">
 			      				<li><a href="<c:url value="/groupCreation"/>">Add Group</a></li>
@@ -47,7 +45,6 @@
 	      			</c:if>
 					</c:forEach>
 	      			
-	      			<c:set var="contains" value="false" />
 					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 					<c:if test="${item eq 'Privilege'}">
 	      			<li>
@@ -76,7 +73,7 @@
 		</c:if>
 		</c:forEach>
 	  	
-	  	<c:set var="contains" value="false" />
+
 		<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 		<c:if test="${item eq 'Course'}">
 	  	<li>
