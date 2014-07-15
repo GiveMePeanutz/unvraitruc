@@ -20,7 +20,7 @@ public final class Menu {
                                       }
                                       },
                                       {
-                                      { "Course" , "Delete Course" , "Modify Course"},
+                                      { "Course" , "Delete Course" , "Modify Course" , "Course Subscription"},
                                       { "Display Courses" },
                                       { "Add Course" }
                                       },

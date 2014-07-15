@@ -7,9 +7,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import beans.Date;
+import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
+import dao.DateDao;
 import dao.FactTableDao;
 import dao.GroupDao;
 
@@ -17,17 +21,21 @@ import dao.GroupDao;
 public class DeleteGroup extends HttpServlet {
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String GROUPNAME_PARAM  = "groupName";
+    public static final String USER_SESSION_ATT  = "userSession";
 
     public static final String VIEW             = "/displayGroups";
     public static final String ACTIVITY_NAME    = "deleteGroup";
 
     private GroupDao           GroupDao;
-    private FactTableDao       FactTableDao;
-
+    private DateDao			   dateDao;
+    private FactTableDao       factTableDao;
+    
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.GroupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
-        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
+
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response )
@@ -40,6 +48,12 @@ public class DeleteGroup extends HttpServlet {
             try {
                 /* Alors suppression du client de la BDD */
                 GroupDao.delete( groupName );
+                
+                Date date = dateDao.create();
+                HttpSession session = request.getSession();
+        		User userSession = new User();
+                userSession = (User) session.getAttribute( USER_SESSION_ATT );
+                factTableDao.addFact(userSession.getUsername(), "Group Deleted", date.getDateID());
             } catch ( DAOException e ) {
                 e.printStackTrace();
             }

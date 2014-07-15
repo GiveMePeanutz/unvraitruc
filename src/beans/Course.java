@@ -12,6 +12,7 @@ public class Course implements Serializable{
 	private String courseDescription;
 	private int courseYear;
 	private String schedule;
+	private String teacher;
 	private ArrayList<String> usernames;
 	
 
@@ -47,6 +48,12 @@ public class Course implements Serializable{
 	}
 	public void addUsername(String username){
 		this.usernames.add(username);
+	}
+	public String getTeacher() {
+		return teacher;
+	}
+	public void setTeacher(String teacher) {
+		this.teacher = teacher;
 	}
 	
 	

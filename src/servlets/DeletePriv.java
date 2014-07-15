@@ -7,9 +7,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import beans.Date;
+import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
+import dao.DateDao;
 import dao.FactTableDao;
 import dao.PrivDao;
 
@@ -17,17 +21,21 @@ import dao.PrivDao;
 public class DeletePriv extends HttpServlet {
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String PRIVNAME_PARAM   = "privName";
+    public static final String USER_SESSION_ATT  = "userSession";
 
     public static final String VIEW             = "/displayPrivs";
     public static final String ACTIVITY_NAME    = "deletePriv";
 
     private PrivDao            PrivDao;
-    private FactTableDao       FactTableDao;
-
+    private DateDao			   dateDao;
+    private FactTableDao       factTableDao;
+    
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.PrivDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getPrivDao();
-        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
+
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response )
@@ -40,6 +48,12 @@ public class DeletePriv extends HttpServlet {
             try {
                 /* Alors suppression du client de la BDD */
                 PrivDao.delete( privName );
+                
+                Date date = dateDao.create();
+                HttpSession session = request.getSession();
+        		User userSession = new User();
+                userSession = (User) session.getAttribute( USER_SESSION_ATT );
+                factTableDao.addFact(userSession.getUsername(), "Privilege Deleted", date.getDateID());
             } catch ( DAOException e ) {
                 e.printStackTrace();
             }

@@ -18,8 +18,10 @@ public class CourseDaoImpl implements CourseDao {
 
     private static final String SQL_SELECT               = "SELECT courseName, courseYear, courseDescription, courseschedule FROM Course ORDER BY courseName";
     private static final String SQL_SELECT_BY_COURSENAME = "SELECT  courseName, courseYear, courseDescription, courseschedule FROM Course WHERE courseName = ?";
-    private static final String SQL_SELECT_COURSE_USERS  = "SELECT username FROM user WHERE username IN (SELECT username FROM user_course WHERE courseName = ?) ORDER BY username";
+    private static final String SQL_SELECT_COURSE_USERS  = "SELECT username FROM user WHERE username IN (SELECT username FROM user_course WHERE courseName = ?) AND username IN (SELECT username FROM user_group WHERE groupName='Student') ORDER BY username";
+    private static final String SQL_SELECT_COURSE_TEACHER  = "SELECT username FROM user WHERE username IN (SELECT username FROM user_course WHERE courseName = ?) AND username IN (SELECT username FROM user_group WHERE groupName='Teacher') ORDER BY username";
 
+    
     private static final String SQL_MODIFY_COURSE        = "UPDATE course SET courseDescription= ?, courseYear = ? WHERE courseName = ?";
 
     private static final String SQL_INSERT               = "INSERT INTO Course ( courseName, courseYear, courseDescription, courseschedule) VALUES ( ?, ?, ?, ?)";
@@ -66,10 +68,13 @@ public class CourseDaoImpl implements CourseDao {
         ResultSet resultSet = null;
         PreparedStatement preparedStatement2 = null;
         ResultSet resultSet2 = null;
+        PreparedStatement preparedStatement3 = null;
+        ResultSet resultSet3 = null;
 
         Course course = null;
         String sql = SQL_SELECT_BY_COURSENAME;
         String sql2 = SQL_SELECT_COURSE_USERS;
+        String sql3 = SQL_SELECT_COURSE_TEACHER;
 
         try {
             /* Récupération d'une connection depuis la Factory */
@@ -82,9 +87,11 @@ public class CourseDaoImpl implements CourseDao {
             resultSet = preparedStatement.executeQuery();
             preparedStatement2 = initialisationRequetePreparee( connection, sql2, false, courseName );
             resultSet2 = preparedStatement2.executeQuery();
+            preparedStatement3 = initialisationRequetePreparee( connection, sql3 , false, courseName );
+            resultSet3 = preparedStatement3.executeQuery();
             /* Parcours de la ligne de données retournée dans le ResultSet */
             if ( resultSet.next() ) {
-                course = map( resultSet, resultSet2 );
+                course = map( resultSet, resultSet2, resultSet3 );
             }
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -101,8 +108,10 @@ public class CourseDaoImpl implements CourseDao {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         PreparedStatement preparedStatement2 = null;
+        PreparedStatement preparedStatement3 = null;
         ResultSet resultSet = null;
         ResultSet resultSet2 = null;
+        ResultSet resultSet3 = null;
         List<Course> courses = new ArrayList<Course>();
 
         try {
@@ -114,7 +123,10 @@ public class CourseDaoImpl implements CourseDao {
                 preparedStatement2 = initialisationRequetePreparee( connection, SQL_SELECT_COURSE_USERS, false,
                         resultSet.getString( "courseName" ) );
                 resultSet2 = preparedStatement2.executeQuery();
-                courses.add( map( resultSet, resultSet2 ) );
+                preparedStatement3 = initialisationRequetePreparee( connection, SQL_SELECT_COURSE_TEACHER, false,
+                        resultSet.getString( "courseName" ) );
+                resultSet3 = preparedStatement3.executeQuery();
+                courses.add( map( resultSet, resultSet2, resultSet3) );
             }
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -146,7 +158,7 @@ public class CourseDaoImpl implements CourseDao {
         }
     }
 
-    private static Course map( ResultSet resultSet, ResultSet resultSet2 ) throws SQLException {
+    private static Course map( ResultSet resultSet, ResultSet resultSet2 , ResultSet resultSet3) throws SQLException {
 
         Course course = new Course();
         course.setCourseName( resultSet.getString( "courseName" ) );
@@ -159,7 +171,10 @@ public class CourseDaoImpl implements CourseDao {
             usernames.add( resultSet2.getString( "username" ) );
         }
         course.setUsernames( usernames );
-
+        if (resultSet3.next()){
+        	course.setTeacher( resultSet3.getString( "username" ));
+        }
+        
         return course;
 
     }
