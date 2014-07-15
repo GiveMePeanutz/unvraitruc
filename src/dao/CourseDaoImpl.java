@@ -53,7 +53,7 @@ public class CourseDaoImpl implements CourseDao {
                         "Failed to create course. No row added" );
             }else{
             	preparedStatement2 = initialisationRequetePreparee( connexion,
-                        SQL_INSERT_COURSE_USER, true, course.getCourseName(), teacherName );
+                        SQL_INSERT_COURSE_USER, true,  teacherName, course.getCourseName() );
                 int statut2 = preparedStatement2.executeUpdate();
                 if ( statut2 == 0 ) {
                     throw new DAOException(

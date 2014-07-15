@@ -24,6 +24,7 @@ public class Login extends HttpServlet {
     public static final String  FORM_ATT                = "form";
     public static final String  USER_SESSION_ATT        = "userSession";
     public static final String  USER_SESSION_ACCESS_ATT = "userSessionAccess";
+    public static final String  USER_GROUP_ATT  		= "userGroup";
     public static final String  VIEW                    = "/WEB-INF/login.jsp";
     private static final String PATH                    = "path";
     public static final String  ACTIVITY_NAME           = "login";
