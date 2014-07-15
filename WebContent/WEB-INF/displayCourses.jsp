@@ -30,10 +30,11 @@
 					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 					<c:if test="${item eq 'Delete Course'}">
                     	<th class="action">Delete</th>
-                    </c:if>
-					</c:forEach>                   					
-                    <th class="action">Inscription</th>                   
-
+                    </c:if>					
+					<c:if test="${item eq 'Course Subscription'}">                   					
+                    	<th class="action">Inscription</th>
+                    </c:if>                   
+					</c:forEach>
                 </tr>
                 <%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
                 <c:forEach items="${ requestScope.availableCourses }" var="mapCourses" varStatus="boucle">
@@ -50,20 +51,21 @@
 
                     <c:set var="contains" value="false" />
 					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
-					<c:if test="${item eq 'Delete Course'}">
-	                    <td class="action">
-	                        <a href="<c:url value="/deleteCourse"><c:param name="courseName" value="${ mapCourses.value.courseName }" /></c:url>">
-	                            <img src="<c:url value="/inc/supprimer.png"/>" alt="Delete" />
-	                        </a>
-	                    </td>
-	                </c:if>
-					</c:forEach>
-                   
-                    <td>
-                    <a  href="<c:url value="/inscriptionCourse" ><c:param name="courseName" value="${ mapCourses.value.courseName }" /></c:url>" class = "button">           
-            			<img src="<c:url value="/inc/inscription.gif"/>" alt="Inscription" />
-          			</a>  
-          			</td>
+						<c:if test="${item eq 'Delete Course'}">
+		                    <td class="action">
+		                        <a href="<c:url value="/deleteCourse"><c:param name="courseName" value="${ mapCourses.value.courseName }" /></c:url>">
+		                            <img src="<c:url value="/inc/supprimer.png"/>" alt="Delete" />
+		                        </a>
+		                    </td>
+		                </c:if>
+		                <c:if test="${item eq 'Course Subscription'}">                   
+		                    <td>
+		                    <a  href="<c:url value="/inscriptionCourse" ><c:param name="courseName" value="${ mapCourses.value.courseName }" /></c:url>" class = "button">           
+		            			<img src="<c:url value="/inc/inscription.gif"/>" alt="Inscription" />
+		          			</a>  
+		          			</td>
+	          			</c:if>
+          			</c:forEach>
 
                 </tr>
                 </c:forEach>
