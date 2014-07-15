@@ -37,9 +37,10 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public void create( Course course ) throws DAOException {
+    public void create( Course course , String teacherName) throws DAOException {
         Connection connexion = null;
         PreparedStatement preparedStatement1 = null;
+        PreparedStatement preparedStatement2 = null;
 
         try {
             connexion = daoFactory.getConnection();
@@ -50,6 +51,14 @@ public class CourseDaoImpl implements CourseDao {
             if ( statut1 == 0 ) {
                 throw new DAOException(
                         "Failed to create course. No row added" );
+            }else{
+            	preparedStatement2 = initialisationRequetePreparee( connexion,
+                        SQL_INSERT_COURSE_USER, true, course.getCourseName(), teacherName );
+                int statut2 = preparedStatement2.executeUpdate();
+                if ( statut2 == 0 ) {
+                    throw new DAOException(
+                            "Failed to create course_user association. No row added" );
+                }
             }
 
         } catch ( SQLException e ) {

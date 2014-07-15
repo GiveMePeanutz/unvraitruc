@@ -7,7 +7,7 @@ import beans.Course;
 
 public interface CourseDao {
 
-	void create( Course course ) throws DAOException;
+	void create( Course course , String teacherName ) throws DAOException;
 	
 	Course find (String courseName )throws DAOException;
 	
