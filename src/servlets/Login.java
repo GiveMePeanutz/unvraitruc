@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import beans.Date;
 import beans.User;
 import dao.DAOFactory;
+import dao.DateDao;
 import dao.FactTableDao;
 import dao.UserDao;
 import forms.LoginForm;
@@ -24,18 +26,20 @@ public class Login extends HttpServlet {
     public static final String  FORM_ATT                = "form";
     public static final String  USER_SESSION_ATT        = "userSession";
     public static final String  USER_SESSION_ACCESS_ATT = "userSessionAccess";
-    public static final String  USER_GROUP_ATT  		= "userGroup";
+    public static final String  USER_GROUP_ATT          = "userGroup";
     public static final String  VIEW                    = "/WEB-INF/login.jsp";
     private static final String PATH                    = "path";
     public static final String  ACTIVITY_NAME           = "login";
 
     private UserDao             userDao;
-    private FactTableDao        FactTableDao;
+    private FactTableDao        factTableDao;
+    private DateDao             dateDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
-        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -63,6 +67,11 @@ public class Login extends HttpServlet {
             session.setAttribute( USER_SESSION_ATT, user );
             List<String> menus = userDao.listAccMenus( user.getUsername() );
             session.setAttribute( USER_SESSION_ACCESS_ATT, menus );
+
+            Date date = dateDao.create();
+            User userSession = new User();
+            userSession = (User) session.getAttribute( USER_SESSION_ATT );
+            factTableDao.addFact( userSession.getUsername(), "Login", date.getDateID() );
 
         } else {
             session.setAttribute( USER_SESSION_ATT, null );
