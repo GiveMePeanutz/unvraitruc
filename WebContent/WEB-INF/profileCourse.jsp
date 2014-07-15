@@ -27,9 +27,13 @@
             	</c:forEach>
             </ul>
             <br>
-            <a href="<c:url value="/courseCreation"><c:param name="courseName" value="${course.courseName }" /><c:param name="modify" value="true" /></c:url>" class = "button">           
-            <input type="button" value="Modify" />
-          	</a> 
+            <c:forEach var="item" items="${sessionScope.userSessionAccess}">
+				<c:if test="${item eq 'Modify Course'}">
+		            <a href="<c:url value="/courseCreation"><c:param name="courseName" value="${course.courseName }" /><c:param name="modify" value="true" /></c:url>" class = "button">           
+		            	<input type="button" value="Modify" />
+		          	</a> 
+		        </c:if>
+		    </c:forEach>
         </div>
     </body>
 </html>

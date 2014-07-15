@@ -52,10 +52,6 @@ public class DisplayCourses extends HttpServlet {
         {
             List<String> userCourseList = user.getCourseNames();
 
-            for ( String s : userCourseList ) {
-                System.out.println( s );
-            }
-
             for ( Course course : listeCourses ) {
                 if ( userCourseList.contains( course.getCourseName() ) )
                 {
