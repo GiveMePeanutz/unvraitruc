@@ -17,8 +17,9 @@
             <dl><dt class ="important">Name :</dt> <dd><c:out value="${ course.courseName }"/></dd></dl>  
             <dl><dt class="important">Description :</dt> <dd><c:out value="${ course.courseDescription }"/></dd></dl>
             <dl><dt class="important">Course Year :</dt> <dd><c:out value="${ course.courseYear }"/></dd></dl>           
-      
-            <p class="important">Users :</p> 
+       		<dl><dt class="important">Teacher :</dt> <dd><c:out value="${ course.teacher }"/></dd></dl>           
+       		
+            <p class="important">Students :</p> 
             <ul class="prof">
             	<c:forEach items="${ course.usernames }" var="users" >
             		<li><c:out value="${ users }"/></li>

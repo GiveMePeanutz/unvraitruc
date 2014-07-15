@@ -15,6 +15,7 @@ public final class CourseCreationForm {
     private static final String NAME_FIELD        = "courseName";
     private static final String DESCRIPTION_FIELD = "courseDescription";
     private static final String YEAR_FIELD        = "courseYear";
+    private static final String TEACHER_FIELD     = "teacher";
 
     private String              result;
     private Map<String, String> errors            = new HashMap<String, String>();
@@ -37,15 +38,17 @@ public final class CourseCreationForm {
         String courseName = getFieldValue( request, NAME_FIELD );
         int courseYear = getIntValue( request, YEAR_FIELD );
         String courseDescription = getFieldValue( request, DESCRIPTION_FIELD );
+        String teacher = getFieldValue( request, TEACHER_FIELD );
 
         Course course = new Course();
         handleCourseName( courseName, course );
         handleCourseDescription( courseDescription, course );
         handleCourseYear( courseYear, course );
+        handleTeacher( teacher, course );
 
         try {
             if ( errors.isEmpty() ) {
-                courseDao.create( course );
+                courseDao.create( course, teacher );
                 result = "Course creation succeed";
             } else {
                 result = "Course creation failed !.";
@@ -64,11 +67,13 @@ public final class CourseCreationForm {
         String courseName = getFieldValue( request, NAME_FIELD );
         int courseYear = getIntValue( request, YEAR_FIELD );
         String courseDescription = getFieldValue( request, DESCRIPTION_FIELD );
+        String teacher = getFieldValue( request, TEACHER_FIELD );
 
         Course course = new Course();
         handleCourseName( courseName, course );
         handleCourseDescription( courseDescription, course );
         handleCourseYear( courseYear, course );
+        handleTeacher( teacher, course );
 
         try {
             if ( errors.isEmpty() ) {
@@ -114,6 +119,16 @@ public final class CourseCreationForm {
 
     }
 
+    private void handleTeacher( String teacher, Course course ) {
+        try {
+            teacherValidation( teacher );
+        } catch ( FormValidationException e ) {
+            setError( TEACHER_FIELD, e.getMessage() );
+        }
+        course.setTeacher( teacher );
+
+    }
+
     private void courseNameValidation( String name ) throws FormValidationException {
         if ( name != null ) {
             if ( name.length() < 2 ) {
@@ -144,6 +159,14 @@ public final class CourseCreationForm {
         }
     }
 
+    private void teacherValidation( String teacher ) throws FormValidationException {
+        if ( teacher == null ) {
+
+            throw new FormValidationException( "Please select one teacher." );
+        }
+
+    }
+
     /*
      * Ajoute un message correspondant au champ spécifié à la map des errors.
      */
@@ -157,6 +180,7 @@ public final class CourseCreationForm {
      */
     private static String getFieldValue( HttpServletRequest request, String fieldName ) {
         String value = request.getParameter( fieldName );
+        System.out.println( value );
         if ( value == null || value.trim().length() == 0 ) {
             return null;
         } else {

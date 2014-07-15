@@ -59,6 +59,21 @@
 					<span class="error">${form.errors['courseYear']}</span>
 					<br />
 					
+					<label for="teacher">Teacher :</label>
+					<c:choose>
+            			<c:when test="${ empty requestScope.teachers }">
+                		<p class="error">No teachers in database</p>
+            			</c:when>
+            			<c:otherwise>
+		                    <select name="teacher" id = "teacher" >																				
+		                		<c:forEach items="${ requestScope.teachers }" var="mapTeachers" varStatus="boucle">
+		                    		<option value='<c:out value="${mapTeachers.value.username}"/>'><c:out value="${mapTeachers.value.username}"/></option>                    
+		                		</c:forEach>
+		                	</select>
+		                	<span class="error">${form.errors['teacher']}</span>
+		                	
+                		</c:otherwise>
+        			</c:choose>
 				</fieldset>
                  
                 <p class="info">${ form.result }</p>

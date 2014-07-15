@@ -2,6 +2,8 @@ package servlets;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,31 +19,35 @@ import dao.CourseDao;
 import dao.DAOFactory;
 import dao.DateDao;
 import dao.FactTableDao;
+import dao.UserDao;
 import forms.CourseCreationForm;
 
 @WebServlet( urlPatterns = "/courseCreation" )
 public class CourseCreation extends HttpServlet {
-    public static final String CONF_DAO_FACTORY  = "daofactory";
-    public static final String PATH              = "path";
-    public static final String COURSE_ATT        = "course";
-    public static final String FORM_ATT          = "form";
-    public static final String VUE_SUCCESS       = "/Project/displayCourses";
-    public static final String VUE_FORM          = "/WEB-INF/createCourse.jsp";
-    public static final String GROUP_REQUEST_ATT = "courses";
-    public static final String VERIFY_PARAM      = "modify";
-    public static final String COURSENAME_PARAM  = "courseName";
-    public static final String VERIFY_PARAM2     = "Create";
-    public static final String USER_SESSION_ATT  = "userSession";
+    public static final String CONF_DAO_FACTORY    = "daofactory";
+    public static final String PATH                = "path";
+    public static final String COURSE_ATT          = "course";
+    public static final String FORM_ATT            = "form";
+    public static final String VUE_SUCCESS         = "/Project/displayCourses";
+    public static final String VUE_FORM            = "/WEB-INF/createCourse.jsp";
+    public static final String GROUP_REQUEST_ATT   = "courses";
+    public static final String VERIFY_PARAM        = "modify";
+    public static final String COURSENAME_PARAM    = "courseName";
+    public static final String VERIFY_PARAM2       = "Create";
+    public static final String USER_SESSION_ATT    = "userSession";
+    public static final String USER_REQUEST_ATT    = "users";
+    public static final String TEACHER_REQUEST_ATT = "teachers";
 
-    public static final String ACTIVITY_NAME     = "courseCreation";
+    public static final String ACTIVITY_NAME       = "courseCreation";
 
+    private UserDao            userDao;
     private CourseDao          courseDao;
     private FactTableDao       factTableDao;
-    private DateDao			   dateDao;
+    private DateDao            dateDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
-
+        this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
         this.courseDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getCourseDao();
         this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
         this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
@@ -57,6 +63,14 @@ public class CourseCreation extends HttpServlet {
             request.setAttribute( VERIFY_PARAM, modifiable );
             request.setAttribute( COURSE_ATT, course );
         }
+
+        List<User> listeTeachers = userDao.listGroup( "teacher" );
+        LinkedHashMap<String, User> mapTeachers = new LinkedHashMap<String, User>();
+        for ( User user : listeTeachers ) {
+            mapTeachers.put( user.getUsername(), user );
+        }
+
+        request.setAttribute( TEACHER_REQUEST_ATT, mapTeachers );
 
         this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
     }
@@ -94,34 +108,45 @@ public class CourseCreation extends HttpServlet {
         request.setAttribute( COURSE_ATT, course );
         request.setAttribute( FORM_ATT, form );
 
+        if ( request.getAttribute( TEACHER_REQUEST_ATT ) == null ) {
+
+            List<User> listeTeachers = userDao.listGroup( "teacher" );
+            LinkedHashMap<String, User> mapTeachers = new LinkedHashMap<String, User>();
+            for ( User user : listeTeachers ) {
+                mapTeachers.put( user.getUsername(), user );
+            }
+
+            request.setAttribute( TEACHER_REQUEST_ATT, mapTeachers );
+        }
+
         Date date = dateDao.create();
         HttpSession session = request.getSession();
-		User userSession = new User();
+        User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
-        
+
         /* Si aucune erreur */
         if ( form.getErrors().isEmpty() ) {
-        	if ( modify.equals( "Modify" ) )
+            if ( modify.equals( "Modify" ) )
             {
-        		factTableDao.addFact(userSession.getUsername(), "Course modified", date.getDateID());
-            }else{
-            	factTableDao.addFact(userSession.getUsername(), "Course created", date.getDateID());
+                factTableDao.addFact( userSession.getUsername(), "Course modified", date.getDateID() );
+            } else {
+                factTableDao.addFact( userSession.getUsername(), "Course created", date.getDateID() );
             }
             response.sendRedirect( VUE_SUCCESS );
         } else {
 
             if ( modify.equals( "Modify" ) )
             {
-            	factTableDao.addFact(userSession.getUsername(), "Course modification errors", date.getDateID());
+                factTableDao.addFact( userSession.getUsername(), "Course modification errors", date.getDateID() );
                 request.setAttribute( VERIFY_PARAM, "true" );
-            }else{
-            	factTableDao.addFact(userSession.getUsername(), "Course creation errors", date.getDateID());
+            } else {
+                factTableDao.addFact( userSession.getUsername(), "Course creation errors", date.getDateID() );
             }
 
             /*
              * Sinon, ré-affichage du formulaire de création avec les erreurs
              */
-            
+
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }
     }
