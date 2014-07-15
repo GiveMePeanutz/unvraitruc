@@ -57,6 +57,15 @@
     </filter-mapping>
     
     <filter>
+        <filter-name>CourseSubscriptionFilter</filter-name>
+        <filter-class>filters.CourseSubscriptionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CourseSubscriptionFilter</filter-name>
+        <url-pattern>/inscriptionCourse</url-pattern>
+    </filter-mapping>
+    
+    <filter>
         <filter-name>AddPrivFilter</filter-name>
         <filter-class>filters.AddPrivFilter</filter-class>
     </filter>
