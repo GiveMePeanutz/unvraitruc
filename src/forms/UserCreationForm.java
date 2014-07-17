@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -81,10 +82,10 @@ public final class UserCreationForm {
         handlePhone( phone, user );
         handleEmail( email, user );
         handleBirthDate( birthDate, user );
-        handlePromotion( promotion, user );
+
         handlePhoto( user, request, path );
         handleGroups( groups, user );
-
+        handlePromotion( promotion, user );
         DateTime today = new DateTime();
         user.setRegDate( today );
 
@@ -127,9 +128,9 @@ public final class UserCreationForm {
         handlePhone( phone, user );
         handleEmail( email, user );
         handleBirthDate( birthDate, user );
-        handlePromotion( promotion, user );
         handlePhoto( user, request, path );
         handleGroups( groups, user );
+        handlePromotion( promotion, user );
 
         DateTime today = new DateTime();
         user.setRegDate( today );
@@ -251,7 +252,7 @@ public final class UserCreationForm {
 
     private void handlePromotion( String promotion, User user ) {
         try {
-            promotionValidation( promotion );
+            promotionValidation( promotion, user );
         } catch ( FormValidationException e ) {
             setError( PROMOTION_FIELD, e.getMessage() );
         }
@@ -362,13 +363,33 @@ public final class UserCreationForm {
         }
     }
 
-    private void promotionValidation( String promotion ) throws FormValidationException {
-        if ( promotion != null ) {
-            if ( !promotion.matches( "([^0-9]+)([0-9]+)" ) ) {
-                throw new FormValidationException( "Promotion must be a name or an acronym followed by a number." );
+    private void promotionValidation( String promotion, User user ) throws FormValidationException {
+        List<String> listeGroup = user.getGroupNames();
+        Boolean bool = false;
+        for ( String group : listeGroup )
+        {
+            if ( group.equals( "Student" ) )
+            {
+                bool = true;
             }
-        } else {
-            throw new FormValidationException( "Please enter a promotion." );
+        }
+
+        if ( bool == true )
+        {
+            if ( promotion != null ) {
+                if ( !promotion.matches( "([^0-9]+)([0-9]+)" ) ) {
+                    throw new FormValidationException( "Promotion must be a name or an acronym followed by a number." );
+                }
+            } else {
+                throw new FormValidationException( "Please enter a promotion." );
+            }
+        }
+        else
+        {
+            if ( promotion != null )
+            {
+                throw new FormValidationException( "Please do not enter a promotion for a user of this group." );
+            }
         }
     }
 

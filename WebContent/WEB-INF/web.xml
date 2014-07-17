@@ -120,12 +120,12 @@
     </filter-mapping>
     
     <filter>
-        <filter-name>NaivesBayesFilter</filter-name>
-        <filter-class>filters.NaivesBayesFilter</filter-class>
+        <filter-name>NaiveBayesFilter</filter-name>
+        <filter-class>filters.NaiveBayesFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>NaivesBayesFilter</filter-name>
-        <url-pattern>/naivesBayes</url-pattern>
+        <filter-name>NaiveBayesFilter</filter-name>
+        <url-pattern>/naiveBayes</url-pattern>
     </filter-mapping>
     
     <filter>
