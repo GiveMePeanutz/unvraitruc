@@ -45,7 +45,9 @@
             <dl><dt class="important">Address :</dt> <dd><c:out value="${ user.address }"/></dd></dl>
             <dl><dt class="important">Phone Number :</dt><dd><c:out value="${ user.phone }"/></dd></dl>
             <dl><dt class="important">Email :</dt> <dd><c:out value="${ user.email }"/></dd></dl>
+            <c:if test ="${!empty user.promotion }">
             <dl><dt class="important">Promotion :</dt> <dd><c:out value="${ user.promotion }"/></dd></dl>
+            </c:if>
             <dl>
              <c:if test="${ !empty user.photoURL }">
                             <c:set var="photo"><c:out value="${ user.photoURL }"/></c:set>
