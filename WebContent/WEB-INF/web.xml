@@ -102,12 +102,30 @@
     </filter-mapping>
     
     <filter>
-        <filter-name>DataAnalysisFilter</filter-name>
-        <filter-class>filters.DataAnalysisFilter</filter-class>
+        <filter-name>KMeansFilter</filter-name>
+        <filter-class>filters.KMeansFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>DataAnalysisFilter</filter-name>
-        <url-pattern>/dataAnalysis</url-pattern>
+        <filter-name>KMeansFilter</filter-name>
+        <url-pattern>/kMeans</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>GeneticAlgorithmsFilter</filter-name>
+        <filter-class>filters.GeneticAlgorithmsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>GeneticAlgorithmsFilter</filter-name>
+        <url-pattern>/geneticAlgorithms</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>NaivesBayesFilter</filter-name>
+        <filter-class>filters.NaivesBayesFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>NaivesBayesFilter</filter-name>
+        <url-pattern>/naivesBayes</url-pattern>
     </filter-mapping>
     
     <filter>

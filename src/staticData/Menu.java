@@ -20,7 +20,7 @@ public final class Menu {
                                       }
                                       },
                                       {
-                                      { "Course" , "Delete Course" , "Modify Course" , "Course Subscription"},
+                                      { "Course", "Delete Course", "Modify Course", "Course Subscription" },
                                       { "Display Courses" },
                                       { "Add Course" }
                                       },
@@ -36,10 +36,13 @@ public final class Menu {
 
                                       },
                                       {
-                                      { "Warehouse Maintenance" }
+                                      { "Warehouse Maintenance" },
                                       },
                                       {
-                                      { "Data Analysis" }
+                                      { "Data Analysis" },
+                                      { "Naives Bayes" },
+                                      { "KMeans" },
+                                      { "Genetic Algorithms" }
                                       },
                                       {
                                       { "Profile" }
@@ -51,12 +54,12 @@ public final class Menu {
     }
 
     public static String getMenuName( int path ) throws ArrayIndexOutOfBoundsException {
-    	try{
-    		return menus[path / 10000][( path - ( path / 10000 ) * 10000 ) / 100][( path - ( path / 100 ) * 100 )];
-    	}catch( Exception e){
-    		System.out.println(path);
-    		return "Path invalid";
-    	}
+        try {
+            return menus[path / 10000][( path - ( path / 10000 ) * 10000 ) / 100][( path - ( path / 100 ) * 100 )];
+        } catch ( Exception e ) {
+            System.out.println( path );
+            return "Path invalid";
+        }
     }
 
     public static LinkedHashMap<Integer, String> list()
