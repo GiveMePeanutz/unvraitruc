@@ -121,5 +121,9 @@ public class DAOFactory {
 	public DateDao getDateDao() {
 		return new DateDaoImpl( this );
 	}
+	
+	public KmeansDataDao getKmeansDataDao() {
+		return new KmeansDataDaoImpl(this);
+	}
 
 }

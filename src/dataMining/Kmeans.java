@@ -10,23 +10,24 @@ import beans.KmeansDataType;
  
 public class  Kmeans{
  
-    
-    private KmeansDataType[] data; 			// data to cluster
-    private int numClusters;    			// number of clusters
-    private double[][] clusterCenters;   	// cluster centers
-    private int dataSize;               	// size of the data
-    private int dataDim;                	// dimension of the data
-    private ArrayList[] clusteredDATA;		// duh
-    private double[] clusterVars;        	// cluster variances
+    //private double[][] data;         // data to cluster
+    private KmeansDataType[] DATA;
+    private int numClusters;    // number of clusters
+    private double[][] clusterCenters;   // cluster centers
+    private int dataSize;               // size of the data
+    private int dataDim;                // dimension of the data
+    //private ArrayList[] clusters;     // calculated clusters
+    private ArrayList<KmeansDataType>[] clusteredDATA;
+    private double[] clusterVars;        // cluster variances
  
     private double epsilon;
  
-    public Kmeans(KmeansDataType[] data, int numClusters)
+    public Kmeans(KmeansDataType[] DATA, int numClusters)
     {
-        dataSize = data.length;
-        dataDim = data[0].getData().length;
+        dataSize = DATA.length;
+        dataDim = DATA[0].getData().length;
  
-        this.data = data;
+        this.DATA = DATA;
  
         this.numClusters = numClusters;
  
@@ -41,7 +42,7 @@ public class  Kmeans{
  
         epsilon = 0.0;
  
-        randomizeCenters(numClusters, data);
+        randomizeCenters(numClusters, DATA);
     }
     
     
@@ -142,7 +143,7 @@ public class  Kmeans{
  
             for(int j=0; j<numClusters; j++)
             {
-                newdist = distToCenter( data[i].getData(), j );
+                newdist = distToCenter( DATA[i].getData(), j );
                 if( newdist <= dist )
                 {
                     clust = j;
@@ -150,7 +151,7 @@ public class  Kmeans{
                 }
             }
  
-            clusteredDATA[clust].add(data[i]);
+            clusteredDATA[clust].add(DATA[i]);
         }
  
     }
@@ -182,7 +183,7 @@ public class  Kmeans{
               if (Double.isNaN(var2))    // if this happens, there must be some empty clusters
              {
                  delta = Double.MAX_VALUE;
-                 randomizeCenters(numClusters, data);
+                 randomizeCenters(numClusters, DATA);
                  assignData();
                  calculateClusterCenters();
                  calculateClusterVars();
