@@ -35,7 +35,7 @@ public class KmeansServlet extends HttpServlet{
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		/*
+		
 		KmeansDataType[] dataArray= kmeansDataDao.getUserActivity();
 		Kmeans kmeans = new Kmeans(dataArray, 2);
 		kmeans.calculateClusters();
@@ -43,7 +43,7 @@ public class KmeansServlet extends HttpServlet{
 		
 		ArrayList<KmeansDataType>[] clusteredData = kmeans.getClusters();
 		
-		request.setAttribute(KMEANS_DATA_ATT, clusteredData);*/
+		request.setAttribute(KMEANS_DATA_ATT, clusteredData);
 		this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
 	}
 	
