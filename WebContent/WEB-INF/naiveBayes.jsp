@@ -22,13 +22,14 @@
                 		<p class="error">No Student in database</p>
             			</c:when>
             			<c:otherwise>
-		                    <select name="students" id = "students" >																				
+		                    <select name="students" id = "students" required ="required">																				
 								<%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
 		                		<c:forEach items="${ requestScope.students }" var="mapStudents" varStatus="boucle">
 		                    		<option value='<c:out value="${mapStudents.value.username}"/>'><c:out value="${mapStudents.value.username}"/></option>                    
 		                		</c:forEach>
 		                	</select>
-		                	<span class="error">${form.errors['students']}</span> 
+        					<input type="submit" name = "Submit" value="Submit"  /> 			
+
             			</c:otherwise>
         			</c:choose>
         		</fieldset>
