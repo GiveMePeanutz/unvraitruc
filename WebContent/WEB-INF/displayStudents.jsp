@@ -16,7 +16,7 @@
         <c:choose>
             <%-- Si aucun client n'existe en session, affichage d'un message par défaut. --%>
             <c:when test="${ empty requestScope.users }">
-                <p class="erreur">Aucun client enregistré.</p>
+                <p class="erreur">No student in database</p>
             </c:when>
             <%-- Sinon, affichage du tableau. --%>
             <c:otherwise>
