@@ -40,7 +40,7 @@ public final class Menu {
                                       },
                                       {
                                       { "Data Analysis" },
-                                      { "Naives Bayes" },
+                                      { "Naive Bayes" },
                                       { "KMeans" },
                                       { "Genetic Algorithms" }
                                       },
