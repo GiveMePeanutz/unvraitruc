@@ -118,12 +118,12 @@ public class DAOFactory {
         return new FactTableDaoImpl( this );
     }
 
-  
-
     public KmeansDataDao getKmeansDataDao() {
         return new KmeansDataDaoImpl( this );
     }
 
-
+    public NaiveBayesDao getNaiveBayesDao() {
+        return new NaiveBayesDaoImpl( this );
+    }
 
 }
