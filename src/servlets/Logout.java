@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import beans.Date;
 import beans.User;
 import dao.DAOFactory;
 import dao.FactTableDao;
@@ -30,11 +29,12 @@ public class Logout extends HttpServlet {
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         /* Récupération et destruction de la session en cours */
         HttpSession session = request.getSession();
-        session.invalidate();
-
         User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
-        factTableDao.addFact( userSession.getUsername(), "Logout");
+        factTableDao.addFact( userSession.getUsername(), "Logout" );
+
+        session.invalidate();
+
         response.sendRedirect( REDIRECTION_URL );
     }
 }
