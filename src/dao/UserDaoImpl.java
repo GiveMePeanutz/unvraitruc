@@ -208,6 +208,41 @@ public class UserDaoImpl implements UserDao {
         return users;
     }
 
+    public List<User> listStudent() throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement2 = null;
+        PreparedStatement preparedStatement3 = null;
+        ResultSet resultSet = null;
+        ResultSet resultSet2 = null;
+        ResultSet resultSet3 = null;
+        List<User> students = new ArrayList<User>();
+
+        try {
+            connection = daoFactory.getConnection();
+            preparedStatement = connection.prepareStatement( SQL_SELECT_STUDENTS );
+            resultSet = preparedStatement.executeQuery();
+
+            while ( resultSet.next() ) {
+                preparedStatement2 = initialisationRequetePreparee( connection, SQL_SELECT_USER_COURSES, false,
+                        resultSet.getString( "username" ) );
+                resultSet2 = preparedStatement2.executeQuery();
+                preparedStatement3 = initialisationRequetePreparee( connection, SQL_SELECT_USER_GROUPS, false,
+                        resultSet.getString( "username" ) );
+                resultSet3 = preparedStatement3.executeQuery();
+                students.add( map( resultSet, resultSet2, resultSet3 ) );
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connection );
+            fermeturesSilencieuses( resultSet2, preparedStatement2, connection );
+            fermeturesSilencieuses( resultSet3, preparedStatement3, connection );
+        }
+
+        return students;
+    }
+
     @Override
     public void delete( String username ) throws DAOException {
         Connection connexion = null;

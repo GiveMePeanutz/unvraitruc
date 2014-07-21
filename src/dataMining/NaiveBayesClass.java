@@ -30,7 +30,7 @@ public class NaiveBayesClass {
         int numberOfUsers = naiveBayesDao.getUserCount();
         List<String> listCourse = naiveBayesDao.listCourse();
         List<String> listPromotion = naiveBayesDao.listPromotion();
-        List<User> listUser = userDao.list();
+        List<User> listStudent = userDao.listStudent();
 
         // Sex Attribute
 
@@ -74,7 +74,7 @@ public class NaiveBayesClass {
         this.cModel = (Classifier) new NaiveBayes();
 
         // Create the instance
-        for ( User userList : listUser )
+        for ( User userList : listStudent )
         {
 
             if ( !userList.getUsername().equals( user.getUsername() ) )
