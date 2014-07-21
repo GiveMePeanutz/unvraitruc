@@ -81,7 +81,7 @@ public class DisplayCourses extends HttpServlet {
 
         /*------------------------Naive Bayes----------------------------------*/
         NumberFormat nf = new DecimalFormat( "0.##" );
-        NaiveBayesClass classifier = new NaiveBayesClass( userDao, naiveBayesDao );
+        NaiveBayesClass classifier = new NaiveBayesClass( user, userDao, naiveBayesDao );
         double[] likelihood = null;
         Attribute courseAttribute = null;
 

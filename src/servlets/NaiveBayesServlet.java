@@ -66,7 +66,7 @@ public class NaiveBayesServlet extends HttpServlet {
         String result = "Error";
         String studentName = getFieldValue( request, STUDENT_FIELD );
         User user = userDao.find( studentName );
-        NaiveBayesClass classifier = new NaiveBayesClass( userDao, naiveBayesDao );
+        NaiveBayesClass classifier = new NaiveBayesClass( user, userDao, naiveBayesDao );
         double[] likelihood = null;
         Attribute courseAttribute = null;
 

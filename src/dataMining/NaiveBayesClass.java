@@ -25,7 +25,7 @@ public class NaiveBayesClass {
     private FastVector fvAttributes;
     private double[]   fDistribution;
 
-    public NaiveBayesClass( UserDao userDao, NaiveBayesDao naiveBayesDao )
+    public NaiveBayesClass( User user, UserDao userDao, NaiveBayesDao naiveBayesDao )
     {
         int numberOfUsers = naiveBayesDao.getUserCount();
         List<String> listCourse = naiveBayesDao.listCourse();
@@ -74,21 +74,25 @@ public class NaiveBayesClass {
         this.cModel = (Classifier) new NaiveBayes();
 
         // Create the instance
-        for ( User user : listUser )
+        for ( User userList : listUser )
         {
-            for ( String course : user.getCourseNames() )
+
+            if ( !userList.getUsername().equals( user.getUsername() ) )
             {
-                Instance i = new Instance( 3 );
-                if ( user.getSex() == 1 )
-                    i.setValue( (Attribute) fvAttributes.elementAt( 0 ), "Woman" );
-                else
-                    i.setValue( (Attribute) fvAttributes.elementAt( 0 ), "Man" );
+                for ( String course : userList.getCourseNames() )
+                {
+                    Instance i = new Instance( 3 );
+                    if ( userList.getSex() == 1 )
+                        i.setValue( (Attribute) fvAttributes.elementAt( 0 ), "Woman" );
+                    else
+                        i.setValue( (Attribute) fvAttributes.elementAt( 0 ), "Man" );
 
-                i.setValue( (Attribute) fvAttributes.elementAt( 1 ), user.getPromotion() );
-                i.setValue( (Attribute) fvAttributes.elementAt( 2 ), course );
+                    i.setValue( (Attribute) fvAttributes.elementAt( 1 ), userList.getPromotion() );
+                    i.setValue( (Attribute) fvAttributes.elementAt( 2 ), course );
 
-                // add the instance
-                isSet.add( i );
+                    // add the instance
+                    isSet.add( i );
+                }
 
             }
         }
