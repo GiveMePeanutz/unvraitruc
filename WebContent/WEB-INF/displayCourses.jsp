@@ -100,6 +100,7 @@
             </c:choose>
             <c:choose>
             <c:when test="${ empty requestScope.userCourses }">
+                <br>
                 <p class="erreur">You are not registered to any courses</p>
             </c:when>
             <%-- Sinon, affichage du tableau. --%>
