@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Student list</title>
+        <title>Naive Bayes</title>
         <link type="text/css" rel="stylesheet" href="<c:url value="/inc/design.css"/>" />
     </head>
     <body>
@@ -34,6 +34,37 @@
         			</c:choose>
         		</fieldset>
         	</form>
+        	<c:if test="${! empty requestScope.selectedUser }">
+        		<h3 >Naive Bayes algorithms advise <span class="important"><c:out value="${requestScope.result }"/></span> for <c:out value="${requestScope.selectedUser }"/></h3>
+        		<br>
+        		<h3 >Likelihood Comparative</h3>
+        	</c:if>
+        	<c:if test="${! empty requestScope.mapResult }">
+        		<table>
+	        		<tr>
+		        		<th>
+		        			Courses
+		        		</th>
+		        		<th>
+		        			Affinity Probability<br> for <c:out value="${requestScope.selectedUser }"/> 
+		        		</th>
+	        		</tr>
+	        		<c:forEach items="${ requestScope.mapResult }" var="courses" varStatus="boucle">
+		        		<tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
+		        			<td>
+								<c:out value="${courses.key}"/>
+							</td>
+							<td class="action">
+								<c:out value="${courses.value}"/> %
+							</td>
+		        		</tr>
+	        		</c:forEach>
+        		</table>
+        	</c:if>
+        	
         </div>
+       
+        
+        
     </body>
 </html>
