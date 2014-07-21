@@ -9,7 +9,16 @@
     </head>
     <body>
         <c:import url="/inc/menu.jsp" />
-        
+        <c:forEach var="group" items="${sessionScope.userSession.groupNames}">
+           <c:choose>
+	           <c:when test="${group eq 'Student'}">
+	           		<c:set var="stu" value="true"/>
+	           </c:when>
+	           <c:otherwise>
+	           		<c:set var="stu" value="false"/>
+	           </c:otherwise>
+           </c:choose>
+		</c:forEach>
         <div id="normalForm">
         <h1>Courses  </h1>
         <br />
@@ -30,11 +39,15 @@
 					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 					<c:if test="${item eq 'Delete Course'}">
                     	<th class="action">Delete</th>
-                    </c:if>					
+                    </c:if>
+	                
 					<c:if test="${item eq 'Course Subscription'}">                   					
                     	<th class="action">Inscription</th>
                     </c:if>                   
 					</c:forEach>
+					<c:if test="${stu eq 'true'}">
+	                	<th class="action">Interest Probability</th>
+	                </c:if>
                 </tr>
                 <%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
                 <c:forEach items="${ requestScope.availableCourses }" var="mapCourses" varStatus="boucle">
@@ -58,6 +71,7 @@
 		                        </a>
 		                    </td>
 		                </c:if>
+		                
 		                <c:if test="${item eq 'Course Subscription'}">                   
 		                    <td>
 		                    <a  href="<c:url value="/inscriptionCourse" ><c:param name="courseName" value="${ mapCourses.value.courseName }" /></c:url>" class = "button">           
@@ -66,6 +80,15 @@
 		          			</td>
 	          			</c:if>
           			</c:forEach>
+          			<c:if test="${stu eq 'true'}">
+		                <td>
+							<c:forEach items="${ requestScope.mapResult }" var="courses" varStatus="boucle">
+								<c:if test="${courses.key == mapCourses.value.courseName }">
+									<c:out value="${courses.value}"/> %
+								</c:if>
+		        			</c:forEach>
+						</td>
+		            </c:if>
 
                 </tr>
                 </c:forEach>

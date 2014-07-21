@@ -66,7 +66,6 @@ public class NaiveBayesServlet extends HttpServlet {
         Attribute courseAttribute = null;
 
         try {
-            classifier.classifierTest();
             result = classifier.courseAdvice( user );
             likelihood = classifier.getfDistribution();
             courseAttribute = classifier.getCourse();
