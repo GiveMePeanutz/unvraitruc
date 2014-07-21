@@ -13,7 +13,6 @@ import beans.Date;
 import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
-import dao.DateDao;
 import dao.FactTableDao;
 import dao.UserDao;
 
@@ -27,12 +26,10 @@ public class InscriptionCourse extends HttpServlet {
 
     private UserDao            UserDao;
     private FactTableDao       FactTableDao;
-    private DateDao            DateDao;
 
     public void init() throws ServletException {
         this.UserDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
         this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
-        this.DateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response )
@@ -55,8 +52,7 @@ public class InscriptionCourse extends HttpServlet {
                 user.addCourseName( courseName );
                 session.setAttribute( USER_SESSION_ATT, user );
                 Date date = new Date();
-                date = DateDao.create();
-                FactTableDao.addFact( username, "Course Subscribe", date.getDateID() );
+                FactTableDao.addFact( username, "Course Subscribe" );
 
             } catch ( DAOException e ) {
                 e.printStackTrace();

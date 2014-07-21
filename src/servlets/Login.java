@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import beans.Date;
 import beans.User;
 import dao.DAOFactory;
-import dao.DateDao;
 import dao.FactTableDao;
 import dao.UserDao;
 import forms.LoginForm;
@@ -33,13 +32,11 @@ public class Login extends HttpServlet {
 
     private UserDao             userDao;
     private FactTableDao        factTableDao;
-    private DateDao             dateDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
         this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
-        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -68,10 +65,9 @@ public class Login extends HttpServlet {
             List<String> menus = userDao.listAccMenus( user.getUsername() );
             session.setAttribute( USER_SESSION_ACCESS_ATT, menus );
 
-            Date date = dateDao.create();
             User userSession = new User();
             userSession = (User) session.getAttribute( USER_SESSION_ATT );
-            factTableDao.addFact( userSession.getUsername(), "Login", date.getDateID() );
+            factTableDao.addFact( userSession.getUsername(), "Login" );
 
         } else {
             session.setAttribute( USER_SESSION_ATT, null );

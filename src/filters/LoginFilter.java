@@ -19,7 +19,6 @@ import beans.Date;
 import beans.User;
 import dao.CourseDao;
 import dao.DAOFactory;
-import dao.DateDao;
 import dao.FactTableDao;
 
 
@@ -29,12 +28,10 @@ public class LoginFilter implements Filter {
 	public static final String CONF_DAO_FACTORY  = "daofactory";
 	public static final String USER_SESSION_ATT  = "userSession";
 	
-	private DateDao          dateDao;
     private FactTableDao       factTableDao;
 	
 	public void init(FilterConfig filterConfig) throws ServletException {
         ServletContext servletContext = filterConfig.getServletContext();
-		this.dateDao = ( (DAOFactory) servletContext.getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
         this.factTableDao = ( (DAOFactory) servletContext.getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
 	}
 
@@ -59,8 +56,7 @@ public class LoginFilter implements Filter {
 		if(user==null){
 			request.getRequestDispatcher("/login").forward( req, res);
 		}else{
-			Date date = dateDao.create();
-			factTableDao.addFact(user.getUsername(), path, date.getDateID());
+			factTableDao.addFact(user.getUsername(), path);
 			chain.doFilter(req, res);
 		}
 	}

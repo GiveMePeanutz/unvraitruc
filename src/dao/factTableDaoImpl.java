@@ -11,14 +11,14 @@ public class FactTableDaoImpl implements FactTableDao {
 
 	private DAOFactory          daoFactory;
 	
-	private static final String SQL_INSERT = "INSERT INTO fact_table(username,pageName,dateID) VALUES (?,?,?)";
+	private static final String SQL_INSERT = "INSERT INTO fact_table(username,pageName,factDate) VALUES (?,?,NOW())";
 	
 	FactTableDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
     }
 	
 	@Override
-	public void addFact(String username, String pageName, int dateID)
+	public void addFact(String username, String pageName)
 			throws DAOException {
 		
 		Connection connexion = null;
@@ -27,7 +27,7 @@ public class FactTableDaoImpl implements FactTableDao {
         try {
             connexion = daoFactory.getConnection();
             preparedStatement1 = initialisationRequetePreparee( connexion,
-                    SQL_INSERT, true, username, pageName, dateID );
+                    SQL_INSERT, true, username, pageName );
             int statut1 = preparedStatement1.executeUpdate();
             if ( statut1 == 0 ) {
                 throw new DAOException(

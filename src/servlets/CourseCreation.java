@@ -17,7 +17,6 @@ import beans.Date;
 import beans.User;
 import dao.CourseDao;
 import dao.DAOFactory;
-import dao.DateDao;
 import dao.FactTableDao;
 import dao.UserDao;
 import forms.CourseCreationForm;
@@ -43,14 +42,12 @@ public class CourseCreation extends HttpServlet {
     private UserDao            userDao;
     private CourseDao          courseDao;
     private FactTableDao       factTableDao;
-    private DateDao            dateDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
         this.courseDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getCourseDao();
         this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
-        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -119,7 +116,6 @@ public class CourseCreation extends HttpServlet {
             request.setAttribute( TEACHER_REQUEST_ATT, mapTeachers );
         }
 
-        Date date = dateDao.create();
         HttpSession session = request.getSession();
         User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
@@ -128,19 +124,19 @@ public class CourseCreation extends HttpServlet {
         if ( form.getErrors().isEmpty() ) {
             if ( modify.equals( "Modify" ) )
             {
-                factTableDao.addFact( userSession.getUsername(), "Course modified", date.getDateID() );
+                factTableDao.addFact( userSession.getUsername(), "Course modified" );
             } else {
-                factTableDao.addFact( userSession.getUsername(), "Course created", date.getDateID() );
+                factTableDao.addFact( userSession.getUsername(), "Course created");
             }
             response.sendRedirect( VUE_SUCCESS );
         } else {
 
             if ( modify.equals( "Modify" ) )
             {
-                factTableDao.addFact( userSession.getUsername(), "Course modification errors", date.getDateID() );
+                factTableDao.addFact( userSession.getUsername(), "Course modification errors" );
                 request.setAttribute( VERIFY_PARAM, "true" );
             } else {
-                factTableDao.addFact( userSession.getUsername(), "Course creation errors", date.getDateID() );
+                factTableDao.addFact( userSession.getUsername(), "Course creation errors" );
             }
 
             /*

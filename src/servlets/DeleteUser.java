@@ -13,7 +13,6 @@ import beans.Date;
 import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
-import dao.DateDao;
 import dao.FactTableDao;
 import dao.UserDao;
 
@@ -27,14 +26,12 @@ public class DeleteUser extends HttpServlet {
     public static final String ACTIVITY_NAME    = "deleteUser";
 
     private UserDao            userDao;
-    private DateDao			   dateDao;
     private FactTableDao       factTableDao;
     
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
         this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
-        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
 
     }
 
@@ -49,11 +46,10 @@ public class DeleteUser extends HttpServlet {
                 /* Alors suppression du client de la BDD */
                 userDao.delete( username );
                 
-                Date date = dateDao.create();
                 HttpSession session = request.getSession();
         		User userSession = new User();
                 userSession = (User) session.getAttribute( USER_SESSION_ATT );
-                factTableDao.addFact(userSession.getUsername(), "User Deleted", date.getDateID());
+                factTableDao.addFact(userSession.getUsername(), "User Deleted" );
             } catch ( DAOException e ) {
                 e.printStackTrace();
             }

@@ -17,7 +17,6 @@ import beans.Date;
 import beans.Priv;
 import beans.User;
 import dao.DAOFactory;
-import dao.DateDao;
 import dao.FactTableDao;
 import dao.PrivDao;
 import forms.PrivilegeCreationForm;
@@ -41,14 +40,12 @@ public class PrivilegeCreation extends HttpServlet {
 
     private PrivDao            privDao;
     private FactTableDao       factTableDao;
-    private DateDao 		   dateDao;
 
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.privDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getPrivDao();
         this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
-        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
 
     }
 
@@ -106,7 +103,6 @@ public class PrivilegeCreation extends HttpServlet {
 
         request.setAttribute( MENU_REQUEST_ATT, mapMenus );
 
-        Date date = dateDao.create();
         HttpSession session = request.getSession();
 		User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
@@ -115,19 +111,19 @@ public class PrivilegeCreation extends HttpServlet {
         if ( form.getErrors().isEmpty() ) {
         	if ( modify.equals( "Modify" ) )
             {
-        		factTableDao.addFact(userSession.getUsername(), "Privilege modified", date.getDateID());
+        		factTableDao.addFact(userSession.getUsername(), "Privilege modified");
             }else{
-            	factTableDao.addFact(userSession.getUsername(), "Privilege created", date.getDateID());
+            	factTableDao.addFact(userSession.getUsername(), "Privilege created");
             }
             response.sendRedirect( VUE_SUCCESS );
         } else {
 
             if ( modify.equals( "Modify" ) )
             {
-            	factTableDao.addFact(userSession.getUsername(), "Privilege modification errors", date.getDateID());
+            	factTableDao.addFact(userSession.getUsername(), "Privilege modification errors");
                 request.setAttribute( VERIFY_PARAM, "true" );
             }else{
-            	factTableDao.addFact(userSession.getUsername(), "Privilege creation errors", date.getDateID());
+            	factTableDao.addFact(userSession.getUsername(), "Privilege creation errors");
             }
 
             /*

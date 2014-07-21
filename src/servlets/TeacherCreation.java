@@ -19,7 +19,6 @@ import beans.Date;
 import beans.Group;
 import beans.User;
 import dao.DAOFactory;
-import dao.DateDao;
 import dao.FactTableDao;
 import dao.GroupDao;
 import dao.UserDao;
@@ -46,12 +45,10 @@ public class TeacherCreation extends HttpServlet {
     private UserDao            userDao;
     private GroupDao           groupDao;
     private FactTableDao       factTableDao;
-    private DateDao			   dateDao;
 
     public void init() throws ServletException {
         this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
-        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
         this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
@@ -124,7 +121,6 @@ public class TeacherCreation extends HttpServlet {
             request.setAttribute( GROUP_REQUEST_ATT, mapPrivs );
         }
 
-        Date date = dateDao.create();
         HttpSession session = request.getSession();
 		User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
@@ -133,19 +129,19 @@ public class TeacherCreation extends HttpServlet {
         if ( form.getErrors().isEmpty() ) {
         	if ( modify.equals( "Modify" ) )
             {
-        		factTableDao.addFact(userSession.getUsername(), "Teacher modified", date.getDateID());
+        		factTableDao.addFact(userSession.getUsername(), "Teacher modified");
             }else{
-            	factTableDao.addFact(userSession.getUsername(), "Teacher created", date.getDateID());
+            	factTableDao.addFact(userSession.getUsername(), "Teacher created");
             }
             response.sendRedirect( VUE_SUCCESS );
         } else {
 
             if ( modify.equals( "Modify" ) )
             {
-            	factTableDao.addFact(userSession.getUsername(), "Teacher modification errors", date.getDateID());
+            	factTableDao.addFact(userSession.getUsername(), "Teacher modification errors");
                 request.setAttribute( VERIFY_PARAM, "true" );
             }else{
-            	factTableDao.addFact(userSession.getUsername(), "Teacher creation errors", date.getDateID());
+            	factTableDao.addFact(userSession.getUsername(), "Teacher creation errors");
             }
 
             /*

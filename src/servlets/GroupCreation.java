@@ -18,7 +18,6 @@ import beans.Group;
 import beans.Priv;
 import beans.User;
 import dao.DAOFactory;
-import dao.DateDao;
 import dao.FactTableDao;
 import dao.GroupDao;
 import dao.PrivDao;
@@ -44,12 +43,10 @@ public class GroupCreation extends HttpServlet {
     private GroupDao           groupDao;
     private PrivDao            privDao;
     private FactTableDao       factTableDao;
-    private DateDao 		   dateDao;
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.privDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getPrivDao();
-        this.dateDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDateDao();
         this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
         this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
@@ -117,7 +114,6 @@ public class GroupCreation extends HttpServlet {
             request.setAttribute( PRIV_REQUEST_ATT, mapPrivs );
         }
 
-        Date date = dateDao.create();
         HttpSession session = request.getSession();
 		User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
@@ -126,19 +122,19 @@ public class GroupCreation extends HttpServlet {
         if ( form.getErrors().isEmpty() ) {
         	if ( modify.equals( "Modify" ) )
             {
-        		factTableDao.addFact(userSession.getUsername(), "Group modified", date.getDateID());
+        		factTableDao.addFact(userSession.getUsername(), "Group modified");
             }else{
-            	factTableDao.addFact(userSession.getUsername(), "Group created", date.getDateID());
+            	factTableDao.addFact(userSession.getUsername(), "Group created");
             }
             response.sendRedirect( VUE_SUCCESS );
         } else {
 
             if ( modify.equals( "Modify" ) )
             {
-            	factTableDao.addFact(userSession.getUsername(), "Group modification errors", date.getDateID());
+            	factTableDao.addFact(userSession.getUsername(), "Group modification errors");
                 request.setAttribute( VERIFY_PARAM, "true" );
             }else{
-            	factTableDao.addFact(userSession.getUsername(), "Group creation errors", date.getDateID());
+            	factTableDao.addFact(userSession.getUsername(), "Group creation errors");
             }
 
             /*
