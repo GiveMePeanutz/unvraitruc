@@ -66,7 +66,7 @@
 <br />
 
 <label for="birthDate">Date of Birth (MM/DD/YYY)</label>
-<input type="text" id="birthDate" name="birthDate" value="<c:out value="${user.birthDate}"/>" size="30" maxlength="60" />
+<input type="text" id="birthDate" name="birthDate" value="<c:out value="${user.birthDate.toString('MM/dd/yyyy')}"/>" size="30" maxlength="60" />
 <span class="error">${form.errors['birthDate']}</span>
 <br />
 

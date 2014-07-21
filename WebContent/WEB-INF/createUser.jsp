@@ -42,7 +42,7 @@
 	                		<p class="error">No groups in database</p>
 	            			</c:when>
 	            			<c:otherwise>
-			                    <select name="groups" id = "groups" multiple="multiple" size=10>																				
+			                    <select name="groups" id = "groups" multiple="multiple" size=10 required="required">																				
 									<%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
 			                		<c:forEach items="${ requestScope.groups }" var="mapGroups" varStatus="boucle">
 			                    		<option value='<c:out value="${mapGroups.value.groupName}"/>'><c:out value="${mapGroups.value.groupName}"/></option>                    

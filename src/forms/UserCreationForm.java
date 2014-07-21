@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +37,6 @@ public final class UserCreationForm {
     private static final String EMAIL_FIELD     = "email";
     private static final String BIRTH_FIELD     = "birthDate";
     private static final String PROMOTION_FIELD = "promotion";
-    private static final String GROUP_FIELD     = "groups";
     private static final String PHOTO_FIELD     = "photoURL";
 
     private static final int    BUFFER_LENGTH   = 10240;                        // 10ko
@@ -70,7 +68,6 @@ public final class UserCreationForm {
         String email = getFieldValue( request, EMAIL_FIELD );
         DateTime birthDate = getDateValue( request, BIRTH_FIELD );
         String promotion = getFieldValue( request, PROMOTION_FIELD );
-        ArrayList<String> groups = getSelectedValues( request, GROUP_FIELD );
 
         User user = new User();
         handleUsername( username, user );
@@ -84,7 +81,6 @@ public final class UserCreationForm {
         handleBirthDate( birthDate, user );
 
         handlePhoto( user, request, path );
-        handleGroups( groups, user );
         handlePromotion( promotion, user );
         DateTime today = new DateTime();
         user.setRegDate( today );
@@ -116,7 +112,6 @@ public final class UserCreationForm {
         String email = getFieldValue( request, EMAIL_FIELD );
         DateTime birthDate = getDateValue( request, BIRTH_FIELD );
         String promotion = getFieldValue( request, PROMOTION_FIELD );
-        ArrayList<String> groups = getSelectedValues( request, GROUP_FIELD );
 
         User user = new User();
         handleUsername( username, user );
@@ -129,7 +124,6 @@ public final class UserCreationForm {
         handleEmail( email, user );
         handleBirthDate( birthDate, user );
         handlePhoto( user, request, path );
-        handleGroups( groups, user );
         handlePromotion( promotion, user );
 
         DateTime today = new DateTime();
@@ -149,16 +143,6 @@ public final class UserCreationForm {
         }
 
         return user;
-    }
-
-    private void handleGroups( ArrayList<String> groups, User user ) {
-        try {
-            groupValidation( groups );
-        } catch ( FormValidationException e ) {
-            setError( GROUP_FIELD, e.getMessage() );
-        }
-        user.setGroupNames( groups );
-
     }
 
     private void handleUsername( String username, User user ) {
@@ -269,13 +253,6 @@ public final class UserCreationForm {
         user.setPhotoURL( photoURL );
     }
 
-    private void groupValidation( ArrayList<String> groups ) throws FormValidationException {
-        if ( groups == null )
-        {
-            throw new FormValidationException( "Please choose a group." );
-        }
-    }
-
     private void birthDateValidation( DateTime birthDate ) throws FormValidationException {
         if ( birthDate == null )
         {
@@ -364,16 +341,19 @@ public final class UserCreationForm {
     }
 
     private void promotionValidation( String promotion, User user ) throws FormValidationException {
-        List<String> listeGroup = user.getGroupNames();
         Boolean bool = false;
-        for ( String group : listeGroup )
+        if ( user.getGroupNames() != null )
         {
-            if ( group.equals( "Student" ) )
+            List<String> listGroup = user.getGroupNames();
+
+            for ( String group : listGroup )
             {
-                bool = true;
+                if ( group.equals( "Student" ) )
+                {
+                    bool = true;
+                }
             }
         }
-
         if ( bool == true )
         {
             if ( promotion != null ) {
@@ -506,30 +486,6 @@ public final class UserCreationForm {
         }
     }
 
-    private ArrayList<String> getSelectedValues( HttpServletRequest request, String fieldName ) {
-
-        ArrayList<String> groups = new ArrayList<String>();
-
-        String[] values = request.getParameterValues( fieldName );
-        if ( values == null || values.length == 0 )
-        {
-            return null;
-        }
-
-        for ( int i = 0; i < values.length; i++ )
-        {
-            groups.add( values[i] );
-        }
-        return groups;
-    }
-
-    /*
-     * Méthode utilitaire qui a pour unique but d'analyser l'en-tête
-     * "content-disposition", et de vérifier si le paramètre "filename" y est
-     * présent. Si oui, alors le champ traité est de type File et la méthode
-     * retourne son nom, sinon il s'agit d'un champ de formulaire classique et
-     * la méthode retourne null.
-     */
     private static String getFileName( Part part ) {
         /* Boucle sur chacun des paramètres de l'en-tête "content-disposition". */
         for ( String contentDisposition : part.getHeader( "content-disposition" ).split( ";" ) ) {
@@ -584,13 +540,4 @@ public final class UserCreationForm {
         }
     }
 
-    private static String getParameterValue( HttpServletRequest request,
-            String nomChamp ) {
-        String value = request.getParameter( nomChamp );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } else {
-            return value;
-        }
-    }
 }

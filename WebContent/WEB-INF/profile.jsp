@@ -30,7 +30,7 @@
 			</c:otherwise>
 			</c:choose>
 			
-            <dl><dt class="important">Register Date :</dt> <dd><c:out value="${ user.regDate }"/></dd></dl>           
+            <dl><dt class="important">Register Date :</dt> <dd><c:out value="${ user.regDate.toString('MM/dd/yyyy') }"/></dd></dl>           
                      
             <dl><dt class="important">FirstName :</dt> <dd><c:out value="${ user.firstName }"/></dd></dl>
             <dl><dt class="important">Last Name :</dt> <dd><c:out value="${ user.lastName }"/></dd></dl>
@@ -41,7 +41,7 @@
             <dl><dt class="important">Sex :</dt> <dd><c:out value="Female"/></dd></dl>
             </c:if>
             
-            <dl><dt class="important">Birth Date :</dt> <dd><c:out value="${ user.birthDate }"/></dd></dl>
+            <dl><dt class="important">Birth Date :</dt> <dd><c:out value="${ user.birthDate.toString('MM/dd/yyyy') }"/></dd></dl>
             <dl><dt class="important">Address :</dt> <dd><c:out value="${ user.address }"/></dd></dl>
             <dl><dt class="important">Phone Number :</dt><dd><c:out value="${ user.phone }"/></dd></dl>
             <dl><dt class="important">Email :</dt> <dd><c:out value="${ user.email }"/></dd></dl>
