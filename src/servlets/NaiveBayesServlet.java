@@ -12,10 +12,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import weka.core.Attribute;
 import beans.User;
 import dao.DAOFactory;
+import dao.FactTableDao;
 import dao.NaiveBayesDao;
 import dao.UserDao;
 import dataMining.NaiveBayesClass;
@@ -29,6 +31,7 @@ public class NaiveBayesServlet extends HttpServlet {
     public static final String RESULT              = "result";
     public static final String USER                = "selectedUser";
     public static final String MAP_RESULT          = "mapResult";
+    public static final String USER_SESSION_ATT    = "userSession";
 
     public static final String STUDENT_FIELD       = "students";
 
@@ -36,10 +39,12 @@ public class NaiveBayesServlet extends HttpServlet {
 
     private UserDao            userDao;
     private NaiveBayesDao      naiveBayesDao;
+    private FactTableDao       factTableDao;
 
     public void init() throws ServletException {
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
         this.naiveBayesDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getNaiveBayesDao();
+        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
 
     }
 
@@ -70,6 +75,11 @@ public class NaiveBayesServlet extends HttpServlet {
             likelihood = classifier.getfDistribution();
             courseAttribute = classifier.getCourse();
 
+            HttpSession session = request.getSession();
+            User userSession = new User();
+            userSession = (User) session.getAttribute( USER_SESSION_ATT );
+            factTableDao.addFact( userSession.getUsername(), "Naive Bayes Algorithm" );
+
         } catch ( Exception e ) {
             e.printStackTrace();
         }
@@ -83,6 +93,7 @@ public class NaiveBayesServlet extends HttpServlet {
             }
             request.setAttribute( MAP_RESULT, mapCourseLikelihood );
         }
+
         request.setAttribute( USER, studentName );
         request.setAttribute( RESULT, result );
 
