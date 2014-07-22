@@ -18,6 +18,7 @@
 					
 	                <c:if test="${empty sessionScope.userSession}">
 	                	<p>Please connect yourself to access the application.</p>
+	                	
 		                <label for="name">Username<span class="required">*</span></label>
 		                <input type="text" id="username" name="username" value="<c:out value="${User.username}"/>" size="20" maxlength="60" />
 		                <span class="error">${form.errors['username']}</span>
