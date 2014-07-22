@@ -49,7 +49,7 @@
 						</c:forEach>
 					</td>
 					<td class="action">
-                        <a href="<c:url value="/profile"><c:param name="username" value="${ mapUsers.value.username }" /></c:url>">
+                        <a href="<c:url value="/profile"><c:param name="username" value="${ mapUsers.key }" /></c:url>">
                             <img src="<c:url value="/inc/info.gif"/>" alt="info" />
                         </a>
                     </td>
@@ -57,7 +57,7 @@
 					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 					<c:if test="${item eq 'Delete Teacher'}">
                     <td class="action">
-                        <a href="<c:url value="/deleteUser"><c:param name="username" value="${ mapUsers.value.username }" /></c:url>">
+                        <a href="<c:url value="/deleteUser"><c:param name="username" value="${ mapUsers.key }" /></c:url>">
                             <img src="<c:url value="/inc/supprimer.png"/>" alt="Delete" />
                         </a>
                     </td>

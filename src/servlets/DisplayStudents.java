@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import utilities.Encryption;
 import beans.User;
 import dao.DAOFactory;
 import dao.UserDao;
@@ -31,11 +32,12 @@ public class DisplayStudents extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+        Encryption enc = new Encryption();
 
         List<User> listeUsers = userDao.listGroup( "student" );
         LinkedHashMap<String, User> mapUsers = new LinkedHashMap<String, User>();
         for ( User user : listeUsers ) {
-            mapUsers.put( user.getUsername(), user );
+            mapUsers.put( enc.encrypt( user.getUsername() ), user );
         }
 
         request.setAttribute( USER_REQUEST_ATT, mapUsers );
@@ -45,11 +47,11 @@ public class DisplayStudents extends HttpServlet {
     }
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-
+        Encryption enc = new Encryption();
         List<User> listeUsers = userDao.listGroup( "student" );
         Map<String, User> mapUsers = new HashMap<String, User>();
         for ( User user : listeUsers ) {
-            mapUsers.put( user.getUsername(), user );
+            mapUsers.put( enc.encrypt( user.getUsername() ), user );
         }
 
         request.setAttribute( USER_REQUEST_ATT, mapUsers );
@@ -57,5 +59,4 @@ public class DisplayStudents extends HttpServlet {
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
 
     }
-
 }

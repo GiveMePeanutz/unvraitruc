@@ -55,7 +55,7 @@
                     <c:forEach var="item" items="${sessionScope.userSessionAccess}">
 					<c:if test="${item eq 'Delete User'}">
                     <td class="action">
-                        <a href="<c:url value="/deleteUser"><c:param name="username" value="${ mapUsers.value.username }" /></c:url>">
+                        <a href="<c:url value="/deleteUser"><c:param name="username" value="${ mapUsers.key }" /></c:url>">
                             <img src="<c:url value="/inc/supprimer.png"/>" alt="Delete" />
                         </a>
                     </td>

@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import utilities.Encryption;
 import beans.Course;
-import beans.Date;
 import beans.User;
 import dao.CourseDao;
 import dao.DAOFactory;
@@ -51,6 +51,8 @@ public class CourseCreation extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+
+        Encryption enc = new Encryption();
 
         String modifiable = getParameterValue( request, VERIFY_PARAM );
         if ( modifiable != null && modifiable.equals( "true" ) )
@@ -126,7 +128,7 @@ public class CourseCreation extends HttpServlet {
             {
                 factTableDao.addFact( userSession.getUsername(), "Course modified" );
             } else {
-                factTableDao.addFact( userSession.getUsername(), "Course created");
+                factTableDao.addFact( userSession.getUsername(), "Course created" );
             }
             response.sendRedirect( VUE_SUCCESS );
         } else {
