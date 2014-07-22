@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import utilities.Encryption;
 import beans.User;
 import dao.DAOFactory;
 import dao.UserDao;
@@ -35,7 +36,9 @@ public class Profile extends HttpServlet {
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String username = getParameterValue( request, USERNAME_PARAM );
+
+        Encryption enc = new Encryption();
+        String username = enc.decrypt( getParameterValue( request, USERNAME_PARAM ) );
         User user = userDao.find( username );
         request.setAttribute( USER_REQUEST_ATT, user );
 

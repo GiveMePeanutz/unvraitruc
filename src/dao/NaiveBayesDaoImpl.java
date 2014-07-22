@@ -43,7 +43,6 @@ public class NaiveBayesDaoImpl implements NaiveBayesDao {
             fermeturesSilencieuses( preparedStatement,
                     connection );
         }
-        System.out.println( "result" );
         return result;
     }
 

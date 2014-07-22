@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import utilities.Encryption;
 import beans.User;
 import dao.DAOFactory;
 import dao.FactTableDao;
@@ -27,11 +28,13 @@ public class Logout extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+        Encryption enc = new Encryption();
+
         /* Récupération et destruction de la session en cours */
         HttpSession session = request.getSession();
         User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
-        factTableDao.addFact( userSession.getUsername(), "Logout" );
+        factTableDao.addFact( enc.decrypt( userSession.getUsername() ), "Logout" );
 
         session.invalidate();
 
