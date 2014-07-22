@@ -48,7 +48,7 @@ public class LoginFilter implements Filter {
         if ( user == null ) {
             request.getRequestDispatcher( "/login" ).forward( req, res );
         } else {
-            factTableDao.addFact( enc.decrypt( user.getUsername() ), path );
+            factTableDao.addFact( user.getUsername(), path );
             chain.doFilter( req, res );
         }
     }

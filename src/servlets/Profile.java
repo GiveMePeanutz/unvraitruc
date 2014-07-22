@@ -22,6 +22,7 @@ public class Profile extends HttpServlet {
     public static final String CONF_DAO_FACTORY        = "daofactory";
     public static final String USERNAME_PARAM          = "username";
     public static final String USER_SESSION_ACCESS_ATT = "userSessionAccess";
+    public static final String USER_SESSION_ATT        = "userSession";
 
     public static final String USER_REQUEST_ATT        = "user";
     public static final String USER_MODIFIABLE_ATT     = "userModifiable";
@@ -38,7 +39,17 @@ public class Profile extends HttpServlet {
         HttpSession session = request.getSession();
 
         Encryption enc = new Encryption();
-        String username = enc.decrypt( getParameterValue( request, USERNAME_PARAM ) );
+        String username = "";
+        if ( getParameterValue( request, "personnal" ).equals( "true" ) )
+        {
+            User userSession = new User();
+            userSession = (User) session.getAttribute( USER_SESSION_ATT );
+            username = userSession.getUsername();
+        }
+        else {
+            username = enc.decrypt( getParameterValue( request, USERNAME_PARAM ) );
+
+        }
         User user = userDao.find( username );
         request.setAttribute( USER_REQUEST_ATT, user );
 

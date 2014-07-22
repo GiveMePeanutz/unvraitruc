@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import utilities.Encryption;
 import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
@@ -35,15 +34,13 @@ public class InscriptionCourse extends HttpServlet {
     public void doGet( HttpServletRequest request, HttpServletResponse response )
             throws ServletException, IOException {
 
-        Encryption enc = new Encryption();
-
         String courseName = getParameterValue( request, COURSENAME_PARAM );
 
         HttpSession session = request.getSession();
         User user = new User();
         user = (User) session.getAttribute( USER_SESSION_ATT );
 
-        String username = enc.decrypt( user.getUsername() );
+        String username = user.getUsername();
 
         /* Si l'id du client et la Map des clients ne sont pas vides */
         if ( courseName != null && username != null ) {

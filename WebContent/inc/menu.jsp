@@ -186,7 +186,7 @@
 		
 		<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 		<c:if test="${item eq 'Profile'}">
-		<li><a href="<c:url value="/profile"><c:param name="username" value="${sessionScope.userSession.username}" /></c:url>">Profile</a></li>	  
+		<li><a href="<c:url value="/profile"><c:param name="personnal" value="true" /></c:url>">Profile</a></li>	  
 		</c:if>
 		</c:forEach>
 		

@@ -34,7 +34,7 @@ public class Logout extends HttpServlet {
         HttpSession session = request.getSession();
         User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
-        factTableDao.addFact( enc.decrypt( userSession.getUsername() ), "Logout" );
+        factTableDao.addFact( userSession.getUsername() , "Logout" );
 
         session.invalidate();
 

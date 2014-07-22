@@ -173,6 +173,42 @@
         <url-pattern>/displayTeachers</url-pattern>
     </filter-mapping>
     
+    <filter>
+        <filter-name>DeleteStudentFilter</filter-name>
+        <filter-class>filters.DeleteStudentFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DeleteStudentFilter</filter-name>
+        <url-pattern>/deleteStudent</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>DeleteUserFilter</filter-name>
+        <filter-class>filters.DeleteUserFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DeleteUserFilter</filter-name>
+        <url-pattern>/deleteUser</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>DeleteCourseFilter</filter-name>
+        <filter-class>filters.DeleteCourseFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DeleteCourseFilter</filter-name>
+        <url-pattern>/deleteCourse</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>DeleteTeacherFilter</filter-name>
+        <filter-class>filters.DeleteTeacherFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DeleteTeacherFilter</filter-name>
+        <url-pattern>/deleteTeacher</url-pattern>
+    </filter-mapping>
+    
     
     
 	<function>
