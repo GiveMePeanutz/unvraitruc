@@ -89,7 +89,10 @@ public class DataWarehouse extends HttpServlet {
         int activity = getIntValue( request, ACTIVITY_FIELD );
 
         DataWarehouseLine dWLine = new DataWarehouseLine( sex, group, year, month, week, day, dayOfWeek, hour, activity );
+        int countResult = dataWarehouseDao.count( sex, group, year, month, week, day, dayOfWeek, hour, activity );
+        dWLine.setCount( countResult );
 
+        // inutile peut etre
         request.setAttribute( COUNT_ATT, dWLine );
 
         HttpSession session = request.getSession();
