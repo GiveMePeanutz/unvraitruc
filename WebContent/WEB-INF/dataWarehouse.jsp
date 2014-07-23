@@ -149,5 +149,8 @@
 	            </table>
 	        </form>
         </div>
+        <a href="<c:url value="/updateDataWarehouse"></c:url>">
+        <input type="button" value="Update" />
+        </a>
     </body>
 </html>
