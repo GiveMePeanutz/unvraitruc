@@ -126,4 +126,8 @@ public class DAOFactory {
         return new NaiveBayesDaoImpl( this );
     }
 
+    public DataWarehouseDao getDataWarehouseDao() {
+        return new DataWarehouseDaoImpl( this );
+    }
+
 }

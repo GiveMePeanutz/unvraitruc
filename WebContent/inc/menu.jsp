@@ -146,8 +146,8 @@
 		</c:forEach>
 		
 	  	<c:forEach var="item" items="${sessionScope.userSessionAccess}">
-		<c:if test="${item eq 'Warehouse Maintenance'}">
-		<li><a href="<c:url value="/warehouseMaintenance"/>">Warehouse Maintenance</a></li>
+		<c:if test="${item eq 'Data Warehouse'}">
+		<li><a href="<c:url value="/dataWarehouse"/>">Data Warehouse</a></li>
 		</c:if>
 		</c:forEach>
 	  	

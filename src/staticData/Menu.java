@@ -36,7 +36,7 @@ public final class Menu {
 
                                       },
                                       {
-                                      { "Warehouse Maintenance" },
+                                      { "Data Warehouse" },
                                       },
                                       {
                                       { "Data Analysis" },
