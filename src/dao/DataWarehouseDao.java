@@ -3,15 +3,11 @@ package dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.joda.time.DateTime;
+
+
 public interface DataWarehouseDao {
 	
-	HashMap<String, ArrayList<String>> getUserFieldValues() throws DAOException;
+	void updateDW () throws DAOException;
 	
-	HashMap<String, ArrayList<String>> getTimeFieldValues() throws DAOException;
-
-	HashMap<String, ArrayList<String>> getActivityFieldValues() throws DAOException;
-	
-	void updateLastDWModTime() throws DAOException;
-	
-
 }
