@@ -78,9 +78,9 @@
 	                <tr>
 	                    <td>
 	                    	<select name="sexValue" id = "sexValue">
-							    <option value="<c:out value=0/>">All</option> 
-							    <option value="<c:out value=1/>">Male</option> 
-							    <option value="<c:out value=2/>">Female</option> 
+							    <option value="<c:out value="0"/>">All</option> 
+							    <option value="<c:out value="1"/>">Male</option> 
+							    <option value="<c:out value="2"/>">Female</option> 
 							</select>
 						</td>
 						<td>
@@ -134,9 +134,9 @@
 						</td>
 						<td>
 		                    <select name="activity" id = "activity">
-		                    	<option value='<c:out value=0/>'>All</option> 
-							    <option value='<c:out value=1/>'>Page Visited</option> 
-							    <option value='<c:out value=2/>'>Action Done</option> 
+		                    	<option value='<c:out value="0"/>'>All</option> 
+							    <option value='<c:out value="1"/>'>Page Visited</option> 
+							    <option value='<c:out value="2"/>'>Action Done</option> 
 							</select>
 						</td>
 						<td>
