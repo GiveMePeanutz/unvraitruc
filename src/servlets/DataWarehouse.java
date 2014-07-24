@@ -1,7 +1,7 @@
 package servlets;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -64,9 +64,9 @@ public class DataWarehouse extends HttpServlet {
     	/*
         List<String> groups = dataWarehouseDao.listGroup();
         List<String> years = dataWarehouseDao.listYear();
-        List<String> months = dataWarehouseDao.listMonth();
+        List<String> months = dataWarehouseDao.getMonths();
         List<String> weeks = dataWarehouseDao.listWeek();
-        List<String> days = dataWarehouseDao.listDay();
+        List<String> days = dataWarehouseDao.getDay();
         List<String> daysOfWeek = dataWarehouseDao.listDayOfWeek();
         List<String> hours = dataWarehouseDao.listHour();
 		
@@ -106,11 +106,11 @@ public class DataWarehouse extends HttpServlet {
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
         factTableDao.addFact( userSession.getUsername(), "Count something" );
 
-        LinkedList<DataWarehouseLine> results = (LinkedList<DataWarehouseLine>) session
+        ArrayList<DataWarehouseLine> results = (ArrayList<DataWarehouseLine>) session
                 .getAttribute( SESSION_RESULTS );
 
         if ( results == null ) {
-            results = new LinkedList<DataWarehouseLine>();
+            results = new ArrayList<DataWarehouseLine>();
         }
         results.add( dWLine );
 
