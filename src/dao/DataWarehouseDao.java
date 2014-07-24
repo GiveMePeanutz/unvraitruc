@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import beans.DataWarehouseLine;
+
 public interface DataWarehouseDao {
 
     void updateDW() throws DAOException;
@@ -24,5 +26,7 @@ public interface DataWarehouseDao {
     public List<String> listYear() throws DAOException;
 
     public List<String> listGroup() throws DAOException;
+
+    public String count( DataWarehouseLine dWL ) throws DAOException;
 
 }

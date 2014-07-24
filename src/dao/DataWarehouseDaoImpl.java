@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import beans.DataWarehouseLine;
+
 public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     private DAOFactory          daoFactory;
@@ -42,6 +44,8 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     private static String       INSERT_UPDATE_DATETIME = "INSERT INTO updateTime (updateTime)  VALUES (NOW())";
     private static String       INSERT_DWFACT          = "INSERT INTO dwFactTable (userID, activityId, timeId, count) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE count = VALUES(count)";
+
+    private static String       FIND_RESULT            = "SELECT count FROM dwFactTable dwft, userDim ud, groupDim gd, timeDim td, activityDim ad WHERE dwft.userId=ud.userId AND dwft.timeId=td.timeID AND dwft.activityId=ad.activityId AND ud.groupID=gd.groupId AND ud.sex= ? AND gd.groupName = ? AND ad.isAction = ? AND td.hour = ? AND td.day = ? AND td.dayName= ? AND td.week = ? AND td.monthName = ? AND td.year = ?";
 
     DataWarehouseDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
@@ -358,5 +362,34 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         }
 
         return groups;
+    }
+
+    @Override
+    public String count( DataWarehouseLine dWL ) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        ResultSet resultSet = null;
+
+        String result = "";
+
+        try {
+            connection = daoFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connection, FIND_RESULT, false, dWL.getSex(),
+                    dWL.getGroup(), dWL.getYear(), dWL.getMonth(), dWL.getWeek(), dWL.getDay(), dWL.getDayOfWeek(),
+                    dWL.getHour(), dWL.getActivity() );
+            resultSet = preparedStatement.executeQuery();
+
+            while ( resultSet.next() ) {
+
+                result = resultSet.getString( "count" );
+            }
+
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connection );
+        }
+        return result;
     }
 }

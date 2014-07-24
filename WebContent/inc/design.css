@@ -98,6 +98,8 @@ form input {
 }
 
 
+
+
 form .required {
     color: #c00;
 }
@@ -151,6 +153,11 @@ ul.prof
 /* Buttons --------------------------------------------------------------------------------------- */
 .button {
 
+	text-decoration : none;
+}
+
+.update {
+margin-bottom : 20px;
 	text-decoration : none;
 }
 
