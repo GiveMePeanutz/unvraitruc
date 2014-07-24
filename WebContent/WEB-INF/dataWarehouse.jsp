@@ -13,7 +13,14 @@
         <div id="normalForm">
 	        <h1>Data Warehouse</h1>
 	        <br />
+<<<<<<< HEAD
 
+=======
+	        <a href="<c:url value="/updateDataWarehouse" />" class="update">
+	        	<input type="button" value="Update"/>
+	        </a>
+	        <form method="post" action="<c:url value="/dataWarehouse"/>" enctype="multipart/form-data">
+>>>>>>> origin/master
 	        <div class="update">
 	        <a href="<c:url value="/updateDataWarehouse"/>" class="update">
 	        	<input type="button" value="Update the Database"/>

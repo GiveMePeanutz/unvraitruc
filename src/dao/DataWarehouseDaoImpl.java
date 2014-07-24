@@ -49,6 +49,11 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     private static String       FIND_RESULT            = "SELECT count FROM dwFactTable dwft, userDim ud, groupDim gd, timeDim td, activityDim ad WHERE dwft.userId=ud.userId AND dwft.timeId=td.timeID AND dwft.activityId=ad.activityId AND ud.groupID=gd.groupId AND ud.sex= ? AND gd.groupName = ? AND ad.isAction = ? AND td.hour = ? AND td.day = ? AND td.dayName= ? AND td.week = ? AND td.monthName = ? AND td.year = ?";
 
+    
+    
+    private static String 		WILDCARD_TEST 		   = "SELECT sex FROM web_app_db.user WHERE sex like ?";
+    
+    
     DataWarehouseDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
     }
@@ -60,16 +65,23 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         PreparedStatement preparedStatement1 = null;
         PreparedStatement preparedStatement2 = null;
         PreparedStatement preparedStatement3 = null;
-
+        ResultSet resultSet = null;
+        
         try {
-            connexion = daoFactory.getConnection();
-            // Dimension updates
+            
+        	connexion = daoFactory.getConnection();
+            
+        	// Dimension updates
+        	/*
             updateTimeDim();
+            */
+            
             updateUserGroupDim();
-
+            /*
             // DW Fact table update
             updateDWFactTable();
-
+            */
+        	
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } finally {
@@ -78,6 +90,14 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             fermeturesSilencieuses( preparedStatement3, connexion );
         }
 
+    }
+    
+    public int blah(int i){
+    	if(i<0){
+    		return 0;
+    	}else{
+    		return 1;
+    	}
     }
 
     public void updateDWFactTable() throws DAOException {
