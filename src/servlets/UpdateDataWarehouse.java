@@ -44,17 +44,4 @@ public class UpdateDataWarehouse extends HttpServlet {
         response.sendRedirect( request.getContextPath() + VIEW );
     }
 
-    /*
-     * Méthode utilitaire qui retourne null si un paramètre est vide, et son
-     * contenu sinon.
-     */
-    private static String getParameterValue( HttpServletRequest request,
-            String nomChamp ) {
-        String value = request.getParameter( nomChamp );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } else {
-            return value;
-        }
-    }
 }

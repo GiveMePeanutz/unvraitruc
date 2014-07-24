@@ -117,8 +117,8 @@
 						<td>
 		                    <select name="activity" id = "activity">
 		                    	<option value='<c:out value="-1"/>'>All</option> 
-							    <option value='<c:out value="0"/>'>Page Visited</option> 
-							    <option value='<c:out value="1"/>'>Action Done</option> 
+							    <option value='<c:out value="0"/>'>Visited Page</option> 
+							    <option value='<c:out value="1"/>'>Performed Action</option> 
 							</select>
 						</td>
 						<td>
@@ -213,8 +213,8 @@
 						<td>
 		                    <select name="activity" id = "activity">
 		                    	<option value='<c:out value="-1"/>'>All</option> 
-							    <option value='<c:out value="0"/>'>Page Visited</option> 
-							    <option value='<c:out value="1"/>'>Action Done</option> 
+							    <option value='<c:out value="0"/>'>Visited Page </option> 
+							    <option value='<c:out value="1"/>'>Performed Action</option> 
 							</select>
 						</td>
 						<td>
@@ -239,8 +239,8 @@
 	                Please choose a type of action :
                     <select name="action" id = "action">																				
                     		<option value='-1'>All</option>
-                    		<option value='0'>Page Visited</option>                     
-                     		<option value='1'>Action Done</option>                     
+                    		<option value='0'>Visited Page </option>                     
+                     		<option value='1'>Performed Action</option>                     
                 	</select>
                 	<br>
 	      			<input type="submit" name = "Submit" value="Draw"  /> 			
