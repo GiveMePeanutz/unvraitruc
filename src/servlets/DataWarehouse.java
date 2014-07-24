@@ -125,6 +125,7 @@ public class DataWarehouse extends HttpServlet {
 
     private static int getIntValue( HttpServletRequest request, String fieldName ) {
         String value = request.getParameter( fieldName );
+        System.out.println( value );
         int valueInt = Integer.parseInt( value );
         if ( valueInt == 0 ) {
             return 0;

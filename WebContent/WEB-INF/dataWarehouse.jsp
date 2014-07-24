@@ -18,7 +18,7 @@
 	        	<input type="button" value="Update the Database"/>
 	        </a>
 	        </div>
-	        <form method="post" action="<c:url value="/dataWarehouse"/>" enctype="multipart/form-data">
+	        <form method="post" action="<c:url value="/dataWarehouse"/>" >
 	        
 	            <table >
 	                <tr>
