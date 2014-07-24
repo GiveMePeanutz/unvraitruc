@@ -13,30 +13,23 @@
         <div id="normalForm">
 	        <h1>Data Warehouse</h1>
 	        <br />
-<<<<<<< HEAD
 
-=======
-	        <a href="<c:url value="/updateDataWarehouse" />" class="update">
-	        	<input type="button" value="Update"/>
-	        </a>
-	        <form method="post" action="<c:url value="/dataWarehouse"/>" enctype="multipart/form-data">
->>>>>>> origin/master
 	        <div class="update">
-	        <a href="<c:url value="/updateDataWarehouse"/>" class="update">
+	        <a href="<c:url value="/updateDataWarehouse"/>" class="button">
 	        	<input type="button" value="Update the Database"/>
 	        </a>
 	        </div>
+	        <br />
 	        <form method="post" action="<c:url value="/dataWarehouse"/>" >
 	        
 	            <table >
+	            <CAPTION>Calculate by Year>Month>Day>Hour </CAPTION>
 	                <tr>
 	                	<th>Sex</th>
 	                    <th>Group</th>
 	                    <th>Year</th>
 	                    <th>Month</th>
-	                    <th>Week</th>
 	                    <th>Day</th>
-	                    <th>Day of Week</th>
 	                    <th>Hour</th>
 	                    <th>Activity</th>
 	                    <th class="action">Count</th>
@@ -58,13 +51,7 @@
 		                    		<c:out value="${listResult.getMonth()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${listResult.getWeek()}"/>
-								</td>
-								<td>
 		                    		<c:out value="${listResult.getDay()}"/>
-								</td>
-								<td>
-		                    		<c:out value="${listResult.getDayOfWeek()}"/>
 								</td>
 								<td>
 		                    		<c:out value="${listResult.getHour()}"/>
@@ -109,14 +96,6 @@
 							</select>
 						</td>
 						<td>
-		                    <select name="week" id = "week">
-		                    	<option value='<c:out value="0"/>'>All</option> 
-							<c:forEach var="week" begin="1" end="52">
-							    <option value='<c:out value="${week}"/>'><c:out value="${week}"/></option> 
-							</c:forEach>
-							</select>
-						</td>
-						<td>
 		                    <select name="day" id = "day">
 		                    	<option value='<c:out value="0"/>'>All</option> 
 							<c:forEach var="day" begin="1" end="31">
@@ -125,17 +104,106 @@
 							</select>
 						</td>
 						<td>
-		                    <select name="dayOfWeek" id = "dayOfWeek">
-		                    <c:forEach items="${ requestScope.daysOfWeek }" var="dayOfWeek" varStatus="boucle">
-							    <option value='<c:out value="${dayOfWeek}"/>'><c:out value="${dayOfWeek}"/></option> 
-							</c:forEach>
-							</select>
-						</td>
-						<td>
 		                    <select name="hour" id = "hour">
 		                    	<option value='<c:out value="-1"/>'>All</option> 
 							<c:forEach var="hour" begin="0" end="23">
 							    <option value='<c:out value="${hour}"/>'><c:out value="${hour}"/></option> 
+							</c:forEach>
+							</select>
+						</td>
+						<td>
+		                    <select name="activity" id = "activity">
+		                    	<option value='<c:out value="-1"/>'>All</option> 
+							    <option value='<c:out value="0"/>'>Page Visited</option> 
+							    <option value='<c:out value="1"/>'>Action Done</option> 
+							</select>
+						</td>
+						<td>
+							<input type="submit" name="Calculate" value="Calculate"  >
+						</td>
+						
+	                </tr>
+	            </table>
+	        </form>
+	        <br>
+	        <br>
+	        <form method="post" action="<c:url value="/dataWarehouse"/>" >
+	        
+	            <table >
+	            <CAPTION>Calculate by Year>Week>Day of Week </CAPTION>
+	            
+	                <tr>
+	                	<th>Sex</th>
+	                    <th>Group</th>
+	                    <th>Year</th>
+	                    <th>Week</th>
+	                    <th>Day of Week</th>
+	                    <th>Activity</th>
+	                    <th class="action">Count</th>
+	                </tr>
+	                <c:if test="${ ! empty sessionScope.results }">
+	                	<c:forEach items="${ sessionScope.results }" var="listResult" varStatus="boucle">
+	                		<tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
+		                		
+								<td>
+		                    		<c:out value="${listResult.getSex()}"/>
+								</td>
+								<td>
+		                    		<c:out value="${listResult.getGroup()}"/>
+								</td>
+								<td>
+		                    		<c:out value="${listResult.getYear()}"/>
+								</td>
+								<td>
+		                    		<c:out value="${listResult.getWeek()}"/>
+								</td>
+								<td>
+		                    		<c:out value="${listResult.getDayOfWeek()}"/>
+								</td>
+								<td>
+		                    		<c:out value="${listResult.getActivity()}"/>
+								</td>
+								<td>
+		                    		<c:out value="${listResult.getCount()}"/>
+								</td>
+		                    </tr>
+	                	</c:forEach>
+	                </c:if>
+	                
+	                <tr>
+	                    <td>
+	                    	<select name="sexValue" id = "sexValue">
+							    <option value="<c:out value="-1"/>">All</option> 
+							    <option value="<c:out value="0"/>">Male</option> 
+							    <option value="<c:out value="1"/>">Female</option> 
+							</select>
+						</td>
+						<td>
+		                    <select name="group" id = "group">
+		                    <c:forEach items="${ requestScope.groups }" var="group" varStatus="boucle">
+							    <option value='<c:out value="${group}"/>'><c:out value="${group}"/></option> 
+							</c:forEach>
+							</select>
+						</td>
+						<td>
+		                    <select name="year" id = "year">
+		                    <c:forEach items="${ requestScope.years }" var="year" varStatus="boucle">
+							    <option value='<c:out value="${year}"/>'><c:out value="${year}"/></option> 
+							</c:forEach>
+							</select>
+						</td>
+						<td>
+		                    <select name="week" id = "week">
+		                    	<option value='<c:out value="0"/>'>All</option> 
+							<c:forEach var="week" begin="1" end="52">
+							    <option value='<c:out value="${week}"/>'><c:out value="${week}"/></option> 
+							</c:forEach>
+							</select>
+						</td>
+						<td>
+		                    <select name="dayOfWeek" id = "dayOfWeek">
+		                    <c:forEach items="${ requestScope.daysOfWeek }" var="dayOfWeek" varStatus="boucle">
+							    <option value='<c:out value="${dayOfWeek}"/>'><c:out value="${dayOfWeek}"/></option> 
 							</c:forEach>
 							</select>
 						</td>
