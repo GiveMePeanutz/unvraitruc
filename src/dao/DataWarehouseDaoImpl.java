@@ -51,7 +51,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     
     
-    private static String 		WILDCARD_TEST 		   = "SELECT groupName FROM groupDim WHERE groupId = ?";
+    private static String 		WILDCARD_TEST 		   = "SELECT sex FROM web_app_db.user WHERE sex like ?";
     
     
     DataWarehouseDaoImpl( DAOFactory daoFactory ) {
@@ -70,21 +70,17 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         try {
             
         	connexion = daoFactory.getConnection();
-            /*
+            
         	// Dimension updates
+        	/*
             updateTimeDim();
+            */
+            
             updateUserGroupDim();
-
+            /*
             // DW Fact table update
             updateDWFactTable();
             */
-        	String wildcard = "%";
-        	preparedStatement1 = initialisationRequetePreparee(connexion,WILDCARD_TEST , false, wildcard);
-        	resultSet = preparedStatement1.executeQuery();
-        	 while( resultSet.next()){
-        		 System.out.println(resultSet.getString("groupName"));
-        	 }
-        	
         	
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -94,6 +90,14 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             fermeturesSilencieuses( preparedStatement3, connexion );
         }
 
+    }
+    
+    public int blah(int i){
+    	if(i<0){
+    		return 0;
+    	}else{
+    		return 1;
+    	}
     }
 
     public void updateDWFactTable() throws DAOException {
