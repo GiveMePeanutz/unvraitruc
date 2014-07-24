@@ -148,9 +148,11 @@
 	                </tr>
 	            </table>
 	        </form>
-        </div>
-        <a href="<c:url value="/updateDataWarehouse"></c:url>">
+	        <br><br>
+	        <a href="<c:url value="/updateDataWarehouse"></c:url>">
         <input type="button" value="Update" />
         </a>
+        </div>
+        
     </body>
 </html>

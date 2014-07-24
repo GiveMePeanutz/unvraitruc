@@ -25,11 +25,11 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
     private static String SELECT_NEW_YEARS				= "SELECT DISTINCT date_format(factDate,'%Y') AS year FROM fact_table WHERE factDate>(SELECT MAX(updateTime) FROM updateTime)";
 	private static String SELECT_NEW_GROUPS 			= "SELECT DISTINCT groupName FROM user_group WHERE groupName NOT IN ( SELECT DISTINCT groupName FROM GroupDim)";
     
-	private static String SELECT_USERDIM_ID				= "SELECT userId FROM userDim ud, groupDim gd, user u, user_group ug WHERE u.username like ? AND u.sex=ud.sex AND ug.username=u.username AND ug.groupName=gd.groupName AND ud.groupId=gd.groupId ";
-	private static String SELECT_TIMEDIM_ID				= "SELECT timeId FROM timeDim td WHERE td.hour like ? AND td.day like ? AND td.dayName like ?  AND td.week like ? AND td.monthName like ? AND td.year like ?";
-	private static String SELECT_ACTIVITYDIM_ID			= "SELECT activityId FROM activityDim ad WHERE ad.isAction like ?";
+	private static String SELECT_USERDIM_ID				= "SELECT DISTINCT userId FROM userDim ud, groupDim gd, user u, user_group ug WHERE u.sex like ? AND u.sex=ud.sex AND ug.username=u.username AND ug.groupName like ? AND ug.groupName=gd.groupName AND ud.groupId=gd.groupId ";
+	private static String SELECT_TIMEDIM_ID				= "SELECT DISTINCT timeId FROM timeDim td WHERE td.hour like ? AND td.day like ? AND td.dayName like ?  AND td.week like ? AND td.monthName like ? AND td.year like ?";
+	private static String SELECT_ACTIVITYDIM_ID			= "SELECT DISTINCT activityId FROM activityDim ad WHERE ad.isAction like ?";
 	
-	private static String SELECT_NEW_LOGS				= "SELECT DISTINCT u.sex, ug.groupName, pageName,  factDate FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime)";
+	private static String SELECT_NEW_LOGS				= "SELECT DISTINCT u.sex AS sex, ug.groupName AS groupName, pageName,  date_format(factDate,'%H') AS hour, date_format(factDate,'%d') AS day, date_format(factDate,'%W') AS dayName,  date_format(factDate,'%u') AS week, date_format(factDate,'%M') AS monthName, date_format(factDate,'%Y') AS year FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime)";
 	
 	private static String COUNT							= "SELECT COUNT(*) as count FROM fact_table WHERE username IN (SELECT u.username FROM user u, user_group ug, userDim ud, groupDim gd WHERE u.sex=ud.sex AND ud.groupID=gd.groupID AND gd.groupName=ug.groupName  AND u.username=ug.username AND ud.userID=?) AND pageName IN (SELECT pageName FROM fact_table ft, activityDim ad WHERE IF(ad.isAction=0, pageName LIKE '/%', NOT pageName LIKE '/%') AND ad.activityID=?) AND factDate IN (SELECT factDate FROM fact_table ft, timeDim td WHERE  date_format(factDate,'%H')=td.hour AND date_format(factDate,'%d')=td.day AND date_format(factDate,'%W')=td.dayName  AND date_format(factDate,'%u')=td.week AND date_format(factDate,'%M')=td.monthName AND date_format(factDate,'%Y')=td.year AND td.timeID=?)";
 	
@@ -104,15 +104,20 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         
         try {
             connexion = daoFactory.getConnection();
+            connexion.setAutoCommit(false);
             preparedStatement1 = connexion.prepareStatement(SELECT_NEW_LOGS);
             resultSet1 = preparedStatement1.executeQuery();
             while( resultSet1.next() ){
             	
-            	preparedStatement2 = initialisationRequetePreparee(connexion, SELECT_USERDIM_ID, false, resultSet1.getString("username"));
+            	System.out.println("1");
+            	
+            	preparedStatement2 = initialisationRequetePreparee(connexion, SELECT_USERDIM_ID, false,  resultSet1.getInt("sex"), resultSet1.getString("groupName"));
                 resultSet2 = preparedStatement2.executeQuery();
             	userIDs = mapSingleColumnIntegerQuery(resultSet2, "userId");
             	
-            	preparedStatement3 = initialisationRequetePreparee(connexion, SELECT_TIMEDIM_ID, false, new DateTime(resultSet1.getTimestamp("factDate")));
+            	System.out.println("2");
+            	
+            	preparedStatement3 = initialisationRequetePreparee(connexion, SELECT_TIMEDIM_ID, false, resultSet1.getInt("hour"),resultSet1.getInt("day"),resultSet1.getString("dayName"),resultSet1.getInt("week"),resultSet1.getString("monthName"),resultSet1.getInt("year"));
             	resultSet3 = preparedStatement3.executeQuery();
             	timeIDs = mapSingleColumnIntegerQuery(resultSet3, "timeId");
             	
@@ -120,11 +125,14 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             	if(resultSet1.getString("pageName").startsWith("/")){
             		isAction=false;
             	}
+            	
+            	System.out.println("3");
+            	
             	preparedStatement4 = initialisationRequetePreparee(connexion, SELECT_ACTIVITYDIM_ID, false, isAction);
             	resultSet4 = preparedStatement4.executeQuery();
             	activityIDs = mapSingleColumnIntegerQuery(resultSet4, "activityId");
             	
-            	
+            	System.out.println("4");
             	
             	for(int userId : userIDs){
             		for(int timeId : timeIDs){
@@ -147,7 +155,8 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             	
             	preparedStatement7 = connexion.prepareStatement(INSERT_UPDATE_DATETIME);
             	preparedStatement7.executeUpdate();
-            	
+            	connexion.commit();
+            	System.out.println("done");
             	
             }
            
@@ -170,6 +179,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         PreparedStatement preparedStatement2 = null;
         ArrayList<String> newGroups = new ArrayList<String>();
         PreparedStatement preparedStatement3 = null;
+        ResultSet generatedKey = null;
         
         
         try {
@@ -181,10 +191,18 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             for( String groupName : newGroups ){
             	
             	preparedStatement2 = initialisationRequetePreparee(connexion, INSERT_GROUP_GROUPDIM, true, groupName);
-            	int generatedKey = preparedStatement2.executeUpdate();
+            	preparedStatement2.executeUpdate();
+            	
+            	int groupId = 1;
+            	generatedKey = preparedStatement2.getGeneratedKeys();
+            	
+            	if ( generatedKey.next() ) {
+                    groupId = generatedKey.getInt( 1 ) ;
+                }
+            	System.out.println(generatedKey);
             	
             	for(int sex=-1; sex<2; sex++){
-            		preparedStatement3 = initialisationRequetePreparee(connexion, INSERT_USER_USERDIM, true, sex, generatedKey);
+            		preparedStatement3 = initialisationRequetePreparee(connexion, INSERT_USER_USERDIM, true, sex, groupId);
             		int statut = preparedStatement3.executeUpdate();
             		if( statut == 0 ){
             			throw new DAOException ("Failed to create user in userDim. No rows added." );
@@ -219,6 +237,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         
         try {
             connexion = daoFactory.getConnection();
+            connexion.setAutoCommit(false);
             preparedStatement1 = initialisationRequetePreparee( connexion, SELECT_DISTINCT_YEAR , false  );
             resultSet1 = preparedStatement1.executeQuery();
             dimTableyears = mapSingleColumnIntegerQuery(resultSet1, "year");
@@ -228,7 +247,8 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_NEW_YEARS , false  );
             resultSet2 = preparedStatement2.executeQuery();
             newActivityLogYears = mapSingleColumnIntegerQuery(resultSet2, "year");
-            
+            /*
+            int it = 0;
             for(Integer newYear : newActivityLogYears){
             	if(!dimTableyears.contains(newYear)){
             		
@@ -244,6 +264,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 	            						
 	            						preparedStatement3 = initialisationRequetePreparee( connexion, INSERT_TIME_TIMEDIM , true, newYear, monthName, week, dayName, day, hour );
 	            						int statut = preparedStatement3.executeUpdate();
+	            						it++;
 	            						if ( statut == 0 ) {
 	            			                throw new DAOException(
 	            			                        "Failed to create time int timeDim. No row added" );
@@ -254,7 +275,9 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             			}
             		}
             	}
-            }
+            }*/
+            connexion.commit();
+            System.out.println(it);
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } finally {

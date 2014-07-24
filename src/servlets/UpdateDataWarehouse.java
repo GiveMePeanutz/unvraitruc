@@ -29,7 +29,7 @@ public class UpdateDataWarehouse extends HttpServlet {
             throws ServletException, IOException {
 
         dataWarehouseDao.updateDW();
-
+        System.out.println("bovdic,hgo_xr,yèf");
         response.sendRedirect( request.getContextPath() + VIEW );
     }
 
