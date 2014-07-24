@@ -97,14 +97,16 @@
 						</td>
 						<td>
 		                    <select name="week" id = "week">
-		                    <c:forEach items="${ requestScope.weeks }" var="week" varStatus="boucle">
+		                    	<option value='<c:out value="0"/>'>All</option> 
+							<c:forEach var="week" begin="1" end="52">
 							    <option value='<c:out value="${week}"/>'><c:out value="${week}"/></option> 
 							</c:forEach>
 							</select>
 						</td>
 						<td>
 		                    <select name="day" id = "day">
-		                    <c:forEach items="${ requestScope.days }" var="day" varStatus="boucle">
+		                    	<option value='<c:out value="0"/>'>All</option> 
+							<c:forEach var="day" begin="1" end="31">
 							    <option value='<c:out value="${day}"/>'><c:out value="${day}"/></option> 
 							</c:forEach>
 							</select>
@@ -118,7 +120,8 @@
 						</td>
 						<td>
 		                    <select name="hour" id = "hour">
-		                    <c:forEach items="${ requestScope.hours }" var="hour" varStatus="boucle">
+		                    	<option value='<c:out value="-1"/>'>All</option> 
+							<c:forEach var="hour" begin="0" end="23">
 							    <option value='<c:out value="${hour}"/>'><c:out value="${hour}"/></option> 
 							</c:forEach>
 							</select>
