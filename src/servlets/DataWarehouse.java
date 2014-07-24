@@ -61,7 +61,7 @@ public class DataWarehouse extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-    	/*
+
         List<String> groups = dataWarehouseDao.listGroup();
         List<String> years = dataWarehouseDao.listYear();
         List<String> months = dataWarehouseDao.getMonths();
@@ -69,7 +69,7 @@ public class DataWarehouse extends HttpServlet {
         List<String> days = dataWarehouseDao.getDay();
         List<String> daysOfWeek = dataWarehouseDao.listDayOfWeek();
         List<String> hours = dataWarehouseDao.listHour();
-		
+
         request.setAttribute( LIST_GROUP_ATT, groups );
         request.setAttribute( LIST_YEAR_ATT, years );
         request.setAttribute( LIST_MONTH_ATT, months );
@@ -77,13 +77,13 @@ public class DataWarehouse extends HttpServlet {
         request.setAttribute( LIST_DAY_ATT, days );
         request.setAttribute( LIST_DAYOFWEEK_ATT, daysOfWeek );
         request.setAttribute( LIST_HOUR_ATT, hours );
-		*/
+
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
-		
+
     }
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-    	/*
+
         int sex = getIntValue( request, SEX_FIELD );
         String group = getFieldValue( request, GROUP_FIELD );
         int year = getIntValue( request, YEAR_FIELD );
@@ -115,9 +115,9 @@ public class DataWarehouse extends HttpServlet {
         results.add( dWLine );
 
         session.setAttribute( SESSION_RESULTS, results );
-		*/
+
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
-		
+
     }
 
     private static String getFieldValue( HttpServletRequest request, String fieldName ) {

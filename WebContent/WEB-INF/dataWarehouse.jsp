@@ -137,18 +137,9 @@
 	                </tr>
 	            </table>
 	        </form>
-<<<<<<< HEAD
-	        <br><br>
-	        <a href="<c:url value="/updateDataWarehouse"></c:url>">
-        <input type="button" value="Update" />
-        </a>
-        </div>
-        
-=======
 	        <a href="<c:url value="/updateDataWarehouse"></c:url>">
 	        	<input type="button" value="Update" />
 	        </a>
         </div>
->>>>>>> origin/master
     </body>
 </html>
