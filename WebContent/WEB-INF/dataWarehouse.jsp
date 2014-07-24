@@ -13,6 +13,9 @@
         <div id="normalForm">
 	        <h1>Data Warehouse</h1>
 	        <br />
+	        <a href="<c:url value="/updateDataWarehouse" />" class="update">
+	        	<input type="button" value="Update"/>
+	        </a>
 	        <form method="post" action="<c:url value="/dataWarehouse"/>" enctype="multipart/form-data">
 	        
 	            <table >
@@ -140,9 +143,7 @@
 	                </tr>
 	            </table>
 	        </form>
-	        <a href="<c:url value="/updateDataWarehouse"></c:url>">
-	        	<input type="button" value="Update" />
-	        </a>
+	        
         </div>
     </body>
 </html>
