@@ -35,16 +35,12 @@ public class UpdateDataWarehouse extends HttpServlet {
             throws ServletException, IOException {
 
         dataWarehouseDao.updateDW();
-<<<<<<< HEAD
-        System.out.println("bovdic,hgo_xr,yèf");
-=======
 
         HttpSession session = request.getSession();
         User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
         factTableDao.addFact( userSession.getUsername(), "Count something" );
 
->>>>>>> origin/master
         response.sendRedirect( request.getContextPath() + VIEW );
     }
 
