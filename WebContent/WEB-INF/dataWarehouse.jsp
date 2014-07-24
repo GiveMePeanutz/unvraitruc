@@ -13,19 +13,13 @@
         <div id="normalForm">
 	        <h1>Data Warehouse</h1>
 	        <br />
-<<<<<<< HEAD
-	        <a href="<c:url value="/updateDataWarehouse" />" class="update">
-	        	<input type="button" value="Update"/>
-	        </a>
-	        <form method="post" action="<c:url value="/dataWarehouse"/>" enctype="multipart/form-data">
-=======
+
 	        <div class="update">
 	        <a href="<c:url value="/updateDataWarehouse"/>" class="update">
 	        	<input type="button" value="Update the Database"/>
 	        </a>
 	        </div>
 	        <form method="post" action="<c:url value="/dataWarehouse"/>" >
->>>>>>> origin/master
 	        
 	            <table >
 	                <tr>
@@ -81,9 +75,9 @@
 	                <tr>
 	                    <td>
 	                    	<select name="sexValue" id = "sexValue">
-							    <option value="<c:out value="0"/>">All</option> 
-							    <option value="<c:out value="1"/>">Male</option> 
-							    <option value="<c:out value="2"/>">Female</option> 
+							    <option value="<c:out value="-1"/>">All</option> 
+							    <option value="<c:out value="0"/>">Male</option> 
+							    <option value="<c:out value="1"/>">Female</option> 
 							</select>
 						</td>
 						<td>
@@ -140,9 +134,9 @@
 						</td>
 						<td>
 		                    <select name="activity" id = "activity">
-		                    	<option value='<c:out value="0"/>'>All</option> 
-							    <option value='<c:out value="1"/>'>Page Visited</option> 
-							    <option value='<c:out value="2"/>'>Action Done</option> 
+		                    	<option value='<c:out value="-1"/>'>All</option> 
+							    <option value='<c:out value="0"/>'>Page Visited</option> 
+							    <option value='<c:out value="1"/>'>Action Done</option> 
 							</select>
 						</td>
 						<td>
