@@ -12,14 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import beans.DataWarehouseLine;
+import beans.User;
 import dao.DAOFactory;
 import dao.DataWarehouseDao;
+import dao.FactTableDao;
 
 @WebServlet( "/dataWarehouse" )
 public class DataWarehouse extends HttpServlet {
 
     public static final String CONF_DAO_FACTORY   = "daofactory";
     public static final String LIST_RES_ATT       = "results";
+    public static final String USER_SESSION_ATT   = "userSession";
 
     public static final String LIST_SEX_ATT       = "sexValues";
     public static final String LIST_GROUP_ATT     = "groups";
@@ -48,10 +51,13 @@ public class DataWarehouse extends HttpServlet {
     public static final String VIEW               = "/WEB-INF/dataWarehouse.jsp";
 
     private DataWarehouseDao   dataWarehouseDao;
+    private FactTableDao       factTableDao;
 
     public void init() throws ServletException {
         this.dataWarehouseDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) )
                 .getDataWarehouseDao();
+        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) )
+                .getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -96,6 +102,10 @@ public class DataWarehouse extends HttpServlet {
         request.setAttribute( COUNT_ATT, dWLine );
 
         HttpSession session = request.getSession();
+        User userSession = new User();
+        userSession = (User) session.getAttribute( USER_SESSION_ATT );
+        factTableDao.addFact( userSession.getUsername(), "Count something" );
+
         LinkedList<DataWarehouseLine> results = (LinkedList<DataWarehouseLine>) session
                 .getAttribute( SESSION_RESULTS );
 
