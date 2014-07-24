@@ -14,7 +14,7 @@
 	        <h1>Data Warehouse</h1>
 	        <br />
 
-	        <div class="update">
+	        <div>
 	        <a href="<c:url value="/updateDataWarehouse"/>" class="button">
 	        	<input type="button" value="Update the Database"/>
 	        </a>
@@ -220,8 +220,30 @@
 						
 	                </tr>
 	            </table>
+	            
 	        </form>
-	        
+	        <br>
+	        <div>
+	        <form method="post" action="<c:url value="/chart"/>" >
+            	<fieldset>
+            	<LEGEND>Draw a Pie Chart</LEGEND>
+	            	Please choose a category :
+                    <select name="type" id = "type">																				
+                    		<option value='Sex'>Sex</option>
+                    		<option value='Group'>Group</option>                     
+                	</select>
+	                <br>
+	                Please choose a type of action :
+                    <select name="action" id = "action">																				
+                    		<option value='-1'>All</option>
+                    		<option value='0'>Page Visited</option>                     
+                     		<option value='1'>Action Done</option>                     
+                	</select>
+                	<br>
+	      			<input type="submit" name = "Submit" value="Draw"  /> 			
+        		</fieldset>
+        	</form>
+	        </div>
         </div>
     </body>
 </html>
