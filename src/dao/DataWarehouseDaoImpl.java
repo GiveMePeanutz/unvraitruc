@@ -32,13 +32,13 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
     private static String       SELECT_NEW_YEARS       = "SELECT DISTINCT date_format(factDate,'%Y') AS year FROM fact_table WHERE factDate>(SELECT MAX(updateTime) FROM updateTime)";
     private static String       SELECT_NEW_GROUPS      = "SELECT DISTINCT groupName FROM user_group WHERE groupName NOT IN ( SELECT DISTINCT groupName FROM GroupDim)";
 
-    private static String       SELECT_USERDIM_ID      = "SELECT DISTINCT userId FROM userDim ud, groupDim gd, user u, user_group ug WHERE u.sex like ? AND u.sex=ud.sex AND ug.username=u.username AND ug.groupName like ? AND ug.groupName=gd.groupName AND ud.groupId=gd.groupId ";
+    private static String       SELECT_USERDIM_ID      = "SELECT DISTINCT userId FROM userDim ud, groupDim gd WHERE ud.sex=? AND gd.groupName=? AND ud.groupId=gd.groupId";
     private static String       SELECT_TIMEDIM_ID_H1   = "SELECT DISTINCT timeId FROM timeDim td WHERE td.hour like ? AND td.day like ?  AND td.monthName like ? AND td.year like ?";
     private static String       SELECT_TIMEDIM_ID_H2   = "SELECT DISTINCT timeId FROM timeDim td WHERE td.dayName like ?  AND td.week like ? AND td.year like ?";
     private static String       SELECT_ACTIVITYDIM_ID  = "SELECT DISTINCT activityId FROM activityDim ad WHERE ad.isAction like ?";
 
-    private static String       SELECT_NEW_LOGS_H1     = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%H') AS hour, date_format(factDate,'%d') AS day, date_format(factDate,'%W') AS dayName,  date_format(factDate,'%u') AS week, date_format(factDate,'%M') AS monthName, date_format(factDate,'%Y') AS year, count(*) AS count FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, hour, day, monthName, year";
-    private static String		SELECT_NEW_LOGS_H2	   = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%H') AS hour, date_format(factDate,'%d') AS day, date_format(factDate,'%W') AS dayName,  date_format(factDate,'%u') AS week, date_format(factDate,'%M') AS monthName, date_format(factDate,'%Y') AS year, count(*) AS count FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, dayName, week, year;";
+    private static String       SELECT_NEW_LOGS_H1     = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%H') AS hour, date_format(factDate,'%d') AS day, date_format(factDate,'%M') AS monthName, date_format(factDate,'%Y') AS year, count(*) AS count FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, hour, day, monthName, year";
+    private static String		SELECT_NEW_LOGS_H2	   = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%W') AS dayName,  date_format(factDate,'%u') AS week, date_format(factDate,'%Y') AS year, count(*) AS count FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, dayName, week, year;";
     
     private static String       COUNT                  = "SELECT COUNT(*) as count FROM fact_table WHERE username IN (SELECT u.username FROM user u, user_group ug, userDim ud, groupDim gd WHERE u.sex=ud.sex AND ud.groupID=gd.groupID AND gd.groupName=ug.groupName  AND u.username=ug.username AND ud.userID=?) AND pageName IN (SELECT pageName FROM fact_table ft, activityDim ad WHERE IF(ad.isAction=0, pageName LIKE '/%', NOT pageName LIKE '/%') AND ad.activityID=?) AND factDate IN (SELECT factDate FROM fact_table ft, timeDim td WHERE  date_format(factDate,'%H')=td.hour AND date_format(factDate,'%d')=td.day AND date_format(factDate,'%W')=td.dayName  AND date_format(factDate,'%u')=td.week AND date_format(factDate,'%M')=td.monthName AND date_format(factDate,'%Y')=td.year AND td.timeID=?)";
 
@@ -120,6 +120,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
         Connection connexion = null;
         PreparedStatement preparedStatement1 = null;
+        PreparedStatement preparedStatement1Bis = null;
         PreparedStatement preparedStatement2 = null;
         PreparedStatement preparedStatement3 = null;
         PreparedStatement preparedStatement4 = null;
@@ -127,23 +128,27 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         PreparedStatement preparedStatement6 = null;
         PreparedStatement preparedStatement7 = null;
         ResultSet resultSet1 = null;
+        ResultSet resultSet1Bis = null;
         ResultSet resultSet2 = null;
         ResultSet resultSet3 = null;
         ResultSet resultSet4 = null;
         ResultSet resultSet5 = null;
-        ArrayList<Integer> userIDs = new ArrayList<Integer>();
-        ArrayList<Integer> timeIDs = new ArrayList<Integer>();
-        ArrayList<Integer> activityIDs = new ArrayList<Integer>();
+        
 
         try {
             connexion = daoFactory.getConnection();
             preparedStatement1 = connexion.prepareStatement( SELECT_NEW_LOGS_H1 );
             resultSet1 = preparedStatement1.executeQuery();
+            preparedStatement1Bis = connexion.prepareStatement( SELECT_NEW_LOGS_H2 );
+            resultSet1Bis = preparedStatement1Bis.executeQuery();
             
             
-            
+            // hierarchy 1
             while ( resultSet1.next() ) {
             	
+            	ArrayList<Integer> userIDs = new ArrayList<Integer>();
+                ArrayList<Integer> timeIDs = new ArrayList<Integer>();
+                ArrayList<Integer> activityIDs = new ArrayList<Integer>();
             	
                 System.out.println( "1" );
                 
@@ -154,6 +159,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 		                userIDs.addAll(mapSingleColumnIntegerQuery( resultSet2, "userId" ));
                 	}
                 }
+                System.out.println(userIDs.size()+"-------------------------------------------------");
                 
                 
 
@@ -177,27 +183,15 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                 		}
                 		
                 	}
-               
-                	//hierarchy 2
-                	for ( String dayName : new String[]{"All", resultSet1.getString( "dayName" )}){
-                		
-                		for ( int week : new int[]{-1,resultSet1.getInt( "week" )}){
-                			preparedStatement4 = initialisationRequetePreparee( connexion, SELECT_TIMEDIM_ID_H2, false, dayName, week, year );
-                			resultSet4 = preparedStatement4.executeQuery();
-            				timeIDs.addAll(mapSingleColumnIntegerQuery(resultSet4, "timeId"));
-                		}
-                	}
                 }
+                System.out.println(timeIDs.size()+"---------------------------------------");
                 
                 
                 System.out.println( "3" );
                 
-                int isAction = 1;
-                if ( resultSet1.getString( "pageName" ).startsWith( "/" ) ) {
-                    isAction = 0;
-                }
+                
 
-                for ( int isAct : new int[]{-1 , isAction}){
+                for ( int isAction : new int[]{-1 , resultSet1.getInt("isAction")}){
                 	preparedStatement5 = initialisationRequetePreparee( connexion, SELECT_ACTIVITYDIM_ID, false, isAction );
                     resultSet5 = preparedStatement5.executeQuery();
                     activityIDs.addAll(mapSingleColumnIntegerQuery( resultSet5, "activityId" ));
@@ -208,10 +202,72 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                 for ( int userId : userIDs ) {
                     for ( int timeId : timeIDs ) {
                         for ( int activityId : activityIDs ) {
-                        	System.out.println(it);
+                        	//System.out.println(it);
                         	it++;
                             preparedStatement6 = initialisationRequetePreparee( connexion, INSERT_DWFACT, false,
-                                    userId, activityId, timeId, resultSet1.getInt("count") );
+                                    userId, activityId, timeId, resultSet1.getInt("count"), resultSet1.getInt("count") );
+                            int statut = preparedStatement6.executeUpdate();
+
+                        }
+                    }
+                }
+            }
+            
+            
+            // hierarchy 2
+            while ( resultSet1Bis.next() ) {
+            	
+            	ArrayList<Integer> userIDs = new ArrayList<Integer>();
+                ArrayList<Integer> timeIDs = new ArrayList<Integer>();
+                ArrayList<Integer> activityIDs = new ArrayList<Integer>();
+            	
+                System.out.println( "1" );
+                
+                for( int sex : new int[]{-1,resultSet1Bis.getInt( "sex" )}){
+                	for ( String groupName : new String[]{"All",resultSet1Bis.getString("groupName")}){
+                		preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_USERDIM_ID, false, sex , groupName );
+		                resultSet2 = preparedStatement2.executeQuery();
+		                userIDs.addAll(mapSingleColumnIntegerQuery( resultSet2, "userId" ));
+                	}
+                }
+                
+                
+
+                System.out.println( "2" );
+                
+                for ( int year : new int[]{-1,resultSet1Bis.getInt( "year" )}){
+                	
+                	//hierarchy 2
+                	for ( String dayName : new String[]{"All", resultSet1Bis.getString( "dayName" )}){
+                		
+                		for ( int week : new int[]{-1,resultSet1Bis.getInt( "week" )}){
+                			preparedStatement4 = initialisationRequetePreparee( connexion, SELECT_TIMEDIM_ID_H2, false, dayName, week, year );
+                			resultSet4 = preparedStatement4.executeQuery();
+            				timeIDs.addAll(mapSingleColumnIntegerQuery(resultSet4, "timeId"));
+                		}
+                	}
+                }
+                
+                
+                System.out.println( "3" );
+                
+                
+
+                for ( int isAction : new int[]{-1 , resultSet1Bis.getInt("isAction")}){
+                	preparedStatement5 = initialisationRequetePreparee( connexion, SELECT_ACTIVITYDIM_ID, false, isAction );
+                    resultSet5 = preparedStatement5.executeQuery();
+                    activityIDs.addAll(mapSingleColumnIntegerQuery( resultSet5, "activityId" ));
+                }
+                
+                System.out.println( "4" );
+                int it=0;
+                for ( int userId : userIDs ) {
+                    for ( int timeId : timeIDs ) {
+                        for ( int activityId : activityIDs ) {
+                        	//System.out.println(it);
+                        	it++;
+                            preparedStatement6 = initialisationRequetePreparee( connexion, INSERT_DWFACT, false,
+                                    userId, activityId, timeId, resultSet1Bis.getInt("count"), resultSet1Bis.getInt("count") );
                             int statut = preparedStatement6.executeUpdate();
 
                         }
