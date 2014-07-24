@@ -72,9 +72,9 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         	connexion = daoFactory.getConnection();
             
         	// Dimension updates
-        	/*
+        	
             updateTimeDim();
-            */
+            
             
             updateUserGroupDim();
             /*
@@ -265,27 +265,42 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_NEW_YEARS, false );
             resultSet2 = preparedStatement2.executeQuery();
             newActivityLogYears = mapSingleColumnIntegerQuery( resultSet2, "year" );
-            /*
-             * int it = 0; for(Integer newYear : newActivityLogYears){
-             * if(!dimTableyears.contains(newYear)){
-             * 
-             * for( String monthName : months ){
-             * 
-             * for ( int week=-1; week<53; week++){
-             * 
-             * for ( String dayName : days ){
-             * 
-             * for ( int day=-1; day<32; day++){
-             * 
-             * for ( int hour=-1; hour<25; hour++){
-             * 
-             * preparedStatement3 = initialisationRequetePreparee( connexion,
-             * INSERT_TIME_TIMEDIM , true, newYear, monthName, week, dayName,
-             * day, hour ); int statut = preparedStatement3.executeUpdate();
-             * it++; if ( statut == 0 ) { throw new DAOException(
-             * "Failed to create time int timeDim. No row added" ); } } } } } }
-             * } }
-             */
+            
+            int it = 0; for(Integer newYear : newActivityLogYears){
+            	if(!dimTableyears.contains(newYear)){
+
+            		for( String monthName : months ){
+
+            			
+    					for ( int day=-1; day<32; day++){
+
+    						for ( int hour=-1; hour<25; hour++){
+
+    							preparedStatement3 = initialisationRequetePreparee( connexion, INSERT_TIME_TIMEDIM , true, newYear, monthName, null, null,day, hour ); 
+    							int statut = preparedStatement3.executeUpdate();
+    							if ( statut == 0 ) { 
+    								throw new DAOException("Failed to create time int timeDim. No row added" ); 
+    							} 
+    						} 
+    					}
+    				}	
+            		
+					for ( int week=-1; week<53; week++){
+
+        				for ( String dayName : days ){
+        					
+        					preparedStatement3 = initialisationRequetePreparee( connexion, INSERT_TIME_TIMEDIM , true, newYear, null, week, dayName, null, null ); 
+							int statut = preparedStatement3.executeUpdate();
+							if ( statut == 0 ) { 
+								throw new DAOException("Failed to create time int timeDim. No row added" ); 
+							}
+        					
+        				} 
+        			} 
+            		
+            	} 
+            }
+             
             connexion.commit();
             // System.out.println( it );
         } catch ( SQLException e ) {
