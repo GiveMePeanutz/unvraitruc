@@ -18,4 +18,8 @@ public interface ExtractDataWarehouseDao {
 
     public String countWeek( DataWarehouseLine dWL ) throws DAOException;
 
+    public String countAllBySex( int sex, int action, int year ) throws DAOException;
+
+    public String countAllByGroup( String group, int action, int year ) throws DAOException;
+
 }

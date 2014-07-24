@@ -117,8 +117,8 @@
 						<td>
 		                    <select name="activity" id = "activity">
 		                    	<option value='<c:out value="-1"/>'>All</option> 
-							    <option value='<c:out value="0"/>'>Visited Page</option> 
-							    <option value='<c:out value="1"/>'>Performed Action</option> 
+							    <option value='<c:out value="0"/>'>Visited Pages</option> 
+							    <option value='<c:out value="1"/>'>Performed Actions</option> 
 							</select>
 						</td>
 						<td>
@@ -213,8 +213,8 @@
 						<td>
 		                    <select name="activity" id = "activity">
 		                    	<option value='<c:out value="-1"/>'>All</option> 
-							    <option value='<c:out value="0"/>'>Visited Page </option> 
-							    <option value='<c:out value="1"/>'>Performed Action</option> 
+							    <option value='<c:out value="0"/>'>Visited Pages </option> 
+							    <option value='<c:out value="1"/>'>Performed Actions</option> 
 							</select>
 						</td>
 						<td>
@@ -239,10 +239,17 @@
 	                Please choose a type of action :
                     <select name="action" id = "action">																				
                     		<option value='-1'>All</option>
-                    		<option value='0'>Visited Page </option>                     
-                     		<option value='1'>Performed Action</option>                     
+                    		<option value='0'>Visited Pages </option>                     
+                     		<option value='1'>Performed Actions</option>                     
                 	</select>
                 	<br>
+                	Please choose a Year
+                	<select name="year" id = "year">
+	                    <c:forEach items="${ requestScope.years }" var="year" varStatus="boucle">
+						    <option value='<c:out value="${year}"/>'><c:out value="${year}"/></option> 
+						</c:forEach>
+					</select>
+					<br>
 	      			<input type="submit" name = "Submit" value="Draw"  /> 			
         		</fieldset>
         	</form>
