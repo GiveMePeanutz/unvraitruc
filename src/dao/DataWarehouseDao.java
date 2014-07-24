@@ -29,4 +29,6 @@ public interface DataWarehouseDao {
 
     public String count( DataWarehouseLine dWL ) throws DAOException;
 
+	void updateDWDim() throws DAOException;
+
 }
