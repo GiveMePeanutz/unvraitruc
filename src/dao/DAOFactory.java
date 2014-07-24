@@ -130,4 +130,8 @@ public class DAOFactory {
         return new DataWarehouseDaoImpl( this );
     }
 
+    public ExtractDataWarehouseDao getExtractDataWarehouseDao() {
+        return new ExtractDataWarehouseDaoImpl( this );
+    }
+
 }

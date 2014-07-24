@@ -119,7 +119,7 @@
 							</select>
 						</td>
 						<td>
-							<input type="submit" name="Calculate" value="Calculate"  >
+							<input type="submit" name="Calculate" value="Calculate">
 						</td>
 						
 	                </tr>
@@ -215,7 +215,7 @@
 							</select>
 						</td>
 						<td>
-							<input type="submit" name="Calculate" value="Calculate"  >
+							<input type="submit" name="Calculate" value="Count"  >
 						</td>
 						
 	                </tr>

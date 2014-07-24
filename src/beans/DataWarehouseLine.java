@@ -19,17 +19,25 @@ public class DataWarehouseLine implements Serializable {
         super();
     }
 
-    public DataWarehouseLine( int sex, String group, int year, String month, int week, int day,
-            String dayOfWeek, int hour, int activity ) {
+    public DataWarehouseLine( int sex, String group, int year, String month, int day, int hour, int activity ) {
         super();
         this.sex = sex;
         this.group = group;
         this.year = year;
         this.month = month;
-        this.week = week;
         this.day = day;
-        this.dayOfWeek = dayOfWeek;
         this.hour = hour;
+        this.activity = activity;
+    }
+
+    public DataWarehouseLine( int sex, String group, int year, int week,
+            String dayOfWeek, int activity ) {
+        super();
+        this.sex = sex;
+        this.group = group;
+        this.year = year;
+        this.week = week;
+        this.dayOfWeek = dayOfWeek;
         this.activity = activity;
     }
 
