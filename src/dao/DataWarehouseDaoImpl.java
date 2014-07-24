@@ -19,11 +19,13 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     private DAOFactory          daoFactory;
 
-    private static List<String> months                 = Arrays.asList( "January", "February", "March", "April", "May",
+    private static List<String> months                 = Arrays.asList( "All", "January", "February", "March", "April",
+                                                               "May",
                                                                "June", "July", "August", "September", "October",
-                                                               "November", "December", "All" );
-    private static List<String> days                   = Arrays.asList( "Monday", "Tuesday", "Wednesday", "Thrusday",
-                                                               "Friday", "Saturday", "Sunday", "All" );
+                                                               "November", "December" );
+    private static List<String> days                   = Arrays.asList( "All", "Monday", "Tuesday", "Wednesday",
+                                                               "Thrusday",
+                                                               "Friday", "Saturday", "Sunday" );
 
     private static String       SELECT_DISTINCT_YEAR   = "SELECT DISTINCT year FROM timeDim";
     private static String       SELECT_DISTINCT_GROUP  = "SELECT DISTINCT groupName FROM groupDim";
