@@ -17,7 +17,6 @@
 	        
 	            <table >
 	                <tr>
-	                	<th>#</th>
 	                	<th>Sex</th>
 	                    <th>Group</th>
 	                    <th>Year</th>
@@ -28,49 +27,41 @@
 	                    <th>Hour</th>
 	                    <th>Activity</th>
 	                    <th class="action">Count</th>
-	                    <th class="action">Delete</th>
 	                </tr>
 	                <c:if test="${ ! empty sessionScope.results }">
-	                	<c:forEach items="${ sessionScope.results }" var="mapResult" varStatus="boucle">
+	                	<c:forEach items="${ sessionScope.results }" var="listResult" varStatus="boucle">
 	                		<tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
-		                		<td>
-		                    		<c:out value="${mapResult.key}"/>
+		                		
+								<td>
+		                    		<c:out value="${listResult.getSex()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${mapResult.value.getSex()}"/>
+		                    		<c:out value="${listResult.getGroup()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${mapResult.value.getGroup()}"/>
+		                    		<c:out value="${listResult.getYear()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${mapResult.value.getYear()}"/>
+		                    		<c:out value="${listResult.getMonth()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${mapResult.value.getMonth()}"/>
+		                    		<c:out value="${listResult.getWeek()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${mapResult.value.getWeek()}"/>
+		                    		<c:out value="${listResult.getDay()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${mapResult.value.getDay()}"/>
+		                    		<c:out value="${listResult.getDayOfWeek()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${mapResult.value.getDayOfWeek()}"/>
+		                    		<c:out value="${listResult.getHour()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${mapResult.value.getHour()}"/>
+		                    		<c:out value="${listResult.getActivity()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${mapResult.value.getActivity()}"/>
+		                    		<c:out value="${listResult.getCount()}"/>
 								</td>
-								<td>
-		                    		<c:out value="${mapResult.value.getCount()}"/>
-								</td>
-								<td class="action">
-			                        <a href="<c:url value="/deleteDataWarehouse"><c:param name="idCount" value="${ mapResult.key }" /></c:url>">
-			                            <img src="<c:url value="/inc/supprimer.png"/>" alt="Delete" />
-			                        </a>
-			                    </td>
 		                    </tr>
 	                	</c:forEach>
 	                </c:if>
@@ -142,17 +133,22 @@
 						<td>
 							<input type="submit" name="Calculate" value="Calculate"  >
 						</td>
-						<td class="action">
-	                        <input type="reset" value="Reset all" />
-	                    </td>
+						
 	                </tr>
 	            </table>
 	        </form>
+<<<<<<< HEAD
 	        <br><br>
 	        <a href="<c:url value="/updateDataWarehouse"></c:url>">
         <input type="button" value="Update" />
         </a>
         </div>
         
+=======
+	        <a href="<c:url value="/updateDataWarehouse"></c:url>">
+	        	<input type="button" value="Update" />
+	        </a>
+        </div>
+>>>>>>> origin/master
     </body>
 </html>

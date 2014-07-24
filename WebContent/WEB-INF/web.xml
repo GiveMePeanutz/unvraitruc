@@ -128,6 +128,15 @@
         <url-pattern>/naiveBayes</url-pattern>
     </filter-mapping>
     
+     <filter>
+        <filter-name>DataWarehouseFilter</filter-name>
+        <filter-class>filters.DataWarehouseFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DataWarehouseFilter</filter-name>
+        <url-pattern>/dataWarehouse</url-pattern>
+    </filter-mapping>
+    
     <filter>
         <filter-name>DisplayCoursesFilter</filter-name>
         <filter-class>filters.DisplayCoursesFilter</filter-class>

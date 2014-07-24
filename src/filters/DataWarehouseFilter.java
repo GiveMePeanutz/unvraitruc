@@ -12,7 +12,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-public class NaiveBayesFilter implements Filter {
+public class DataWarehouseFilter implements Filter {
 
     public static final String USER_SESSION_ACCESS_ATT = "userSessionAccess";
 
@@ -27,7 +27,7 @@ public class NaiveBayesFilter implements Filter {
         HttpSession session = request.getSession();
 
         List menus = ( (List<String>) session.getAttribute( USER_SESSION_ACCESS_ATT ) );
-        if ( !menus.contains( "Data Warehouse" ) ) {
+        if ( !menus.contains( "Naive Bayes" ) ) {
             request.getRequestDispatcher( "/notAvailable.jsp" ).forward( req, res );
             return;
         }
