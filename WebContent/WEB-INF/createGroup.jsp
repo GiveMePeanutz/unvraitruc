@@ -48,11 +48,14 @@
         			</c:choose>
 					<span class="error">${form.errors['groupName']}</span>
 					<br />
+					<br />
 
 					<label for="groupDescription">Description</label>
 					<TEXTAREA name="groupDescription" id="groupDescription" rows="5" cols="22" ><c:out value="${group.groupDescription}"/></TEXTAREA>
 					<span class="error">${form.errors['groupDescription']}</span>
 					<br />
+					<br />
+					
 					<label for="privs">Please assign privileges<br /> to this group</label>
 					<c:choose>
             			<c:when test="${ empty requestScope.privs }">

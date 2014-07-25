@@ -15,6 +15,7 @@
 </c:choose>
 <span class="error">${form.errors['username']}</span>
 <br />
+<br />
 
 <label for="password">Password</label>
 <input type="text" id="password" name="password" value="<c:out value="${user.password}"/>" size="30" maxlength="30" />
@@ -24,6 +25,7 @@
 <label for="lastName">Last Name </label>
 <input type="text" id="lastName" name="lastName" value="<c:out value="${user.lastName}"/>" size="30" maxlength="30" />
 <span class="error">${form.errors['lastName']}</span>
+<br />
 <br />
 
 <label for="firstName">First Name </label>
@@ -54,20 +56,24 @@
 <input type="text" id="address" name="address" value="<c:out value="${user.address}"/>" size="30" maxlength="60" />
 <span class="error">${form.errors['address']}</span>
 <br />
+<br />
 
 <label for="phone">Phone Number </label>
 <input type="text" id="phone" name="phone" value="<c:out value="${user.phone}"/>" size="30" maxlength="30" />
 <span class="error">${form.errors['phone']}</span>
+<br />
 <br />
 
 <label for="email">Email Address</label>
 <input type="email" id="email" name="email" value="<c:out value="${user.email}"/>" size="30" maxlength="60" />
 <span class="error">${form.errors['email']}</span>
 <br />
+<br />
 
 <label for="birthDate">Date of Birth (MM/DD/YYY)</label>
 <input type="text" id="birthDate" name="birthDate" value="<c:out value="${user.birthDate.toString('MM/dd/yyyy')}"/>" size="30" maxlength="60" />
 <span class="error">${form.errors['birthDate']}</span>
+<br />
 <br />
 
 <label for="promotion">Promotion</label>

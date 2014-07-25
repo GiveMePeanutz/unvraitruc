@@ -48,16 +48,20 @@
         			</c:choose>
 					<span class="error">${form.errors['courseName']}</span>
 					<br />
+					<br />
 
 					<label for="courseDescription">Description</label>
 					<TEXTAREA name="courseDescription" id="courseDescription" rows="5" cols="22" ><c:out value="${course.courseDescription}"/></TEXTAREA>
 					<span class="error">${form.errors['courseDescription']}</span>
+					<br />
 					<br />
 					
 					<label for="courseYear">Course Year</label>
 					<input type="number" name="courseYear" id="courseYear"  value="<c:out value="${course.courseYear}"/>" required/>
 					<span class="error">${form.errors['courseYear']}</span>
 					<br />
+					<br />
+					
 					<c:set var="bool" value="true" />
 					<c:forEach var="item" items="${sessionScope.userSession.groupNames}">
 						<c:if test="${item ne 'Teacher'}">
@@ -77,6 +81,7 @@
         					</c:choose>
         				</c:if>
         				</c:forEach>
+        				
         				<c:if test="${bool eq 'true' }">
         				<p class="hidden">
         					<select name="teacher" id = "teacher" >																				

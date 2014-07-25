@@ -45,11 +45,14 @@
         			</c:choose>
 					<span class="error">${form.errors['privName']}</span>
 					<br />
-
+					<br />
+					
 					<label for="privDescription">Description</label>
 					<TEXTAREA name="privDescription" rows="5" cols="22" ><c:out value="${priv.privDescription}"/></TEXTAREA>
 					<span class="error">${form.errors['privDescription']}</span>
 					<br />
+					<br />
+					
                     <label for="menus">Please assign menus<br /> to this group</label>
 					<c:choose>
             			<c:when test="${ empty requestScope.menus }">
