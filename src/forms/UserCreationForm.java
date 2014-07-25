@@ -317,7 +317,7 @@ public final class UserCreationForm {
     }
 
     private void sexValidation( String sex ) throws FormValidationException {
-        if ( sex == null ) {
+        if ( sex.isEmpty() ) {
             throw new FormValidationException( "Please check the right user sex." );
         }
     }

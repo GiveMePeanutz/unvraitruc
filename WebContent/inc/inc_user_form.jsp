@@ -36,17 +36,13 @@
 
 <label for="sex">Sex </label>
 <c:choose>
-<c:when test="${requestScope.user.sex==0 }">
-<input type="radio" id="sex" name="sex" value="<c:out value="0"/>" checked/>Male 
-<input type="radio" id="sex" name="sex" value="<c:out value="1"/>" />Female
-</c:when>
 <c:when test="${requestScope.user.sex==1 }">
-<input type="radio" id="sex" name="sex" value="<c:out value="0"/>" />Male 
-<input type="radio" id="sex" name="sex" value="<c:out value="1"/>" checked/>Female
+<input type="radio" id="sex" name="sex" value="<c:out value="0"/>" >Male 
+<input type="radio" id="sex" name="sex" value="<c:out value="1"/>" checked>Female
 </c:when>
 <c:otherwise>
-<input type="radio" id="sex" name="sex" value="<c:out value="0"/>" />Male 
-<input type="radio" id="sex" name="sex" value="<c:out value="1"/>" />Female
+<input type="radio" id="sex" name="sex" value="<c:out value="0"/>" checked>Male 
+<input type="radio" id="sex" name="sex" value="<c:out value="1"/>" >Female
 </c:otherwise>
 </c:choose>
 <span class="error">${form.errors['sex']}</span>
@@ -83,11 +79,13 @@
 <br />
 
 <c:if test="${!empty requestScope.user }">
+<c:if test="${!empty user.photoURL }">
 Last Photo : 
 	<c:set var="photo"><c:out value="${ user.photoURL }"/></c:set>
     <a href="<c:url value="/images/${ photo }"/>"><c:out value="${ user.photoURL }"/></a>
 <br>
 Please select a photo again, could be the same.
+</c:if>
 </c:if>
 <label for="photoURL">Photo</label>
 <input type="file" id="photoURL" name="photoURL" />
