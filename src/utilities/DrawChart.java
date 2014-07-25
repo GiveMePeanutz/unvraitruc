@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
 import dao.ExtractDataWarehouseDao;
@@ -18,17 +20,18 @@ public class DrawChart {
         boolean urls = false;
         String title = "";
         if ( action == -1 )
-            title = "Number of all activities according to ";
+            title = "Number of all activities";
         else if ( action == 0 )
-            title = "Number of visited pages according to ";
+            title = "Number of visited pages";
         else
-            title = "Number of performed actions according to ";
+            title = "Number of performed actions";
 
-        title = title + type + " Attribute in " + year;
+        title = title + "\n according to " + type + " Attribute in " + year;
         dataset = fillDataset( type, action, year, extractDataWarehouseDao );
 
         JFreeChart chart = ChartFactory.createPieChart( title, dataset, legend, tooltips, urls );
-
+        PiePlot piePlot = (PiePlot) chart.getPlot();
+        piePlot.setLabelGenerator( new StandardPieSectionLabelGenerator( "{0}={1}" ) );
         return chart;
     }
 

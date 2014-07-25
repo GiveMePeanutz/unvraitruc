@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,7 @@ public final class UserCreationForm {
     private static final String BIRTH_FIELD     = "birthDate";
     private static final String PROMOTION_FIELD = "promotion";
     private static final String PHOTO_FIELD     = "photoURL";
+    private static final String GROUP_FIELD     = "groups";
 
     private static final int    BUFFER_LENGTH   = 10240;                        // 10ko
 
@@ -67,6 +69,7 @@ public final class UserCreationForm {
         String phone = getFieldValue( request, PHONE_FIELD );
         String email = getFieldValue( request, EMAIL_FIELD );
         DateTime birthDate = getDateValue( request, BIRTH_FIELD );
+        ArrayList<String> groups = getSelectedValues( request, GROUP_FIELD );
         String promotion = getFieldValue( request, PROMOTION_FIELD );
 
         User user = new User();
@@ -79,7 +82,7 @@ public final class UserCreationForm {
         handlePhone( phone, user );
         handleEmail( email, user );
         handleBirthDate( birthDate, user );
-
+        handleGroups( groups, user );
         handlePhoto( user, request, path );
         handlePromotion( promotion, user );
         DateTime today = new DateTime();
@@ -111,6 +114,7 @@ public final class UserCreationForm {
         String phone = getFieldValue( request, PHONE_FIELD );
         String email = getFieldValue( request, EMAIL_FIELD );
         DateTime birthDate = getDateValue( request, BIRTH_FIELD );
+        ArrayList<String> groups = getSelectedValues( request, GROUP_FIELD );
         String promotion = getFieldValue( request, PROMOTION_FIELD );
 
         User user = new User();
@@ -124,6 +128,7 @@ public final class UserCreationForm {
         handleEmail( email, user );
         handleBirthDate( birthDate, user );
         handlePhoto( user, request, path );
+        handleGroups( groups, user );
         handlePromotion( promotion, user );
 
         DateTime today = new DateTime();
@@ -187,7 +192,7 @@ public final class UserCreationForm {
         } catch ( FormValidationException e ) {
             setError( SEX_FIELD, e.getMessage() );
         }
-        if ( sex == "1" )
+        if ( sex.equals( "1" ) )
         {
             user.setSex( 1 );
         }
@@ -232,6 +237,16 @@ public final class UserCreationForm {
             setError( BIRTH_FIELD, e.getMessage() );
         }
         user.setBirthDate( birthDate );
+    }
+
+    private void handleGroups( ArrayList<String> groups, User user ) {
+        try {
+            groupValidation( groups );
+        } catch ( FormValidationException e ) {
+            setError( GROUP_FIELD, e.getMessage() );
+        }
+        user.setGroupNames( groups );
+
     }
 
     private void handlePromotion( String promotion, User user ) {
@@ -340,14 +355,23 @@ public final class UserCreationForm {
         }
     }
 
+    private void groupValidation( ArrayList<String> groups ) throws FormValidationException {
+        if ( groups == null )
+        {
+            throw new FormValidationException( "Please choose at least one group." );
+        }
+    }
+
     private void promotionValidation( String promotion, User user ) throws FormValidationException {
         Boolean bool = false;
+        System.out.println( user.getGroupNames().toString() );
         if ( user.getGroupNames() != null )
         {
             List<String> listGroup = user.getGroupNames();
 
             for ( String group : listGroup )
             {
+                System.out.println( group );
                 if ( group.equals( "Student" ) )
                 {
                     bool = true;
@@ -484,6 +508,21 @@ public final class UserCreationForm {
         } else {
             return value;
         }
+    }
+
+    private static ArrayList<String> getSelectedValues( HttpServletRequest request, String fieldName ) {
+
+        ArrayList<String> privileges = new ArrayList<String>();
+        String[] values = request.getParameterValues( fieldName );
+        if ( values == null || values.length == 0 )
+        {
+            return null;
+        }
+        for ( int i = 0; i < values.length; i++ )
+        {
+            privileges.add( values[i] );
+        }
+        return privileges;
     }
 
     private static String getFileName( Part part ) {

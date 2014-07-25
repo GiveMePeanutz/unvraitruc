@@ -55,6 +55,7 @@ public class ChartServlet extends HttpServlet {
         JFreeChart chart = drawChart.getChart( type, action, year, extractDataWarehouseDao );
         int width = 500;
         int height = 350;
+
         ChartUtilities.writeChartAsPNG( outputStream, chart, width, height );
 
         // Save the action in database

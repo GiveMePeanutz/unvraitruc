@@ -43,8 +43,11 @@
 			                    		<c:when test="${ listResult.getSex()=='-1' }" >
 			                    			<c:out value ="All"/>
 			                    		</c:when>
+			                    		<c:when test="${ listResult.getSex()=='0' }" >
+			                    			<c:out value ="Male"/>
+			                    		</c:when>
 			                    		<c:otherwise>
-			                    			<c:out value="${listResult.getSex()}"/>
+			                    			<c:out value="Female"/>
 			                    		</c:otherwise>
 		                    		</c:choose>
 								</td>
@@ -181,8 +184,11 @@
 			                    		<c:when test="${ listResult.getSex()=='-1' }" >
 			                    			<c:out value ="All"/>
 			                    		</c:when>
+			                    		<c:when test="${ listResult.getSex()=='0' }" >
+			                    			<c:out value ="Male"/>
+			                    		</c:when>
 			                    		<c:otherwise>
-			                    			<c:out value="${listResult.getSex()}"/>
+			                    			<c:out value="Female"/>
 			                    		</c:otherwise>
 		                    		</c:choose>
 								</td>
