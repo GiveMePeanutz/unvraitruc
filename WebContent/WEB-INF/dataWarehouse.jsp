@@ -81,14 +81,17 @@
 			                    	</c:choose>
 								</td>
 								<td>
-								<c:choose>
-		                    		<c:when test="${ listResult.getActivity()=='-1' }" >
-		                    			<c:out value ="All"/>
-		                    		</c:when>
-		                    		<c:otherwise>
-		                    			<c:out value="${listResult.getActivity()}"/>
-		                    		</c:otherwise>
-		                    	</c:choose>
+									<c:choose>
+			                    		<c:when test="${ listResult.getActivity()=='-1' }" >
+			                    			<c:out value ="All"/>
+			                    		</c:when>
+			                    		<c:when  test="${ listResult.getActivity()=='0'}" >
+			                    			<c:out value="Visited Pages"/>
+			                    		</c:when>
+			                    		<c:otherwise>
+			                    			<c:out value="Performed Actions"/>
+			                    		</c:otherwise>
+			                    	</c:choose>
 								</td>
 								<td>
 		                    		<c:out value="${listResult.getCount()}"/>
@@ -206,14 +209,17 @@
 		                    		<c:out value="${listResult.getDayOfWeek()}"/>
 								</td>
 								<td>
-		                    		<c:choose>
+									<c:choose>
 			                    		<c:when test="${ listResult.getActivity()=='-1' }" >
 			                    			<c:out value ="All"/>
 			                    		</c:when>
+			                    		<c:when  test="${ listResult.getActivity()=='0'}" >
+			                    			<c:out value="Visited Pages"/>
+			                    		</c:when>
 			                    		<c:otherwise>
-			                    			<c:out value="${listResult.getActivity()}"/>
+			                    			<c:out value="Performed Actions"/>
 			                    		</c:otherwise>
-		                    		</c:choose>
+			                    	</c:choose>
 								</td>
 								<td>
 		                    		<c:out value="${listResult.getCount()}"/>
