@@ -20,36 +20,38 @@ import dao.FactTableDao;
 @WebServlet( "/dataWarehouse" )
 public class DataWarehouse extends HttpServlet {
 
-    public static final String      CONF_DAO_FACTORY   = "daofactory";
-    public static final String      LIST_RES_ATT       = "results";
-    public static final String      USER_SESSION_ATT   = "userSession";
-    public static final String      VERIFY_PARAM       = "Calculate";
+    public static final String      CONF_DAO_FACTORY      = "daofactory";
+    public static final String      LIST_RES_ATT          = "results";
+    public static final String      USER_SESSION_ATT      = "userSession";
+    public static final String      VERIFY_PARAM          = "Calculate";
 
-    public static final String      LIST_SEX_ATT       = "sexValues";
-    public static final String      LIST_GROUP_ATT     = "groups";
-    public static final String      LIST_YEAR_ATT      = "years";
-    public static final String      LIST_MONTH_ATT     = "months";
-    public static final String      LIST_WEEK_ATT      = "weeks";
-    public static final String      LIST_DAY_ATT       = "days";
-    public static final String      LIST_DAYOFWEEK_ATT = "daysOfWeek";
-    public static final String      LIST_HOUR_ATT      = "hours";
-    public static final String      LIST_ACTIVITY_ATT  = "activities";
+    public static final String      LIST_SEX_ATT          = "sexValues";
+    public static final String      LIST_GROUP_ATT        = "groups";
+    public static final String      LIST_YEAR_ATT         = "years";
+    public static final String      LIST_MONTH_ATT        = "months";
+    public static final String      LIST_WEEK_ATT         = "weeks";
+    public static final String      LIST_DAY_ATT          = "days";
+    public static final String      LIST_DAYOFWEEK_ATT    = "daysOfWeek";
+    public static final String      LIST_HOUR_ATT         = "hours";
+    public static final String      LIST_ACTIVITY_ATT     = "activities";
 
-    public static final String      SEX_FIELD          = "sexValue";
-    public static final String      GROUP_FIELD        = "group";
-    public static final String      YEAR_FIELD         = "year";
-    public static final String      MONTH_FIELD        = "month";
-    public static final String      WEEK_FIELD         = "week";
-    public static final String      DAY_FIELD          = "day";
-    public static final String      DAYOFWEEK_FIELD    = "dayOfWeek";
-    public static final String      HOUR_FIELD         = "hour";
-    public static final String      ACTIVITY_FIELD     = "activitie";
+    public static final String      SEX_FIELD             = "sexValue";
+    public static final String      GROUP_FIELD           = "group";
+    public static final String      YEAR_FIELD            = "year";
+    public static final String      MONTH_FIELD           = "month";
+    public static final String      WEEK_FIELD            = "week";
+    public static final String      DAY_FIELD             = "day";
+    public static final String      DAYOFWEEK_FIELD       = "dayOfWeek";
+    public static final String      HOUR_FIELD            = "hour";
+    public static final String      ACTIVITY_FIELD        = "activity";
 
-    public static final String      SESSION_RESULTS    = "results";
-    public static final String      COUNT_ATT          = "dWLine";
-    public static final String      FORM_ATT           = "form";
+    public static final String      SESSION_RESULTS_MONTH = "resultsMonth";
+    public static final String      SESSION_RESULTS_WEEK  = "resultsWeek";
 
-    public static final String      VIEW               = "/WEB-INF/dataWarehouse.jsp";
+    public static final String      COUNT_ATT             = "dWLine";
+    public static final String      FORM_ATT              = "form";
+
+    public static final String      VIEW                  = "/WEB-INF/dataWarehouse.jsp";
 
     private ExtractDataWarehouseDao extractDataWarehouseDao;
     private FactTableDao            factTableDao;
@@ -79,6 +81,17 @@ public class DataWarehouse extends HttpServlet {
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
+        // Load values again
+        List<String> groups = extractDataWarehouseDao.listGroup();
+        List<String> years = extractDataWarehouseDao.listYear();
+        List<String> months = extractDataWarehouseDao.getMonths();
+        List<String> daysOfWeek = extractDataWarehouseDao.getDays();
+
+        request.setAttribute( LIST_GROUP_ATT, groups );
+        request.setAttribute( LIST_YEAR_ATT, years );
+        request.setAttribute( LIST_MONTH_ATT, months );
+        request.setAttribute( LIST_DAYOFWEEK_ATT, daysOfWeek );
+        // -----------------------------------------------------------------------------------
         DataWarehouseLine dWLine;
         int countResult = 0;
 
@@ -95,14 +108,16 @@ public class DataWarehouse extends HttpServlet {
             int day = getIntValue( request, DAY_FIELD );
             int hour = getIntValue( request, HOUR_FIELD );
             dWLine = new DataWarehouseLine( sex, group, year, month, day, hour, activity );
-            countResult = Integer.parseInt( extractDataWarehouseDao.countMonth( dWLine ) );
+            if ( !extractDataWarehouseDao.countMonth( dWLine ).equals( "" ) )
+                countResult = Integer.parseInt( extractDataWarehouseDao.countMonth( dWLine ) );
         }
         else
         {
             int week = getIntValue( request, WEEK_FIELD );
             String dayOfWeek = getFieldValue( request, DAYOFWEEK_FIELD );
             dWLine = new DataWarehouseLine( sex, group, year, week, dayOfWeek, activity );
-            countResult = Integer.parseInt( extractDataWarehouseDao.countWeek( dWLine ) );
+            if ( !extractDataWarehouseDao.countWeek( dWLine ).equals( "" ) )
+                countResult = Integer.parseInt( extractDataWarehouseDao.countWeek( dWLine ) );
         }
 
         dWLine.setCount( countResult );
@@ -114,16 +129,32 @@ public class DataWarehouse extends HttpServlet {
         User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
         factTableDao.addFact( userSession.getUsername(), "Count something" );
+        if ( calculate.equals( "Calculate" ) )
 
-        ArrayList<DataWarehouseLine> results = (ArrayList<DataWarehouseLine>) session
-                .getAttribute( SESSION_RESULTS );
+        {
+            ArrayList<DataWarehouseLine> resultsMonth = (ArrayList<DataWarehouseLine>) session
+                    .getAttribute( SESSION_RESULTS_MONTH );
 
-        if ( results == null ) {
-            results = new ArrayList<DataWarehouseLine>();
+            if ( resultsMonth == null ) {
+                resultsMonth = new ArrayList<DataWarehouseLine>();
+            }
+            resultsMonth.add( dWLine );
+
+            session.setAttribute( SESSION_RESULTS_MONTH, resultsMonth );
         }
-        results.add( dWLine );
 
-        session.setAttribute( SESSION_RESULTS, results );
+        else
+        {
+            ArrayList<DataWarehouseLine> resultsWeek = (ArrayList<DataWarehouseLine>) session
+                    .getAttribute( SESSION_RESULTS_WEEK );
+
+            if ( resultsWeek == null ) {
+                resultsWeek = new ArrayList<DataWarehouseLine>();
+            }
+            resultsWeek.add( dWLine );
+
+            session.setAttribute( SESSION_RESULTS_WEEK, resultsWeek );
+        }
 
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
 
@@ -140,7 +171,6 @@ public class DataWarehouse extends HttpServlet {
 
     private static int getIntValue( HttpServletRequest request, String fieldName ) {
         String value = request.getParameter( fieldName );
-        System.out.println( value );
         int valueInt = Integer.parseInt( value );
         if ( valueInt == 0 ) {
             return 0;

@@ -39,7 +39,7 @@ public class UpdateDataWarehouse extends HttpServlet {
         HttpSession session = request.getSession();
         User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
-        factTableDao.addFact( userSession.getUsername(), "Count something" );
+        factTableDao.addFact( userSession.getUsername(), "Update Database" );
 
         response.sendRedirect( request.getContextPath() + VIEW );
     }

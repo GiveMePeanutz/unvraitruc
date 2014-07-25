@@ -37,8 +37,8 @@
 	                    <th>Activity</th>
 	                    <th class="action">Count</th>
 	                </tr>
-	                <c:if test="${ ! empty sessionScope.results }">
-	                	<c:forEach items="${ sessionScope.results }" var="listResult" varStatus="boucle">
+	                <c:if test="${ ! empty sessionScope.resultsMonth }">
+	                	<c:forEach items="${ sessionScope.resultsMonth }" var="listResult" varStatus="boucle">
 	                		<tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
 		                		
 								<td>
@@ -100,7 +100,7 @@
 						</td>
 						<td>
 		                    <select name="day" id = "day">
-		                    	<option value='<c:out value="0"/>'>All</option> 
+		                    	<option value='<c:out value="-1"/>'>All</option> 
 							<c:forEach var="day" begin="1" end="31">
 							    <option value='<c:out value="${day}"/>'><c:out value="${day}"/></option> 
 							</c:forEach>
@@ -144,8 +144,8 @@
 	                    <th>Activity</th>
 	                    <th class="action">Count</th>
 	                </tr>
-	                <c:if test="${ ! empty sessionScope.results }">
-	                	<c:forEach items="${ sessionScope.results }" var="listResult" varStatus="boucle">
+	                <c:if test="${ ! empty sessionScope.resultsWeek }">
+	                	<c:forEach items="${ sessionScope.resultsWeek }" var="listResult" varStatus="boucle">
 	                		<tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
 		                		
 								<td>
