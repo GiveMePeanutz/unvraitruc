@@ -10,16 +10,15 @@
     <body>
         <c:import url="/inc/menu.jsp" />
         
-        <div id="normalForm">
+       <CENTER>
 	        <h1>Data Warehouse</h1>
-	        <br />
-
-	        <div>
 	        <a href="<c:url value="/updateDataWarehouse"/>" class="button">
 	        	<input type="button" value="Update the Database"/>
 	        </a>
-	        </div>
+	   </CENTER> 
 	        <br />
+	      
+	        
 	        <form method="post" action="<c:url value="/dataWarehouse"/>" >
 	        
 	            <table >
@@ -162,7 +161,7 @@
 	        <br>
 	        <br>
 	        <form method="post" action="<c:url value="/dataWarehouse"/>" >
-	        
+	            
 	            <table >
 	            <CAPTION>Calculate by Year>Week>Day of Week </CAPTION>
 	            
@@ -281,10 +280,9 @@
 						
 	                </tr>
 	            </table>
-	            
 	        </form>
 	        <br>
-	        <div>
+	        <div id="normalForm">
 	        <form method="post" action="<c:url value="/chart"/>" >
             	<fieldset>
             	<LEGEND>Draw a Pie Chart</LEGEND>
@@ -312,6 +310,5 @@
         		</fieldset>
         	</form>
 	        </div>
-        </div>
     </body>
 </html>

@@ -364,14 +364,12 @@ public final class UserCreationForm {
 
     private void promotionValidation( String promotion, User user ) throws FormValidationException {
         Boolean bool = false;
-        System.out.println( user.getGroupNames().toString() );
         if ( user.getGroupNames() != null )
         {
             List<String> listGroup = user.getGroupNames();
 
             for ( String group : listGroup )
             {
-                System.out.println( group );
                 if ( group.equals( "Student" ) )
                 {
                     bool = true;
