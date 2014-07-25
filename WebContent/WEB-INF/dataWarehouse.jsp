@@ -42,7 +42,14 @@
 	                		<tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
 		                		
 								<td>
-		                    		<c:out value="${listResult.getSex()}"/>
+		                    		<c:choose>
+			                    		<c:when test="${ listResult.getSex()=='-1' }" >
+			                    			<c:out value ="All"/>
+			                    		</c:when>
+			                    		<c:otherwise>
+			                    			<c:out value="${listResult.getSex()}"/>
+			                    		</c:otherwise>
+		                    		</c:choose>
 								</td>
 								<td>
 		                    		<c:out value="${listResult.getGroup()}"/>
@@ -54,13 +61,34 @@
 		                    		<c:out value="${listResult.getMonth()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${listResult.getDay()}"/>
+									<c:choose>
+			                    		<c:when test="${ listResult.getDay()=='-1' }" >
+			                    			<c:out value ="All"/>
+			                    		</c:when>
+			                    		<c:otherwise>
+			                    			<c:out value="${listResult.getDay()}"/>
+			                    		</c:otherwise>
+		                    		</c:choose>
 								</td>
 								<td>
-		                    		<c:out value="${listResult.getHour()}"/>
+									<c:choose>
+			                    		<c:when test="${ listResult.getHour()=='-1' }" >
+			                    			<c:out value ="All"/>
+			                    		</c:when>
+			                    		<c:otherwise>
+			                    			<c:out value="${listResult.getHour()}"/>
+			                    		</c:otherwise>
+			                    	</c:choose>
 								</td>
 								<td>
-		                    		<c:out value="${listResult.getActivity()}"/>
+								<c:choose>
+		                    		<c:when test="${ listResult.getActivity()=='-1' }" >
+		                    			<c:out value ="All"/>
+		                    		</c:when>
+		                    		<c:otherwise>
+		                    			<c:out value="${listResult.getActivity()}"/>
+		                    		</c:otherwise>
+		                    	</c:choose>
 								</td>
 								<td>
 		                    		<c:out value="${listResult.getCount()}"/>
@@ -149,7 +177,14 @@
 	                		<tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
 		                		
 								<td>
-		                    		<c:out value="${listResult.getSex()}"/>
+		                    		<c:choose>
+			                    		<c:when test="${ listResult.getSex()=='-1' }" >
+			                    			<c:out value ="All"/>
+			                    		</c:when>
+			                    		<c:otherwise>
+			                    			<c:out value="${listResult.getSex()}"/>
+			                    		</c:otherwise>
+		                    		</c:choose>
 								</td>
 								<td>
 		                    		<c:out value="${listResult.getGroup()}"/>
@@ -158,13 +193,27 @@
 		                    		<c:out value="${listResult.getYear()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${listResult.getWeek()}"/>
+		                    		<c:choose>
+			                    		<c:when test="${ listResult.getWeek()=='-1' }" >
+			                    			<c:out value ="All"/>
+			                    		</c:when>
+			                    		<c:otherwise>
+			                    			<c:out value="${listResult.getWeek()}"/>
+			                    		</c:otherwise>
+		                    		</c:choose>
 								</td>
 								<td>
 		                    		<c:out value="${listResult.getDayOfWeek()}"/>
 								</td>
 								<td>
-		                    		<c:out value="${listResult.getActivity()}"/>
+		                    		<c:choose>
+			                    		<c:when test="${ listResult.getActivity()=='-1' }" >
+			                    			<c:out value ="All"/>
+			                    		</c:when>
+			                    		<c:otherwise>
+			                    			<c:out value="${listResult.getActivity()}"/>
+			                    		</c:otherwise>
+		                    		</c:choose>
 								</td>
 								<td>
 		                    		<c:out value="${listResult.getCount()}"/>
@@ -197,7 +246,7 @@
 						</td>
 						<td>
 		                    <select name="week" id = "week">
-		                    	<option value='<c:out value="0"/>'>All</option> 
+		                    	<option value='<c:out value="-1"/>'>All</option> 
 							<c:forEach var="week" begin="1" end="52">
 							    <option value='<c:out value="${week}"/>'><c:out value="${week}"/></option> 
 							</c:forEach>
