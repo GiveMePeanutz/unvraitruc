@@ -15,9 +15,6 @@
 	        <br />
 
 	        <div>
-	        <a href="<c:url value="/updateDataWarehouseTemp"/>" class="button">
-	        	<input type="button" value="UpdateDim"/>
-	        </a>
 	        <a href="<c:url value="/updateDataWarehouse"/>" class="button">
 	        	<input type="button" value="Update the Database"/>
 	        </a>

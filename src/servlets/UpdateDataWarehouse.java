@@ -34,6 +34,7 @@ public class UpdateDataWarehouse extends HttpServlet {
     public void doGet( HttpServletRequest request, HttpServletResponse response )
             throws ServletException, IOException {
 
+        dataWarehouseDao.updateDWDim();
         dataWarehouseDao.updateDW();
 
         HttpSession session = request.getSession();
