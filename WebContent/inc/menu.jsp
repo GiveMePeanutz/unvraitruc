@@ -169,12 +169,6 @@
 						<li><a href="<c:url value="/kMeans"/>">KMeans</a></li>
 	     			</c:if>
 				</c:forEach>
-				
-				<c:forEach var="item" items="${sessionScope.userSessionAccess}">
-					<c:if test="${item eq 'Genetic Algorithms'}">
-						<li><a href="<c:url value="/geneticAlgorithms"/>">Genetic Algorithms</a></li>
-	     			</c:if>
-				</c:forEach>
 	    	</ul>
 		</li>
 		</c:if>

@@ -41,8 +41,7 @@ public final class Menu {
                                       {
                                       { "Data Analysis" },
                                       { "Naive Bayes" },
-                                      { "KMeans" },
-                                      { "Genetic Algorithms" }
+                                      { "KMeans" }
                                       },
                                       {
                                       { "Profile" }

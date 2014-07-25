@@ -111,15 +111,6 @@
     </filter-mapping>
     
     <filter>
-        <filter-name>GeneticAlgorithmsFilter</filter-name>
-        <filter-class>filters.GeneticAlgorithmsFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>GeneticAlgorithmsFilter</filter-name>
-        <url-pattern>/geneticAlgorithms</url-pattern>
-    </filter-mapping>
-    
-    <filter>
         <filter-name>NaiveBayesFilter</filter-name>
         <filter-class>filters.NaiveBayesFilter</filter-class>
     </filter>
