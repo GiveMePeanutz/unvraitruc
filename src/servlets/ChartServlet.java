@@ -57,6 +57,7 @@ public class ChartServlet extends HttpServlet {
         int height = 350;
         ChartUtilities.writeChartAsPNG( outputStream, chart, width, height );
 
+        // Save the action in database
         HttpSession session = request.getSession();
         User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
@@ -74,7 +75,6 @@ public class ChartServlet extends HttpServlet {
 
     private static int getIntValue( HttpServletRequest request, String fieldName ) {
         String value = request.getParameter( fieldName );
-        System.out.println( value );
         int valueInt = Integer.parseInt( value );
         if ( valueInt == 0 ) {
             return 0;

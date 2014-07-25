@@ -295,7 +295,7 @@
                      		<option value='1'>Performed Actions</option>                     
                 	</select>
                 	<br>
-                	Please choose a Year
+                	Please choose a Year : 
                 	<select name="year" id = "year">
 	                    <c:forEach items="${ requestScope.years }" var="year" varStatus="boucle">
 						    <option value='<c:out value="${year}"/>'><c:out value="${year}"/></option> 

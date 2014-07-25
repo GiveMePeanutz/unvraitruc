@@ -37,22 +37,40 @@ public class DrawChart {
 
         DefaultPieDataset dataset = new DefaultPieDataset();
         List<String> groups = extractDataWarehouseDao.listGroup();
-
-        if ( type == "Sex" )
+        int nbMale;
+        int nbFemale;
+        int nbByGroup;
+        if ( type.equals( "Sex" ) )
         {
-            dataset.setValue( "Male", Integer.parseInt( extractDataWarehouseDao.countAllBySex( 0, action, year ) ) );
-            dataset.setValue( "Female", Integer.parseInt( extractDataWarehouseDao.countAllBySex( 1, action, year ) ) );
+
+            if ( extractDataWarehouseDao.countAllBySex( 0, action, year ).equals( "" ) )
+                nbMale = 0;
+            else
+                nbMale = Integer.parseInt( extractDataWarehouseDao.countAllBySex( 0, action, year ) );
+
+            if ( extractDataWarehouseDao.countAllBySex( 1, action, year ).equals( "" ) )
+                nbFemale = 0;
+            else
+                nbFemale = Integer.parseInt( extractDataWarehouseDao.countAllBySex( 1, action, year ) );
+
+            dataset.setValue( "Male", nbMale );
+            dataset.setValue( "Female", nbFemale );
         }
-        if ( type == "Group" )
+        if ( type.equals( "Group" ) )
         {
             for ( String group : groups )
             {
-                int value = Integer.parseInt( extractDataWarehouseDao.countAllByGroup( group, action, year ) );
-                dataset.setValue( group, value );
+                if ( !group.equals( "All" ) )
+                {
+                    if ( extractDataWarehouseDao.countAllByGroup( group, action, year ).equals( "" ) )
+                        nbByGroup = 0;
+                    else
+                        nbByGroup = Integer.parseInt( extractDataWarehouseDao.countAllByGroup( group, action, year ) );
+                    dataset.setValue( group, nbByGroup );
+                }
             }
         }
 
         return dataset;
     }
-
 }
