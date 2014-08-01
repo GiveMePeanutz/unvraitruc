@@ -38,6 +38,7 @@
 					</c:forEach>                   
                 </tr>
                 <c:forEach items="${ requestScope.users }" var="mapUsers" varStatus="boucle">
+                <%--A test to put a different color every other time  --%>
                 <tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
                     <td><c:out value="${ mapUsers.value.username }"/></td>
                     <td><c:out value="${ mapUsers.value.lastName }"/></td>

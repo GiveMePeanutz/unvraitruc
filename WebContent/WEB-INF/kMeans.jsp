@@ -43,6 +43,7 @@
 		                    <th>Activity count</th>                   
 			            </tr>
 			       		<c:forEach items="${cluster}" var="clusterData" varStatus="boucle2">
+               				 <%--A test to put a different color every other time  --%>
 			       			<tr class="${boucle2.index % 2 == 0 ? 'pair' : 'impair'}">
 				       			<td><c:out value="${clusterData.username}"/></td>
 				       			<td>

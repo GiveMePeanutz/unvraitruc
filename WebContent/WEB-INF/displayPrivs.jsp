@@ -31,6 +31,7 @@
                     <th class="action">Modify</th>
                     <th class="action">Delete</th>                   
                 </tr>
+                <%--A test to put a different color every other time  --%>
                 <c:forEach items="${ requestScope.privs }" var="mapPrivs" varStatus="boucle">
                 <tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
                     <td><c:out value="${ mapPrivs.value.privName }"/></td>

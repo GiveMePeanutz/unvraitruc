@@ -32,6 +32,7 @@
                     <th class="action">Delete</th>                   
                 </tr>
                 <c:forEach items="${ requestScope.groups }" var="mapGroups" varStatus="boucle">
+                <%--A test to put a different color every other time  --%>
                 <tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
                     <td><c:out value="${ mapGroups.value.groupName }"/></td>
                     <td><c:out value="${ mapGroups.value.groupDescription }"/></td>

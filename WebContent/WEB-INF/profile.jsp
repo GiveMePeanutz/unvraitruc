@@ -81,6 +81,7 @@
 		            </tr>
 		            
 					<c:forEach items="${ user.courseNames }" var="course">
+               			 <%--A test to put a different color every other time  --%>
 			             <tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
 			                 <td><c:out value="${ course }"/></td>	
 			                 <td class="action">

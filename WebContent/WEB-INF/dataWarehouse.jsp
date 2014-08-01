@@ -38,6 +38,7 @@
                 <%--For number attribute, if the value is -1 it means the "All" option --%>
                 <c:if test="${ ! empty sessionScope.resultsMonth }">
                 	<c:forEach items="${ sessionScope.resultsMonth }" var="listResult" varStatus="boucle">
+                		<%--A test to put a different color every other time  --%>
                 		<tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
 	                		
 							<td>
@@ -181,6 +182,7 @@
                 <%--For number attribute, if the value is -1 it means the "All" option --%>
                 <c:if test="${ ! empty sessionScope.resultsWeek }">
                 	<c:forEach items="${ sessionScope.resultsWeek }" var="listResult" varStatus="boucle">
+               			<%--A test to put a different color every other time  --%>
                 		<tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
 	                		
 							<td>
