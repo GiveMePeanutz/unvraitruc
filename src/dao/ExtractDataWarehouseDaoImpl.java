@@ -23,7 +23,7 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
                                                               "June", "July", "August", "September", "October",
                                                               "November", "December" );
     private static List<String> days                  = Arrays.asList( "All", "Monday", "Tuesday", "Wednesday",
-                                                              "Thrusday",
+                                                              "Thursday",
                                                               "Friday", "Saturday", "Sunday" );
 
     private static String       SELECT_DISTINCT_YEAR  = "SELECT DISTINCT year FROM timeDim";

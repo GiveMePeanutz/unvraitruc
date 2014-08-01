@@ -24,7 +24,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                                                                "June", "July", "August", "September", "October",
                                                                "November", "December" );
     private static List<String> days                   = Arrays.asList( "All", "Monday", "Tuesday", "Wednesday",
-                                                               "Thrusday",
+                                                               "Thursday",
                                                                "Friday", "Saturday", "Sunday" );
 
     private static String       SELECT_DISTINCT_YEAR   = "SELECT DISTINCT year FROM timeDim";
@@ -38,8 +38,8 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
     private static String       SELECT_ACTIVITYDIM_ID  = "SELECT DISTINCT activityId FROM activityDim ad WHERE ad.isAction like ?";
 
     private static String       SELECT_NEW_LOGS_H1     = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%H') AS hour, date_format(factDate,'%d') AS day, date_format(factDate,'%M') AS monthName, date_format(factDate,'%Y') AS year, count(*) AS count FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, hour, day, monthName, year";
-    private static String		SELECT_NEW_LOGS_H2	   = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%W') AS dayName,  date_format(factDate,'%u') AS week, date_format(factDate,'%Y') AS year, count(*) AS count FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, dayName, week, year;";
-    
+    private static String       SELECT_NEW_LOGS_H2     = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%W') AS dayName,  date_format(factDate,'%u') AS week, date_format(factDate,'%Y') AS year, count(*) AS count FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, dayName, week, year;";
+
     private static String       COUNT                  = "SELECT COUNT(*) as count FROM fact_table WHERE username IN (SELECT u.username FROM user u, user_group ug, userDim ud, groupDim gd WHERE u.sex=ud.sex AND ud.groupID=gd.groupID AND gd.groupName=ug.groupName  AND u.username=ug.username AND ud.userID=?) AND pageName IN (SELECT pageName FROM fact_table ft, activityDim ad WHERE IF(ad.isAction=0, pageName LIKE '/%', NOT pageName LIKE '/%') AND ad.activityID=?) AND factDate IN (SELECT factDate FROM fact_table ft, timeDim td WHERE  date_format(factDate,'%H')=td.hour AND date_format(factDate,'%d')=td.day AND date_format(factDate,'%W')=td.dayName  AND date_format(factDate,'%u')=td.week AND date_format(factDate,'%M')=td.monthName AND date_format(factDate,'%Y')=td.year AND td.timeID=?)";
 
     private static String       INSERT_TIME_TIMEDIM    = "INSERT INTO timeDim (year,monthName,week,dayName,day,hour) values (?,?,?,?,?,?)";
@@ -51,11 +51,8 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     private static String       FIND_RESULT            = "SELECT count FROM dwFactTable dwft, userDim ud, groupDim gd, timeDim td, activityDim ad WHERE dwft.userId=ud.userId AND dwft.timeId=td.timeID AND dwft.activityId=ad.activityId AND ud.groupID=gd.groupId AND ud.sex= ? AND gd.groupName = ? AND ad.isAction = ? AND td.hour = ? AND td.day = ? AND td.dayName= ? AND td.week = ? AND td.monthName = ? AND td.year = ?";
 
-    
-    
-    private static String 		WILDCARD_TEST 		   = "SELECT sex FROM web_app_db.user WHERE sex like ?";
-    
-    
+    private static String       WILDCARD_TEST          = "SELECT sex FROM web_app_db.user WHERE sex like ?";
+
     DataWarehouseDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
     }
@@ -68,21 +65,19 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         PreparedStatement preparedStatement2 = null;
         PreparedStatement preparedStatement3 = null;
         ResultSet resultSet = null;
-        
+
         try {
-            
-        	connexion = daoFactory.getConnection();
-            
-            
+
+            connexion = daoFactory.getConnection();
+
             // DW Fact table update
             updateDWFactTable();
-            
-            preparedStatement1 = connexion.prepareStatement(INSERT_UPDATE_DATETIME);
+
+            preparedStatement1 = connexion.prepareStatement( INSERT_UPDATE_DATETIME );
             preparedStatement1.executeUpdate();
-            
-            System.out.println("updateDW done");
-            
-        	
+
+            System.out.println( "updateDW done" );
+
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } finally {
@@ -92,28 +87,24 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         }
 
     }
-    
+
     @Override
     public void updateDWDim() throws DAOException {
 
-        
         updateTimeDim();
-        
-        
+
         updateUserGroupDim();
-        
-        
-        System.out.println("updateDWdim done");
-        
-    	
+
+        System.out.println( "updateDWdim done" );
+
     }
-    
-    public int blah(int i){
-    	if(i<0){
-    		return 0;
-    	}else{
-    		return 1;
-    	}
+
+    public int blah( int i ) {
+        if ( i < 0 ) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     public void updateDWFactTable() throws DAOException {
@@ -133,7 +124,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         ResultSet resultSet3 = null;
         ResultSet resultSet4 = null;
         ResultSet resultSet5 = null;
-        
 
         try {
             connexion = daoFactory.getConnection();
@@ -141,140 +131,136 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             resultSet1 = preparedStatement1.executeQuery();
             preparedStatement1Bis = connexion.prepareStatement( SELECT_NEW_LOGS_H2 );
             resultSet1Bis = preparedStatement1Bis.executeQuery();
-            
-            
+
             // hierarchy 1
             while ( resultSet1.next() ) {
-            	
-            	ArrayList<Integer> userIDs = new ArrayList<Integer>();
+
+                ArrayList<Integer> userIDs = new ArrayList<Integer>();
                 ArrayList<Integer> timeIDs = new ArrayList<Integer>();
                 ArrayList<Integer> activityIDs = new ArrayList<Integer>();
-            	
+
                 System.out.println( "1" );
-                
-                for( int sex : new int[]{-1,resultSet1.getInt( "sex" )}){
-                	for ( String groupName : new String[]{"All",resultSet1.getString("groupName")}){
-                		preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_USERDIM_ID, false, sex , groupName );
-		                resultSet2 = preparedStatement2.executeQuery();
-		                userIDs.addAll(mapSingleColumnIntegerQuery( resultSet2, "userId" ));
-                	}
+
+                for ( int sex : new int[] { -1, resultSet1.getInt( "sex" ) } ) {
+                    for ( String groupName : new String[] { "All", resultSet1.getString( "groupName" ) } ) {
+                        preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_USERDIM_ID, false, sex,
+                                groupName );
+                        resultSet2 = preparedStatement2.executeQuery();
+                        userIDs.addAll( mapSingleColumnIntegerQuery( resultSet2, "userId" ) );
+                    }
                 }
-                System.out.println(userIDs.size()+"-------------------------------------------------");
-                
-                
+                System.out.println( userIDs.size() + "-------------------------------------------------" );
 
                 System.out.println( "2" );
-                
-                for ( int year : new int[]{-1,resultSet1.getInt( "year" )}){
-                	
-                	//hierarchy 1
-                	for ( String monthName : new String[]{"All", resultSet1.getString( "monthName" )}){
-                		
-                		for ( int day : new int[]{-1,resultSet1.getInt( "day" )}){
-                			
-                			for ( int hour : new int[]{-1, resultSet1.getInt("hour")}){
-                				
-                				preparedStatement3 = initialisationRequetePreparee( connexion, SELECT_TIMEDIM_ID_H1, false,
-                                        hour, day , monthName, year );
-                				resultSet3 = preparedStatement3.executeQuery();
-                				timeIDs.addAll(mapSingleColumnIntegerQuery(resultSet3, "timeId"));
-                			}
-                			
-                		}
-                		
-                	}
-                }
-                System.out.println(timeIDs.size()+"---------------------------------------");
-                
-                
-                System.out.println( "3" );
-                
-                
 
-                for ( int isAction : new int[]{-1 , resultSet1.getInt("isAction")}){
-                	preparedStatement5 = initialisationRequetePreparee( connexion, SELECT_ACTIVITYDIM_ID, false, isAction );
-                    resultSet5 = preparedStatement5.executeQuery();
-                    activityIDs.addAll(mapSingleColumnIntegerQuery( resultSet5, "activityId" ));
+                for ( int year : new int[] { -1, resultSet1.getInt( "year" ) } ) {
+
+                    // hierarchy 1
+                    for ( String monthName : new String[] { "All", resultSet1.getString( "monthName" ) } ) {
+
+                        for ( int day : new int[] { -1, resultSet1.getInt( "day" ) } ) {
+
+                            for ( int hour : new int[] { -1, resultSet1.getInt( "hour" ) } ) {
+
+                                preparedStatement3 = initialisationRequetePreparee( connexion, SELECT_TIMEDIM_ID_H1,
+                                        false,
+                                        hour, day, monthName, year );
+                                resultSet3 = preparedStatement3.executeQuery();
+                                timeIDs.addAll( mapSingleColumnIntegerQuery( resultSet3, "timeId" ) );
+                            }
+
+                        }
+
+                    }
                 }
-                
+                System.out.println( timeIDs.size() + "---------------------------------------" );
+
+                System.out.println( "3" );
+
+                for ( int isAction : new int[] { -1, resultSet1.getInt( "isAction" ) } ) {
+                    preparedStatement5 = initialisationRequetePreparee( connexion, SELECT_ACTIVITYDIM_ID, false,
+                            isAction );
+                    resultSet5 = preparedStatement5.executeQuery();
+                    activityIDs.addAll( mapSingleColumnIntegerQuery( resultSet5, "activityId" ) );
+                }
+
                 System.out.println( "4" );
-                int it=0;
+                int it = 0;
                 for ( int userId : userIDs ) {
                     for ( int timeId : timeIDs ) {
                         for ( int activityId : activityIDs ) {
-                        	//System.out.println(it);
-                        	it++;
+                            // System.out.println(it);
+                            it++;
                             preparedStatement6 = initialisationRequetePreparee( connexion, INSERT_DWFACT, false,
-                                    userId, activityId, timeId, resultSet1.getInt("count"), resultSet1.getInt("count") );
+                                    userId, activityId, timeId, resultSet1.getInt( "count" ),
+                                    resultSet1.getInt( "count" ) );
                             int statut = preparedStatement6.executeUpdate();
 
                         }
                     }
                 }
             }
-            
-            
+
             // hierarchy 2
             while ( resultSet1Bis.next() ) {
-            	
-            	ArrayList<Integer> userIDs = new ArrayList<Integer>();
+
+                ArrayList<Integer> userIDs = new ArrayList<Integer>();
                 ArrayList<Integer> timeIDs = new ArrayList<Integer>();
                 ArrayList<Integer> activityIDs = new ArrayList<Integer>();
-            	
+
                 System.out.println( "1" );
-                
-                for( int sex : new int[]{-1,resultSet1Bis.getInt( "sex" )}){
-                	for ( String groupName : new String[]{"All",resultSet1Bis.getString("groupName")}){
-                		preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_USERDIM_ID, false, sex , groupName );
-		                resultSet2 = preparedStatement2.executeQuery();
-		                userIDs.addAll(mapSingleColumnIntegerQuery( resultSet2, "userId" ));
-                	}
+
+                for ( int sex : new int[] { -1, resultSet1Bis.getInt( "sex" ) } ) {
+                    for ( String groupName : new String[] { "All", resultSet1Bis.getString( "groupName" ) } ) {
+                        preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_USERDIM_ID, false, sex,
+                                groupName );
+                        resultSet2 = preparedStatement2.executeQuery();
+                        userIDs.addAll( mapSingleColumnIntegerQuery( resultSet2, "userId" ) );
+                    }
                 }
-                
-                
 
                 System.out.println( "2" );
-                
-                for ( int year : new int[]{-1,resultSet1Bis.getInt( "year" )}){
-                	
-                	//hierarchy 2
-                	for ( String dayName : new String[]{"All", resultSet1Bis.getString( "dayName" )}){
-                		
-                		for ( int week : new int[]{-1,resultSet1Bis.getInt( "week" )}){
-                			preparedStatement4 = initialisationRequetePreparee( connexion, SELECT_TIMEDIM_ID_H2, false, dayName, week, year );
-                			resultSet4 = preparedStatement4.executeQuery();
-            				timeIDs.addAll(mapSingleColumnIntegerQuery(resultSet4, "timeId"));
-                		}
-                	}
-                }
-                
-                
-                System.out.println( "3" );
-                
-                
 
-                for ( int isAction : new int[]{-1 , resultSet1Bis.getInt("isAction")}){
-                	preparedStatement5 = initialisationRequetePreparee( connexion, SELECT_ACTIVITYDIM_ID, false, isAction );
-                    resultSet5 = preparedStatement5.executeQuery();
-                    activityIDs.addAll(mapSingleColumnIntegerQuery( resultSet5, "activityId" ));
+                for ( int year : new int[] { -1, resultSet1Bis.getInt( "year" ) } ) {
+
+                    // hierarchy 2
+                    for ( String dayName : new String[] { "All", resultSet1Bis.getString( "dayName" ) } ) {
+
+                        for ( int week : new int[] { -1, resultSet1Bis.getInt( "week" ) } ) {
+                            preparedStatement4 = initialisationRequetePreparee( connexion, SELECT_TIMEDIM_ID_H2, false,
+                                    dayName, week, year );
+                            resultSet4 = preparedStatement4.executeQuery();
+                            timeIDs.addAll( mapSingleColumnIntegerQuery( resultSet4, "timeId" ) );
+                        }
+                    }
                 }
-                
+
+                System.out.println( "3" );
+
+                for ( int isAction : new int[] { -1, resultSet1Bis.getInt( "isAction" ) } ) {
+                    preparedStatement5 = initialisationRequetePreparee( connexion, SELECT_ACTIVITYDIM_ID, false,
+                            isAction );
+                    resultSet5 = preparedStatement5.executeQuery();
+                    activityIDs.addAll( mapSingleColumnIntegerQuery( resultSet5, "activityId" ) );
+                }
+
                 System.out.println( "4" );
-                int it=0;
+                int it = 0;
                 for ( int userId : userIDs ) {
                     for ( int timeId : timeIDs ) {
                         for ( int activityId : activityIDs ) {
-                        	//System.out.println(it);
-                        	it++;
+                            // System.out.println(it);
+                            it++;
                             preparedStatement6 = initialisationRequetePreparee( connexion, INSERT_DWFACT, false,
-                                    userId, activityId, timeId, resultSet1Bis.getInt("count"), resultSet1Bis.getInt("count") );
+                                    userId, activityId, timeId, resultSet1Bis.getInt( "count" ),
+                                    resultSet1Bis.getInt( "count" ) );
                             int statut = preparedStatement6.executeUpdate();
 
                         }
                     }
                 }
             }
-            
+
             System.out.println( "done" );
 
         } catch ( SQLException e ) {
@@ -341,8 +327,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         }
 
     }
-    
-    
 
     @SuppressWarnings( "resource" )
     public void updateTimeDim() throws DAOException {
@@ -368,42 +352,44 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_NEW_YEARS, false );
             resultSet2 = preparedStatement2.executeQuery();
             newActivityLogYears = mapSingleColumnIntegerQuery( resultSet2, "year" );
-            
-            int it = 0; for(Integer newYear : newActivityLogYears){
-            	if(!dimTableyears.contains(newYear)){
 
-            		for( String monthName : months ){
+            int it = 0;
+            for ( Integer newYear : newActivityLogYears ) {
+                if ( !dimTableyears.contains( newYear ) ) {
 
-            			
-    					for ( int day=-1; day<32; day++){
+                    for ( String monthName : months ) {
 
-    						for ( int hour=-1; hour<25; hour++){
+                        for ( int day = -1; day < 32; day++ ) {
 
-    							preparedStatement3 = initialisationRequetePreparee( connexion, INSERT_TIME_TIMEDIM , true, newYear, monthName, null, null,day, hour ); 
-    							int statut = preparedStatement3.executeUpdate();
-    							if ( statut == 0 ) { 
-    								throw new DAOException("Failed to create time int timeDim. No row added" ); 
-    							} 
-    						} 
-    					}
-    				}	
-            		
-					for ( int week=-1; week<53; week++){
+                            for ( int hour = -1; hour < 25; hour++ ) {
 
-        				for ( String dayName : days ){
-        					
-        					preparedStatement3 = initialisationRequetePreparee( connexion, INSERT_TIME_TIMEDIM , true, newYear, null, week, dayName, null, null ); 
-							int statut = preparedStatement3.executeUpdate();
-							if ( statut == 0 ) { 
-								throw new DAOException("Failed to create time int timeDim. No row added" ); 
-							}
-        					
-        				} 
-        			} 
-            		
-            	} 
+                                preparedStatement3 = initialisationRequetePreparee( connexion, INSERT_TIME_TIMEDIM,
+                                        true, newYear, monthName, null, null, day, hour );
+                                int statut = preparedStatement3.executeUpdate();
+                                if ( statut == 0 ) {
+                                    throw new DAOException( "Failed to create time int timeDim. No row added" );
+                                }
+                            }
+                        }
+                    }
+
+                    for ( int week = -1; week < 53; week++ ) {
+
+                        for ( String dayName : days ) {
+
+                            preparedStatement3 = initialisationRequetePreparee( connexion, INSERT_TIME_TIMEDIM, true,
+                                    newYear, null, week, dayName, null, null );
+                            int statut = preparedStatement3.executeUpdate();
+                            if ( statut == 0 ) {
+                                throw new DAOException( "Failed to create time int timeDim. No row added" );
+                            }
+
+                        }
+                    }
+
+                }
             }
-             
+
             connexion.commit();
             // System.out.println( it );
         } catch ( SQLException e ) {
