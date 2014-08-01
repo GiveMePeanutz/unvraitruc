@@ -1,3 +1,5 @@
+<%-- This page shows a group profile, i.e the features of the group --%>
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>

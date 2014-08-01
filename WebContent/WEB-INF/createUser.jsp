@@ -1,3 +1,6 @@
+<%--User creation or modification page--%>
+
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -33,7 +36,8 @@
             <form method="post" action="<c:url value="/userCreation"/>" enctype="multipart/form-data">
                 <fieldset>
                     <legend>User Information</legend>
-                    <c:import url="/inc/inc_user_form.jsp" />
+                    <%--Here is the import of the user form --%>
+                    <c:import url="user_form.jsp" />
                     <br />
                     
                     	<label for="groups">Please assign groups<br /> to the user</label>                                      

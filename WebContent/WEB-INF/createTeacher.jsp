@@ -32,8 +32,12 @@
             <form method="post" action="<c:url value="/teacherCreation"/>" enctype="multipart/form-data">
                 <fieldset>
                     <legend>User Information</legend>
-                    <c:import url="/inc/inc_user_form.jsp" />
+                    <%--Here is the import of the user form --%>
+                    <c:import url="user_form.jsp" />
                     <br />
+                    <%--On this page, user can just create a teacher so he does not affect a group,
+                      but to use the same servlet as the user creation, we need a drop-down list just with Teacher and hide it --%>
+                    
                     	<p class="hidden">
                     	<label for="groups">Please assign groups<br /> to the user</label>                                      
 	                     <select name="groups" id = "groups"  required>																				

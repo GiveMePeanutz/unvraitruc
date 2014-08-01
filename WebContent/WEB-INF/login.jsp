@@ -1,3 +1,8 @@
+<%-- This page is the first page the user will see. It's the login page. --%>
+<%--Value of each field is the value registered in the user bean. If it's the first time this page appears, nothing appears in the fields,
+if this page is displayed after an error written values appear--%>
+<%--After each field, field's error appears if there is one --%>
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -34,11 +39,12 @@
 		                <br />
 	                </c:if>
 	                <p class="${empty form.errors ? 'success' : 'error'}">${form.result}</p>
-	           		<%-- Vérification de la présence d'un objet utilisateur en session --%>
+	           		<%-- If the user already connected... --%>
 	                <c:if test="${!empty sessionScope.userSession}">
-	                    <%-- Si l'utilisateur existe en session, alors on affiche son adresse email. --%>
+	                    <%-- ...this message is displayed --%>
 	                    <p class="succes">You are connected with the username : ${requestScope.username}</p>
 	                </c:if>
+	                <%-- ...and the logout button appears --%>
 	                <c:if test="${!empty sessionScope.userSession}">
         				<a href="<c:url value="/logout"/>"  class="button">           
 							<input type="button" value="Logout" />

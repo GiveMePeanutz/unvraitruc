@@ -1,3 +1,9 @@
+<%--Priviege creation or modification page--%>
+<%--Value of each field is the value registered in the privilege bean. If it's a creation page nothing appears in the fields,
+if it's a modification page or if this page is displayed after an error
+all the registered values appear--%>
+<%--After each field, field's error appears if there is one --%>
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>

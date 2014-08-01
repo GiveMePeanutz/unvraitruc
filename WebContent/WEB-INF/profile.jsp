@@ -1,3 +1,5 @@
+<%-- This page shows a user profile --%>
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -17,6 +19,7 @@
             <dl><dt class ="important">Username :</dt> <dd><c:out value="${ user.username }"/></dd></dl>
             <c:set var="contains" value="false" />
             
+            <%--Password is displayed only if this profile is the profile of the connected user or if the user could modify the users. --%>
 			<c:choose>
 			<c:when test='${ user.username eq sessionScope.userSession.username }'>
 			<dl><dt class="important">Password :</dt> <dd><c:out value="${ user.password }"/></dd></dl>
@@ -62,9 +65,12 @@
             		<br/>
             	</c:forEach>
             </ul>
-			
+            <%-- If the user is enrolled to at least one course, list of his courses is displayed,
+             and he could cancel his enrollment here --%>
+            
+				<c:if test="${ !empty user.courseNames }">
 	            <p class="important">Courses :</p>
-	            <c:if test="${ !empty user.courseNames }"> 
+	             
 	            <table class="profcourses" >
 		            <tr>
 		            	<th>Course name</th>
@@ -74,11 +80,8 @@
 		                </c:if>			                                     
 		            </tr>
 		            
-		            <%-- Parcours de la Map des clients en session, et utilisation de l'objet varStatus. --%>
 					<c:forEach items="${ user.courseNames }" var="course">
-			             <%-- Simple test de parité sur l'index de parcours, pour alterner la couleur de fond de chaque ligne du tableau. --%>
 			             <tr class="${boucle.index % 2 == 0 ? 'pair' : 'impair'}">
-			                 <%-- Affichage des propriétés du bean Client, qui est stocké en tant que valeur de l'entrée courante de la map --%>
 			                 <td><c:out value="${ course }"/></td>	
 			                 <td class="action">
 		                        <a href="<c:url value="/profileCourse"><c:param name="courseName" value="${  course }" /></c:url>">
@@ -96,11 +99,9 @@
 		            </c:forEach>
 			    </table>
 		    </c:if>
-		    <c:if test="${ empty user.courseNames }">
-		    	<p>No course for this user.</p>
-		    </c:if>
 		    <br />
 		    <br />
+		    <%--If the connected user could modify this user, modify button is displayed --%>
 			<c:if test="${requestScope.userModifiable}">
             <a  href="<c:url value="/userCreation" ><c:param name="username" value="${user.username }" /><c:param name="modify" value="true" /></c:url>" class = "button">           
             <input type="button" value="Modify" />

@@ -1,3 +1,5 @@
+<%-- This page shows a course profile, i.e the features of the course --%>
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -27,6 +29,7 @@
             	</c:forEach>
             </ul>
             <br>
+            <%--If the connected user could modify this course, modify button is displayed --%>
             <c:forEach var="item" items="${sessionScope.userSessionAccess}">
 				<c:if test="${item eq 'Modify Course'}">
 		            <a href="<c:url value="/courseCreation"><c:param name="courseName" value="${course.courseName }" /><c:param name="modify" value="true" /></c:url>" class = "button">           

@@ -1,3 +1,7 @@
+<%--Drop-Down Menu --%>
+<%--Each menu is displayed if the user has the right privilege --%>
+<%--sessionScope.userSessionAccess is the array containing all the user's privileges --%>
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <div id="dropdownmenu">
