@@ -22,7 +22,7 @@ public class DrawChart {
         boolean tooltips = false;
         boolean urls = false;
 
-        // Edits the title according to what was chosen in fields.
+        // Creates the title according to what was chosen in fields.
         String title = "";
         if ( action == -1 )
             title = "Number of all activities";
@@ -52,7 +52,7 @@ public class DrawChart {
 
         DefaultPieDataset dataset = new DefaultPieDataset();
 
-        // gets back all existing groups
+        // retrieves all existing groups
         List<String> groups = extractDataWarehouseDao.listGroup();
 
         int nbMale;

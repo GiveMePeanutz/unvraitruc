@@ -1,4 +1,4 @@
-// NaiveBayes.java 
+// NaiveBayes algorithm
 
 package dataMining;
 

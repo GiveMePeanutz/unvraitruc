@@ -7,12 +7,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import utilities.utilitiesForm;
 import beans.Group;
 import dao.DAOException;
 import dao.GroupDao;
 
 public final class GroupCreationForm {
 
+    // Fields Name, have to be identical than fields name in JSPs
     private static final String NAME_FIELD        = "groupName";
     private static final String DESCRIPTION_FIELD = "groupDescription";
     private static final String PRIV_FIELD        = "privileges";
@@ -20,6 +22,7 @@ public final class GroupCreationForm {
     private String              result;
     private Map<String, String> errors            = new HashMap<String, String>();
     private GroupDao            groupDao;
+    private utilitiesForm       util              = new utilitiesForm();
 
     public GroupCreationForm( GroupDao groupDao ) {
         this.groupDao = groupDao;
@@ -35,17 +38,22 @@ public final class GroupCreationForm {
 
     public Group createGroup( HttpServletRequest request, String path ) throws ParseException {
 
-        String groupName = getFieldValue( request, NAME_FIELD );
-
-        String groupDescription = getFieldValue( request, DESCRIPTION_FIELD );
-        ArrayList<String> privileges = getSelectedValues( request, PRIV_FIELD );
+        // Parameters Recovery
+        String groupName = util.getFieldValue( request, NAME_FIELD );
+        String groupDescription = util.getFieldValue( request, DESCRIPTION_FIELD );
+        ArrayList<String> privileges = util.getSelectedValues( request, PRIV_FIELD );
 
         Group group = new Group();
+
+        // Parameters checks : call the "validation" methods, add errors if
+        // there are or set the parameter.
         handleGroupName( groupName, group );
         handleGroupDescription( groupDescription, group );
         handlePrivs( privileges, group );
 
         try {
+            // if no error, the group is created and saved in database, else an
+            // error message is displayed
             if ( errors.isEmpty() ) {
                 groupDao.create( group );
                 result = "Group creation succeed";
@@ -63,17 +71,22 @@ public final class GroupCreationForm {
 
     public Group modifyGroup( HttpServletRequest request, String path ) throws ParseException {
 
-        String groupName = getFieldValue( request, NAME_FIELD );
-
-        String groupDescription = getFieldValue( request, DESCRIPTION_FIELD );
-        ArrayList<String> privileges = getSelectedValues( request, PRIV_FIELD );
+        // Parameters Recovery
+        String groupName = util.getFieldValue( request, NAME_FIELD );
+        String groupDescription = util.getFieldValue( request, DESCRIPTION_FIELD );
+        ArrayList<String> privileges = util.getSelectedValues( request, PRIV_FIELD );
 
         Group group = new Group();
+
+        // Parameters checks : call the "validation" methods, add errors if
+        // there are or set the parameter.
         handleGroupName( groupName, group );
         handleGroupDescription( groupDescription, group );
         handlePrivs( privileges, group );
 
         try {
+            // if no error, the group is modified and saved in database, else an
+            // error message is displayed
             if ( errors.isEmpty() ) {
                 groupDao.modify( group );
                 result = "Group modification succeed";
@@ -117,16 +130,18 @@ public final class GroupCreationForm {
 
     }
 
+    // Group Name check : more than 2 characters
     private void groupNameValidation( String name ) throws FormValidationException {
         if ( name != null ) {
             if ( name.length() < 2 ) {
-                throw new FormValidationException( "Name must have at least 3 characters" );
+                throw new FormValidationException( "Name must have at least 2 characters" );
             }
         } else {
             throw new FormValidationException( "Please enter a name." );
         }
     }
 
+    // Group Description check : more than 5 characters
     private void groupDescriptionValidation( String description ) throws FormValidationException {
         if ( description != null ) {
             if ( description.length() < 5 ) {
@@ -137,6 +152,7 @@ public final class GroupCreationForm {
         }
     }
 
+    // Group Privileges check : one at least
     private void privValidation( ArrayList<String> privileges ) throws FormValidationException {
         if ( privileges == null )
         {
@@ -144,39 +160,9 @@ public final class GroupCreationForm {
         }
     }
 
-    /*
-     * Ajoute un message correspondant au champ spécifié à la map des errors.
-     */
+    // Add a message corresponding to the specific field to the error map.
     private void setError( String path, String message ) {
         errors.put( path, message );
-    }
-
-    /*
-     * Méthode utilitaire qui retourne null si un champ est vide, et son contenu
-     * sinon.
-     */
-    private static String getFieldValue( HttpServletRequest request, String fieldName ) {
-        String value = request.getParameter( fieldName );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } else {
-            return value;
-        }
-    }
-
-    private static ArrayList<String> getSelectedValues( HttpServletRequest request, String fieldName ) {
-
-        ArrayList<String> privileges = new ArrayList<String>();
-        String[] values = request.getParameterValues( fieldName );
-        if ( values == null || values.length == 0 )
-        {
-            return null;
-        }
-        for ( int i = 0; i < values.length; i++ )
-        {
-            privileges.add( values[i] );
-        }
-        return privileges;
     }
 
 }

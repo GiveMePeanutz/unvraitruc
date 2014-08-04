@@ -7,12 +7,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import utilities.utilitiesForm;
 import beans.Priv;
 import dao.DAOException;
 import dao.PrivDao;
 
 public final class PrivilegeCreationForm {
 
+    // Fields Name, have to be identical than fields name in JSPs
     private static final String NAME_FIELD        = "privName";
     private static final String DESCRIPTION_FIELD = "privDescription";
     private static final String MENU_FIELD        = "menus";
@@ -20,6 +22,7 @@ public final class PrivilegeCreationForm {
     private String              result;
     private Map<String, String> errors            = new HashMap<String, String>();
     private PrivDao             privDao;
+    private utilitiesForm       util              = new utilitiesForm();
 
     public PrivilegeCreationForm( PrivDao privDao ) {
         this.privDao = privDao;
@@ -35,16 +38,23 @@ public final class PrivilegeCreationForm {
 
     public Priv createPriv( HttpServletRequest request, String path ) throws ParseException {
 
-        String privName = getFieldValue( request, NAME_FIELD );
-        String privDescription = getFieldValue( request, DESCRIPTION_FIELD );
-        ArrayList<Integer> menus = getSelectedValues( request, MENU_FIELD );
+        // Parameters Recovery
+        String privName = util.getFieldValue( request, NAME_FIELD );
+        String privDescription = util.getFieldValue( request, DESCRIPTION_FIELD );
+        ArrayList<Integer> menus = util.getIntSelectedValues( request, MENU_FIELD );
 
         Priv priv = new Priv();
+
+        // Parameters checks : call the "validation" methods, add errors if
+        // there are or set the parameter.
         handlePrivName( privName, priv );
         handlePrivDescription( privDescription, priv );
         handleMenus( menus, priv );
 
         try {
+            // if no error, the privilege is created and saved in database, else
+            // an
+            // error message is displayed
             if ( errors.isEmpty() ) {
                 privDao.create( priv );
                 result = "Priv creation succeed";
@@ -62,16 +72,22 @@ public final class PrivilegeCreationForm {
 
     public Priv modifyPriv( HttpServletRequest request, String path ) throws ParseException {
 
-        String privName = getFieldValue( request, NAME_FIELD );
-        String privDescription = getFieldValue( request, DESCRIPTION_FIELD );
-        ArrayList<Integer> menus = getSelectedValues( request, MENU_FIELD );
+        // Parameters Recovery
+        String privName = util.getFieldValue( request, NAME_FIELD );
+        String privDescription = util.getFieldValue( request, DESCRIPTION_FIELD );
+        ArrayList<Integer> menus = util.getIntSelectedValues( request, MENU_FIELD );
 
         Priv priv = new Priv();
+
+        // Parameters checks : call the "validation" methods, add errors if
+        // there are or set the parameter.
         handlePrivName( privName, priv );
         handlePrivDescription( privDescription, priv );
         handleMenus( menus, priv );
 
         try {
+            // if no error, the privilege is modified and saved in database,
+            // else an error message is displayed
             if ( errors.isEmpty() ) {
                 privDao.modify( priv );
                 result = "Priv modification succeed";
@@ -115,16 +131,18 @@ public final class PrivilegeCreationForm {
 
     }
 
+    // Privilege Name check : more than 2 characters
     private void privNameValidation( String name ) throws FormValidationException {
         if ( name != null ) {
             if ( name.length() < 2 ) {
-                throw new FormValidationException( "Name must have at least 3 characters" );
+                throw new FormValidationException( "Name must have at least 2 characters" );
             }
         } else {
             throw new FormValidationException( "Please enter a name." );
         }
     }
 
+    // Privilege Description check : more than 5 characters
     private void privDescriptionValidation( String description ) throws FormValidationException {
         if ( description != null ) {
             if ( description.length() < 5 ) {
@@ -135,6 +153,7 @@ public final class PrivilegeCreationForm {
         }
     }
 
+    // Privilege menus check : one at least
     private void menuValidation( ArrayList<Integer> menus ) throws FormValidationException {
         if ( menus == null )
         {
@@ -142,40 +161,9 @@ public final class PrivilegeCreationForm {
         }
     }
 
-    /*
-     * Ajoute un message correspondant au champ spécifié à la map des errors.
-     */
+    // Add a message corresponding to the specific field to the error map.
     private void setError( String path, String message ) {
         errors.put( path, message );
-    }
-
-    /*
-     * Méthode utilitaire qui retourne null si un champ est vide, et son contenu
-     * sinon.
-     */
-    private static String getFieldValue( HttpServletRequest request, String fieldName ) {
-        String value = request.getParameter( fieldName );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } else {
-            return value;
-        }
-    }
-
-    private static ArrayList<Integer> getSelectedValues( HttpServletRequest request, String fieldName ) {
-
-        ArrayList<Integer> menus = new ArrayList<Integer>();
-        String[] values = request.getParameterValues( fieldName );
-        if ( values == null || values.length == 0 )
-        {
-            return null;
-        }
-
-        for ( int i = 0; i < values.length; i++ )
-        {
-            menus.add( Integer.parseInt( values[i] ) );
-        }
-        return menus;
     }
 
 }

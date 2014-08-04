@@ -18,9 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
+import utilities.utilitiesForm;
 import beans.User;
 import dao.DAOException;
 import dao.UserDao;
@@ -28,6 +27,7 @@ import eu.medsea.mimeutil.MimeUtil;
 
 public final class UserCreationForm {
 
+    // Fields Name, have to be identical than fields name in JSPs
     private static final String USERNAME_FIELD  = "username";
     private static final String PASSWORD_FIELD  = "password";
     private static final String NAME_FIELD      = "lastName";
@@ -46,6 +46,7 @@ public final class UserCreationForm {
     private String              result;
     private Map<String, String> errors          = new HashMap<String, String>();
     private UserDao             userDao;
+    private utilitiesForm       util            = new utilitiesForm();
 
     public UserCreationForm( UserDao userDao ) {
         this.userDao = userDao;
@@ -60,19 +61,24 @@ public final class UserCreationForm {
     }
 
     public User createUser( HttpServletRequest request, String path ) throws ParseException, FormValidationException {
-        String username = getFieldValue( request, USERNAME_FIELD );
-        String password = getFieldValue( request, PASSWORD_FIELD );
-        String lastName = getFieldValue( request, NAME_FIELD );
-        String firstName = getFieldValue( request, FIRSTNAME_FIELD );
-        String sex = getFieldValue( request, SEX_FIELD );
-        String address = getFieldValue( request, ADDRESS_FIELD );
-        String phone = getFieldValue( request, PHONE_FIELD );
-        String email = getFieldValue( request, EMAIL_FIELD );
-        DateTime birthDate = getDateValue( request, BIRTH_FIELD );
-        ArrayList<String> groups = getSelectedValues( request, GROUP_FIELD );
-        String promotion = getFieldValue( request, PROMOTION_FIELD );
+
+        // Parameters Recovery
+        String username = util.getFieldValue( request, USERNAME_FIELD );
+        String password = util.getFieldValue( request, PASSWORD_FIELD );
+        String lastName = util.getFieldValue( request, NAME_FIELD );
+        String firstName = util.getFieldValue( request, FIRSTNAME_FIELD );
+        String sex = util.getFieldValue( request, SEX_FIELD );
+        String address = util.getFieldValue( request, ADDRESS_FIELD );
+        String phone = util.getFieldValue( request, PHONE_FIELD );
+        String email = util.getFieldValue( request, EMAIL_FIELD );
+        DateTime birthDate = util.getDateValue( request, BIRTH_FIELD );
+        ArrayList<String> groups = util.getSelectedValues( request, GROUP_FIELD );
+        String promotion = util.getFieldValue( request, PROMOTION_FIELD );
 
         User user = new User();
+
+        // Parameters checks : call the "validation" methods, add errors if
+        // there are or set the parameter.
         handleUsername( username, user );
         handlePassword( password, user );
         handleLastName( lastName, user );
@@ -85,10 +91,14 @@ public final class UserCreationForm {
         handleGroups( groups, user );
         handlePhoto( user, request, path );
         handlePromotion( promotion, user );
+
         DateTime today = new DateTime();
+        // Registration date is initialized to today date
         user.setRegDate( today );
 
         try {
+            // if no error, the user is created and saved in database, else an
+            // error message is displayed
             if ( errors.isEmpty() ) {
                 userDao.create( user );
                 result = "User creation succeed";
@@ -105,19 +115,24 @@ public final class UserCreationForm {
     }
 
     public User modifyUser( HttpServletRequest request, String path ) throws ParseException, FormValidationException {
-        String username = getFieldValue( request, USERNAME_FIELD );
-        String password = getFieldValue( request, PASSWORD_FIELD );
-        String lastName = getFieldValue( request, NAME_FIELD );
-        String firstName = getFieldValue( request, FIRSTNAME_FIELD );
-        String sex = getFieldValue( request, SEX_FIELD );
-        String address = getFieldValue( request, ADDRESS_FIELD );
-        String phone = getFieldValue( request, PHONE_FIELD );
-        String email = getFieldValue( request, EMAIL_FIELD );
-        DateTime birthDate = getDateValue( request, BIRTH_FIELD );
-        ArrayList<String> groups = getSelectedValues( request, GROUP_FIELD );
-        String promotion = getFieldValue( request, PROMOTION_FIELD );
+
+        // Parameters Recovery
+        String username = util.getFieldValue( request, USERNAME_FIELD );
+        String password = util.getFieldValue( request, PASSWORD_FIELD );
+        String lastName = util.getFieldValue( request, NAME_FIELD );
+        String firstName = util.getFieldValue( request, FIRSTNAME_FIELD );
+        String sex = util.getFieldValue( request, SEX_FIELD );
+        String address = util.getFieldValue( request, ADDRESS_FIELD );
+        String phone = util.getFieldValue( request, PHONE_FIELD );
+        String email = util.getFieldValue( request, EMAIL_FIELD );
+        DateTime birthDate = util.getDateValue( request, BIRTH_FIELD );
+        ArrayList<String> groups = util.getSelectedValues( request, GROUP_FIELD );
+        String promotion = util.getFieldValue( request, PROMOTION_FIELD );
 
         User user = new User();
+
+        // Parameters checks : call the "validation" methods, add errors if
+        // there are or set the parameter.
         handleUsername( username, user );
         handlePassword( password, user );
         handleLastName( lastName, user );
@@ -131,10 +146,14 @@ public final class UserCreationForm {
         handleGroups( groups, user );
         handlePromotion( promotion, user );
 
+        // Registration date is initialized to today date
         DateTime today = new DateTime();
         user.setRegDate( today );
 
         try {
+
+            // if no error, the user is modified and saved in database, else
+            // an error message is displayed
             if ( errors.isEmpty() ) {
                 userDao.modify( user );
                 result = "User modification succeed";
@@ -268,6 +287,7 @@ public final class UserCreationForm {
         user.setPhotoURL( photoURL );
     }
 
+    // BirthDate check :can't be null
     private void birthDateValidation( DateTime birthDate ) throws FormValidationException {
         if ( birthDate == null )
         {
@@ -275,16 +295,18 @@ public final class UserCreationForm {
         }
     }
 
+    // Username check : more than 2 characters
     private void usernameValidation( String username ) throws FormValidationException {
         if ( username != null ) {
             if ( username.length() < 2 ) {
-                throw new FormValidationException( "Username must have at least 3 characters" );
+                throw new FormValidationException( "Username must have at least 2 characters" );
             }
         } else {
             throw new FormValidationException( "Please enter a username." );
         }
     }
 
+    // Password check : more than 5 characters
     private void passwordValidation( String password ) throws FormValidationException {
         if ( password != null ) {
             if ( password.length() < 5 ) {
@@ -295,20 +317,22 @@ public final class UserCreationForm {
         }
     }
 
+    // Last Name check : more than 2 characters
     private void lastNameValidation( String lastName ) throws FormValidationException {
         if ( lastName != null ) {
             if ( lastName.length() < 2 ) {
-                throw new FormValidationException( "Last name must have at least 3 characters" );
+                throw new FormValidationException( "Last name must have at least 2 characters" );
             }
         } else {
             throw new FormValidationException( "Please enter a name." );
         }
     }
 
+    // First Name check : more than 2 characters
     private void firstNameValidation( String firstName ) throws FormValidationException {
         if ( firstName != null ) {
             if ( firstName.length() < 2 ) {
-                throw new FormValidationException( "First name must have at least 3 characters" );
+                throw new FormValidationException( "First name must have at least 2 characters" );
             }
         } else {
             throw new FormValidationException( "Please enter a firstname." );
@@ -316,12 +340,14 @@ public final class UserCreationForm {
 
     }
 
+    // Username check : can't be empty
     private void sexValidation( String sex ) throws FormValidationException {
         if ( sex.isEmpty() ) {
             throw new FormValidationException( "Please check the right user sex." );
         }
     }
 
+    // Address check : more than 10 characters
     private void addressValidation( String address ) throws FormValidationException {
         if ( address != null ) {
             if ( address.length() < 10 ) {
@@ -332,6 +358,7 @@ public final class UserCreationForm {
         }
     }
 
+    // Phone number check : more than 4 characters and just numbers
     private void phoneValidation( String phone ) throws FormValidationException {
         if ( phone != null ) {
             if ( !phone.matches( "^\\d+$" ) ) {
@@ -344,6 +371,7 @@ public final class UserCreationForm {
         }
     }
 
+    // Email check : something@something.something
     private void emailValidation( String email ) throws FormValidationException {
         if ( email != null ) {
             if ( !email.matches( "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)" ) ) {
@@ -355,6 +383,7 @@ public final class UserCreationForm {
         }
     }
 
+    // User groups check :one at least
     private void groupValidation( ArrayList<String> groups ) throws FormValidationException {
         if ( groups == null )
         {
@@ -362,6 +391,8 @@ public final class UserCreationForm {
         }
     }
 
+    // User promotion check : has to be entered only if the user is a student.
+    // Has to be an acronym followed by numbers like STE4
     private void promotionValidation( String promotion, User user ) throws FormValidationException {
         Boolean bool = false;
         if ( user.getGroupNames() != null )
@@ -397,8 +428,7 @@ public final class UserCreationForm {
 
     private String photoValidation( HttpServletRequest request, String path ) throws FormValidationException {
         /*
-         * Récupération du contenu du champ image du formulaire. Il faut ici
-         * utiliser la méthode getPart().
+         * Retrieve the picture field.
          */
         String fileName = null;
         InputStream fileContent = null;
@@ -407,61 +437,43 @@ public final class UserCreationForm {
             fileName = getFileName( part );
 
             /*
-             * Si la méthode getNomFichier() a renvoyé quelque chose, il s'agit
-             * donc d'un champ de type fichier (input type="file").
+             * if getNomFichier() return something, input type="file".
              */
             if ( fileName != null && !fileName.isEmpty() ) {
-                /*
-                 * Antibug pour Internet Explorer, qui transmet pour une raison
-                 * mystique le path du fichier local à la machine du user...
-                 * 
-                 * Ex : C:/dossier/sous-dossier/fichier.ext
-                 * 
-                 * On doit donc faire en sorte de ne sélectionner que le nom et
-                 * l'extension du fichier, et de se débarrasser du superflu.
-                 */
+
+                // The following code avoid Internet Explorer bug with file path
                 fileName = fileName.substring( fileName.lastIndexOf( '/' ) + 1 )
                         .substring( fileName.lastIndexOf( '\\' ) + 1 );
 
-                /* Récupération du contenu du fichier */
+                // Retrieving what is IN the file
                 fileContent = part.getInputStream();
 
-                /* Extraction du type MIME du fichier depuis l'InputStream */
+                // Using MIME librairy to know if it's a picture
                 MimeUtil.registerMimeDetector( "eu.medsea.mimeutil.detector.MagicMimeMimeDetector" );
                 Collection<?> mimeTypes = MimeUtil.getMimeTypes( fileContent );
 
-                /*
-                 * Si le fichier est bien une image, alors son en-tête MIME
-                 * commence par la chaîne "image"
-                 */
+                // If the file is a picture, so its MIME-headingstarts with
+                // "image"
                 if ( mimeTypes.toString().startsWith( "image" ) ) {
-                    /* Écriture du fichier sur le disque */
+                    // Writing File on disk
                     fileWriting( fileContent, fileName, path );
                 } else {
                     throw new FormValidationException( "Sent File must be a photo" );
                 }
             }
         } catch ( IllegalStateException e ) {
-            /*
-             * Exception retournée si la taille des données dépasse les limites
-             * définies dans la section <multipart-config> de la déclaration de
-             * notre servlet d'upload dans le fichier web.xml
-             */
+            // Exception if datasize exceeds size defined in <multipart-config>
+            // heading in UserCreation Servlet
             e.printStackTrace();
             throw new FormValidationException( "Sent file can't be heavier than 10 Mo" );
         } catch ( IOException e ) {
-            /*
-             * Exception retournée si une error au niveau des répertoires de
-             * stockage survient (répertoire inexistant, droits d'accès
-             * insuffisants, etc.)
-             */
+            // Exception if there is a repertory error ( not existing repertory,
+            // not enough access rights etc.)
             e.printStackTrace();
             throw new FormValidationException( "Server configuration error" );
         } catch ( ServletException e ) {
-            /*
-             * Exception retournée si la requête n'est pas de type
-             * multipart/form-data.
-             */
+
+            // Exception if request is not multipart/form-data.
             e.printStackTrace();
             throw new FormValidationException(
                     "Impossible, please use this form to upload your photo." );
@@ -470,94 +482,41 @@ public final class UserCreationForm {
         return fileName;
     }
 
-    /*
-     * Ajoute un message correspondant au champ spécifié à la map des errors.
-     */
+    // Add a message corresponding to the specific field to the error map.
     private void setError( String path, String message ) {
         errors.put( path, message );
     }
 
-    /*
-     * Méthode utilitaire qui retourne null si un champ est vide, et son contenu
-     * sinon.
-     */
-    private static DateTime getDateValue( HttpServletRequest request, String fieldName ) throws FormValidationException {
-        String value = request.getParameter( fieldName );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } /*
-           * else if ( !value.matches(
-           * "^(0?[1-9]|[12][0-9]|3[01])[-/]?(0?[1-9]|1[012])[-/]?(19[\\d]{2}|20[\\d]{2}|2100)$"
-           * ) ) { throw new FormValidationException( "Incorrect date format."
-           * ); }
-           */
-        else
-        {
-            DateTimeFormatter formatter = DateTimeFormat.forPattern( "MM/dd/yyyy" );
-            DateTime dt = formatter.parseDateTime( value );
-            return dt;
-        }
-    }
-
-    private static String getFieldValue( HttpServletRequest request, String fieldName ) {
-        String value = request.getParameter( fieldName );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } else {
-            return value;
-        }
-    }
-
-    private static ArrayList<String> getSelectedValues( HttpServletRequest request, String fieldName ) {
-
-        ArrayList<String> privileges = new ArrayList<String>();
-        String[] values = request.getParameterValues( fieldName );
-        if ( values == null || values.length == 0 )
-        {
-            return null;
-        }
-        for ( int i = 0; i < values.length; i++ )
-        {
-            privileges.add( values[i] );
-        }
-        return privileges;
-    }
-
     private static String getFileName( Part part ) {
-        /* Boucle sur chacun des paramètres de l'en-tête "content-disposition". */
+        // Loop on each "content-disposition" parameter.
         for ( String contentDisposition : part.getHeader( "content-disposition" ).split( ";" ) ) {
-            /* Recherche de l'éventuelle présence du paramètre "filename". */
+            // Searching a "filename" parameter if existing.
             if ( contentDisposition.trim().startsWith( "filename" ) ) {
-                /*
-                 * Si "filename" est présent, alors renvoi de sa valeur,
-                 * c'est-à-dire du nom de fichier sans guillemets.
-                 */
+
+                // if "filename" exists, the system returns its value, ie the
+                // file name without inverted comas.
+
                 return contentDisposition.substring( contentDisposition.indexOf( '=' ) + 1 ).trim().replace( "\"", "" );
             }
         }
-        /* Et pour terminer, si rien n'a été trouvé... */
+        // returns null if finds nothing
         return null;
     }
 
-    /*
-     * Méthode utilitaire qui a pour but d'écrire le fichier passé en paramètre
-     * sur le disque, dans le répertoire donné et avec le nom donné.
-     */
+    // Writing parameter file on disk where we want with the name we want.
     private void fileWriting( InputStream fileContent, String fileName, String path )
-            throws FormValidationException {
-        /* Prépare les flux. */
+            throws FormValidationException
+    {
+        // Prepares streams
         BufferedInputStream in = null;
         BufferedOutputStream out = null;
         try {
-            /* Ouvre les flux. */
+            // Opens streams
             in = new BufferedInputStream( fileContent, BUFFER_LENGTH );
             out = new BufferedOutputStream( new FileOutputStream( new File( path + fileName ) ),
                     BUFFER_LENGTH );
 
-            /*
-             * Lit le fichier reçu et écrit son contenu dans un fichier sur le
-             * disque.
-             */
+            // Reading received file et writing its content in a file on disk
             byte[] buffer = new byte[BUFFER_LENGTH];
             int length = 0;
             while ( ( length = in.read( buffer ) ) > 0 ) {
