@@ -5,7 +5,6 @@ package dataMining;
 import java.util.List;
 
 import weka.classifiers.Classifier;
-import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Attribute;
 import weka.core.FastVector;
@@ -17,16 +16,26 @@ import dao.UserDao;
 
 public class NaiveBayesClass {
 
+    // Algorithm parameters
     private Attribute  sex;
     private Attribute  promotion;
     private Attribute  course;
+
     private Instances  isSet;
+
+    // the classifier model
     private Classifier cModel;
+
+    // Vector with all the attributes
     private FastVector fvAttributes;
+
+    // likelihood table
     private double[]   fDistribution;
 
     public NaiveBayesClass( User user, UserDao userDao, NaiveBayesDao naiveBayesDao )
     {
+        // Retrieves number of user, all the courses, all different promotions
+        // and all the students.
         int numberOfUsers = naiveBayesDao.getUserCount();
         List<String> listCourse = naiveBayesDao.listCourse();
         List<String> listPromotion = naiveBayesDao.listPromotion();
@@ -57,7 +66,7 @@ public class NaiveBayesClass {
         }
         this.course = new Attribute( "course", fvCourseVal );
 
-        // Attribute Vector
+        // Attributes Vector
 
         this.fvAttributes = new FastVector( 3 );
         fvAttributes.addElement( sex );
@@ -67,7 +76,7 @@ public class NaiveBayesClass {
         // Create an empty set
         this.isSet = new Instances( "Rel", fvAttributes, numberOfUsers );
 
-        // Set class index
+        // Set class index : 2 = course
         isSet.setClassIndex( 2 );
 
         // Classifier choice : here, NaiveBaye
@@ -105,18 +114,12 @@ public class NaiveBayesClass {
         }
     }
 
-    public String classifierTest() throws Exception
-    {
-        Evaluation eTest = new Evaluation( this.isSet );
-        eTest.evaluateModel( this.cModel, this.isSet );
-        String strSummary = eTest.toSummaryString();
-        return strSummary;
-    }
-
     public String courseAdvice( User user ) throws Exception
     {
         String courseNameAdvised = "";
+        // User on who the algorithm will work
         Instance iUser = new Instance( 3 );
+
         if ( user.getSex() == 1 )
             iUser.setValue( (Attribute) this.fvAttributes.elementAt( 0 ), "Woman" );
         else
@@ -129,6 +132,8 @@ public class NaiveBayesClass {
 
         // Get the likelihood of each classes
         this.fDistribution = this.cModel.distributionForInstance( iUser );
+
+        // Retrieving the biggest likelihood
         int max = indexMax( fDistribution );
 
         courseNameAdvised = this.course.value( max );
@@ -136,6 +141,7 @@ public class NaiveBayesClass {
         return courseNameAdvised;
     }
 
+    // Returns the biggest value of a table.
     public int indexMax( double[] T )
     {
         int max = 0;
@@ -150,32 +156,14 @@ public class NaiveBayesClass {
         return max;
     }
 
+    // Getter of the likelihood table
     public double[] getfDistribution() {
         return fDistribution;
     }
 
-    public Attribute getSex() {
-        return sex;
-    }
-
-    public Attribute getPromotion() {
-        return promotion;
-    }
-
+    // Returns courses
     public Attribute getCourse() {
         return course;
-    }
-
-    public Instances getIsSet() {
-        return isSet;
-    }
-
-    public Classifier getcModel() {
-        return cModel;
-    }
-
-    public FastVector getFvAttributes() {
-        return fvAttributes;
     }
 
 }
