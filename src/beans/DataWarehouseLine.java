@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class DataWarehouseLine implements Serializable {
 
+    // Bean properties
     private int    sex;
     private String group;
     private int    year;
@@ -14,6 +15,8 @@ public class DataWarehouseLine implements Serializable {
     private int    hour;
     private int    activity;
     private int    count;
+
+    /*----------------------------------------CONSTRUCTORS(depends of hierarchy time) ---------------------------------------------------------*/
 
     public DataWarehouseLine() {
         super();
@@ -40,6 +43,8 @@ public class DataWarehouseLine implements Serializable {
         this.dayOfWeek = dayOfWeek;
         this.activity = activity;
     }
+
+    /*----------------------------------------GETTERS AND SETTERS ---------------------------------------------------------*/
 
     public int getSex() {
         return sex;

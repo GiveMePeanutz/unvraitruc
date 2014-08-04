@@ -12,6 +12,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+//Forbids access to every one who wants to open DataWarehouse Page but doesn't have the right privilege.
+//Instead, the "not available page" will be displayed.
+
 public class DataWarehouseFilter implements Filter {
 
     public static final String USER_SESSION_ACCESS_ATT = "userSessionAccess";

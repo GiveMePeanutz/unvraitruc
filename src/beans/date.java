@@ -3,6 +3,8 @@ package beans;
 import org.joda.time.DateTime;
 
 public class Date {
+
+    // Bean properties
     private int    dateID;
     private int    minute;
     private int    hour;
@@ -15,11 +17,11 @@ public class Date {
 
     public Date()
     {
-        
-    	DateTime dateTime = new DateTime();
-    	
-    	this.dateID=-1;
-    	
+
+        DateTime dateTime = new DateTime();
+
+        this.dateID = -1;
+
         this.minute = dateTime.getMinuteOfHour();
         this.hour = dateTime.getHourOfDay();
         this.day = dateTime.getDayOfMonth();
@@ -125,6 +127,8 @@ public class Date {
         }
 
     }
+
+    /*----------------------------------------GETTERS AND SETTERS ---------------------------------------------------------*/
 
     public int getDateID() {
         return dateID;

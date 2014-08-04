@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 
 public class User implements Serializable {
 
+    // Bean properties
     private String            username;
     private String            password;
     private String            firstName;
@@ -29,6 +30,7 @@ public class User implements Serializable {
 
     }
 
+    /*----------------------------------------GETTERS AND SETTERS ---------------------------------------------------------*/
     public String getPassword() {
         return password;
     }
@@ -149,8 +151,8 @@ public class User implements Serializable {
         this.groupNames.add( groupName );
     }
 
-    public void removeCourse ( String courseName){
-    	this.courseNames.remove(courseName);
+    public void removeCourse( String courseName ) {
+        this.courseNames.remove( courseName );
     }
-    
+
 }

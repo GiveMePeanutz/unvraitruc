@@ -17,6 +17,8 @@ import beans.User;
 import dao.DAOFactory;
 import dao.FactTableDao;
 
+//Forbids access to every one who is not logged.
+
 public class LoginFilter implements Filter {
 
     public static final String CONF_DAO_FACTORY = "daofactory";
@@ -45,9 +47,13 @@ public class LoginFilter implements Filter {
         HttpSession session = request.getSession();
         User user = new User();
         user = (User) session.getAttribute( USER_SESSION_ATT );
+        // If the User is not logged, login page will be displayed again and
+        // again
         if ( user == null ) {
             request.getRequestDispatcher( "/login" ).forward( req, res );
         } else {
+            // Add an visited page to the database each time we access to a jsp
+            // saved in "inc" repertory.
             factTableDao.addFact( user.getUsername(), path );
             chain.doFilter( req, res );
         }
