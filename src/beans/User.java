@@ -23,6 +23,7 @@ public class User implements Serializable {
     private ArrayList<String> groupNames;
     private ArrayList<String> courseNames;
 
+    // Contructor
     public User() {
         super();
         ArrayList<String> list = new ArrayList<String>();
@@ -143,14 +144,17 @@ public class User implements Serializable {
         this.courseNames = courseIDs;
     }
 
+    // Adds a course in user's course list
     public void addCourseName( String courseName ) {
         this.courseNames.add( courseName );
     }
 
+    // Adds a group in user's group list
     public void addGroupName( String groupName ) {
         this.groupNames.add( groupName );
     }
 
+    // Removes a course from user's course list
     public void removeCourse( String courseName ) {
         this.courseNames.remove( courseName );
     }

@@ -19,7 +19,7 @@ import javax.servlet.http.Part;
 
 import org.joda.time.DateTime;
 
-import utilities.utilitiesForm;
+import utilities.UtilitiesForm;
 import beans.User;
 import dao.DAOException;
 import dao.UserDao;
@@ -46,7 +46,7 @@ public final class UserCreationForm {
     private String              result;
     private Map<String, String> errors          = new HashMap<String, String>();
     private UserDao             userDao;
-    private utilitiesForm       util            = new utilitiesForm();
+    private UtilitiesForm       util            = new UtilitiesForm();
 
     public UserCreationForm( UserDao userDao ) {
         this.userDao = userDao;
@@ -60,6 +60,7 @@ public final class UserCreationForm {
         return result;
     }
 
+    // Method to create a user
     public User createUser( HttpServletRequest request, String path ) throws ParseException, FormValidationException {
 
         // Parameters Recovery
@@ -114,6 +115,7 @@ public final class UserCreationForm {
         return user;
     }
 
+    // Method to modify a user
     public User modifyUser( HttpServletRequest request, String path ) throws ParseException, FormValidationException {
 
         // Parameters Recovery

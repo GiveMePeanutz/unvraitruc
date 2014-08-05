@@ -25,8 +25,6 @@ public class PrivDaoImpl implements PrivDao {
 
     private static final String SQL_INSERT                = "INSERT INTO Priv ( privName, privDescription) VALUES ( ?, ?)";
     private static final String SQL_INSERT_PRIV_MENU      = "INSERT INTO priv_menu (menuPath , privName) VALUES (? , ?)";
-    private static final String SQL_INSERT_PRIV_GROUP     = "INSERT INTO Group_Priv (groupName , privName) VALUES (? , ?)";
-
     private static final String SQL_DELETE_BY_PRIVNAME    = "DELETE FROM Priv WHERE privName = ?";
     private static final String SQL_DELETE_PRIV_MENUPATHS = "DELETE FROM priv_menu WHERE privName = ?";
 

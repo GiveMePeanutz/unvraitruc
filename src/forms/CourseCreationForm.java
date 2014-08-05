@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import utilities.utilitiesForm;
+import utilities.UtilitiesForm;
 import beans.Course;
 import dao.CourseDao;
 import dao.DAOException;
@@ -22,7 +22,7 @@ public final class CourseCreationForm {
     private String              result;
     private Map<String, String> errors            = new HashMap<String, String>();
     private CourseDao           courseDao;
-    private utilitiesForm       util              = new utilitiesForm();
+    private UtilitiesForm       util              = new UtilitiesForm();
 
     public CourseCreationForm( CourseDao courseDao ) {
         this.courseDao = courseDao;
@@ -36,6 +36,7 @@ public final class CourseCreationForm {
         return result;
     }
 
+    // Method to create a course
     public Course createCourse( HttpServletRequest request, String path ) throws ParseException {
 
         // Parameters Recovery
@@ -72,6 +73,7 @@ public final class CourseCreationForm {
         return course;
     }
 
+    // Method to modify a course
     public Course modifyCourse( HttpServletRequest request, String path ) throws ParseException {
 
         // Parameters Recovery
@@ -171,7 +173,7 @@ public final class CourseCreationForm {
     private void courseYearValidation( int courseYear ) throws FormValidationException {
         if ( courseYear != 0 ) {
             if ( courseYear < 1980 ) {
-                throw new FormValidationException( "Course Year must be superior to the year 1900" );
+                throw new FormValidationException( "Course Year must be superior to the year 1980" );
             }
         } else {
             throw new FormValidationException( "Please enter a course year." );

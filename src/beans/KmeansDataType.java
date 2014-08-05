@@ -7,6 +7,7 @@ public class KmeansDataType {
     private double[] data;
     private double[] cluster;
 
+    // Constructor
     public KmeansDataType( String u, double[] d ) {
         this.username = u;
         this.data = d;

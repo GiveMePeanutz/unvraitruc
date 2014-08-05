@@ -1,5 +1,7 @@
 package servlets;
 
+//Controller of user creation
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -15,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import beans.Date;
+import utilities.UtilitiesForm;
 import beans.Group;
 import beans.User;
 import dao.DAOFactory;
@@ -44,6 +46,7 @@ public class UserCreation extends HttpServlet {
     private UserDao            userDao;
     private GroupDao           groupDao;
     private FactTableDao       factTableDao;
+    private UtilitiesForm      util              = new UtilitiesForm();
 
     public void init() throws ServletException {
         this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
@@ -53,16 +56,23 @@ public class UserCreation extends HttpServlet {
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
-        String modifiable = getParameterValue( request, VERIFY_PARAM );
+        // Boolean parameter retrieving from URL : true if it's a modification
+        String modifiable = util.getParameterValue( request, VERIFY_PARAM );
         if ( modifiable != null && modifiable.equals( "true" ) )
         {
-            String userName = getParameterValue( request, USERNAME_PARAM );
+            // User username retrieving from URL
+            String userName = util.getParameterValue( request, USERNAME_PARAM );
+
+            // Searching of the user corresponding to the username
             User user = userDao.find( userName );
+
             request.setAttribute( USER_ATT, user );
             request.setAttribute( VERIFY_PARAM, modifiable );
 
         }
 
+        // Group list retrieving and saving in the request as a
+        // LinkedHashMap(key = group name)
         List<Group> listeGroup = groupDao.list();
         Map<String, Group> mapGroups = new HashMap<String, Group>();
         for ( Group group : listeGroup ) {
@@ -71,23 +81,23 @@ public class UserCreation extends HttpServlet {
 
         request.setAttribute( GROUP_REQUEST_ATT, mapGroups );
 
+        // Creation form display
         this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
     }
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        /*
-         * Lecture du paramètre 'path' passé à la servlet via la déclaration
-         * dans le web.xml
-         */
+
+        // path = urlPatterns annotation parameter
         String path = this.getServletConfig().getInitParameter( PATH );
 
-        /* Préparation de l'objet formulaire */
         UserCreationForm form = new UserCreationForm( userDao );
 
-        /* Traitement de la requête et récupération du bean en résultant */
         User user = null;
+
+        // Value of Create Button retrieving
         String modify = request.getParameter( VERIFY_PARAM2 );
-        if ( modify.equals( "Modify" ) )
+
+        if ( modify.equals( "Modify" ) )// So it's a modification
         {
             try {
 
@@ -96,11 +106,11 @@ public class UserCreation extends HttpServlet {
             } catch ( ParseException e ) {
                 e.printStackTrace();
             } catch ( FormValidationException e ) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
-        else {
+        else // So it's a creation
+        {
             try {
                 user = form.createUser( request, path );
             } catch ( ParseException | FormValidationException e ) {
@@ -108,57 +118,65 @@ public class UserCreation extends HttpServlet {
             }
         }
 
-        /* Ajout du bean et de l'objet métier à l'objet requête */
         request.setAttribute( USER_ATT, user );
         request.setAttribute( FORM_ATT, form );
 
-        if ( request.getAttribute( GROUP_REQUEST_ATT ) == null ) {
+        // if mapGroups is not created yet
+        if ( request.getAttribute( GROUP_REQUEST_ATT ) == null )
+        {
+            // Group list retrieving and saving in the request as a
+            // LinkedHashMap(key = group name)
             List<Group> listGroup = groupDao.list();
-            Map<String, Group> mapPrivs = new HashMap<String, Group>();
+            Map<String, Group> mapGroups = new HashMap<String, Group>();
             for ( Group group : listGroup ) {
-                mapPrivs.put( group.getGroupName(), group );
+                mapGroups.put( group.getGroupName(), group );
             }
-            request.setAttribute( GROUP_REQUEST_ATT, mapPrivs );
+            request.setAttribute( GROUP_REQUEST_ATT, mapGroups );
         }
-        
+
+        /* Session retrieving from the request */
         HttpSession session = request.getSession();
-		User userSession = new User();
+        User userSession = new User();
+        // userSession = user logged onn this session
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
 
         /* Si aucune erreur */
-        if ( form.getErrors().isEmpty() ) {
-        	if ( modify.equals( "Modify" ) )
+        if ( form.getErrors().isEmpty() ) // if there is no error after the
+                                          // verification...
+        {
+            if ( modify.equals( "Modify" ) )// and if this is a modification
             {
-        		factTableDao.addFact(userSession.getUsername(), "User modified");
-            }else{
-            	factTableDao.addFact(userSession.getUsername(), "User created");
+                // New action saved in database
+                factTableDao.addFact( userSession.getUsername(), "User modified" );
             }
+            else
+            {
+                // New action saved in database
+                factTableDao.addFact( userSession.getUsername(), "User created" );
+            }
+
+            // Redirection toward the course list
             response.sendRedirect( VUE_SUCCESS );
-        } else {
+        }
+        else// if there is at least one error
+        {
 
-            if ( modify.equals( "Modify" ) )
+            if ( modify.equals( "Modify" ) )// and if this is a modification
             {
-            	factTableDao.addFact(userSession.getUsername(), "User modification failed");
+                // New action saved in database
+                factTableDao.addFact( userSession.getUsername(), "User modification failed" );
+
+                // Specifies that it's still a modification
                 request.setAttribute( VERIFY_PARAM, "true" );
-            }else{
-            	factTableDao.addFact(userSession.getUsername(), "User creation failed");
+            }
+            else
+            {
+                // New action saved in database
+                factTableDao.addFact( userSession.getUsername(), "User creation failed" );
             }
 
-            /*
-             * Sinon, ré-affichage du formulaire de création avec les erreurs
-             */
-            
+            // else forwarding toward the creation form
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
-        }
-    }
-
-    private static String getParameterValue( HttpServletRequest request,
-            String nomChamp ) {
-        String value = request.getParameter( nomChamp );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } else {
-            return value;
         }
     }
 }

@@ -53,6 +53,7 @@ public class Group implements Serializable, Comparable<Group> {
         this.usernames.add( privName );
     }
 
+    // Compares two groups according to GroupName.
     public int compareTo( Group other ) {
         return groupName.compareTo( other.groupName );
     }

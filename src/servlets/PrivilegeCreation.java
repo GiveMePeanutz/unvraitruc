@@ -1,5 +1,7 @@
 package servlets;
 
+//Controller of privileges creation 
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
@@ -13,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import staticData.Menu;
-import beans.Date;
+import utilities.UtilitiesForm;
 import beans.Priv;
 import beans.User;
 import dao.DAOFactory;
@@ -31,8 +33,7 @@ public class PrivilegeCreation extends HttpServlet {
     public static final String PRIVNAME_PARAM   = "privName";
     public static final String VERIFY_PARAM     = "modify";
     public static final String VERIFY_PARAM2    = "Create";
-    public static final String USER_SESSION_ATT  = "userSession";
-
+    public static final String USER_SESSION_ATT = "userSession";
 
     public static final String VUE_SUCCESS      = "/Project/displayPrivs";
     public static final String VUE_FORM         = "/WEB-INF/createPrivilege.jsp";
@@ -40,7 +41,7 @@ public class PrivilegeCreation extends HttpServlet {
 
     private PrivDao            privDao;
     private FactTableDao       factTableDao;
-
+    private UtilitiesForm      util             = new UtilitiesForm();
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
@@ -50,36 +51,44 @@ public class PrivilegeCreation extends HttpServlet {
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        String modifiable = getParameterValue( request, VERIFY_PARAM );
+
+        // Boolean parameter retrieving from URL : true if it's a modification
+        String modifiable = util.getParameterValue( request, VERIFY_PARAM );
         if ( modifiable != null && modifiable.equals( "true" ) )
         {
-            String privName = getParameterValue( request, PRIVNAME_PARAM );
+            // Privilege Name retrieving from URL
+            String privName = util.getParameterValue( request, PRIVNAME_PARAM );
+
+            // Searching of the privilege corresponding to the privilege name
             Priv priv = privDao.find( privName );
+
             request.setAttribute( VERIFY_PARAM, modifiable );
             request.setAttribute( PRIV_ATT, priv );
 
         }
 
+        // Menu list retrieving and saving in the request
         Map<Integer, String> mapMenus = Menu.list();
-
         request.setAttribute( MENU_REQUEST_ATT, mapMenus );
+
+        // Creation form display
         this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
     }
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        /*
-         * Lecture du paramètre 'path' passé à la servlet via la déclaration
-         * dans le web.xml
-         */
+
+        // path = urlPatterns annotation parameter
         String path = this.getServletConfig().getInitParameter( PATH );
 
-        /* Préparation de l'objet formulaire */
+        /* Preparation of the form object */
         PrivilegeCreationForm form = new PrivilegeCreationForm( privDao );
 
-        /* Traitement de la requête et récupération du bean en résultant */
         Priv priv = null;
+
+        // Value of Create Button retrieving
         String modify = request.getParameter( VERIFY_PARAM2 );
-        if ( modify.equals( "Modify" ) )
+
+        if ( modify.equals( "Modify" ) )// So it's a modification
         {
             try {
                 priv = form.modifyPriv( request, path );
@@ -87,7 +96,8 @@ public class PrivilegeCreation extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        else {
+        else // So it's a creation
+        {
             try {
                 priv = form.createPriv( request, path );
             } catch ( ParseException e ) {
@@ -95,52 +105,57 @@ public class PrivilegeCreation extends HttpServlet {
             }
         }
 
-        /* Ajout du bean et de l'objet métier à l'objet requête */
         request.setAttribute( PRIV_ATT, priv );
         request.setAttribute( FORM_ATT, form );
 
+        // Menu list retrieving and saving in the request
         LinkedHashMap<Integer, String> mapMenus = Menu.list();
 
         request.setAttribute( MENU_REQUEST_ATT, mapMenus );
 
+        /* Session retrieving from the request */
         HttpSession session = request.getSession();
-		User userSession = new User();
+        // userSession = user logged onn this session
+        User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
-        
+
         /* Si aucune erreur */
-        if ( form.getErrors().isEmpty() ) {
-        	if ( modify.equals( "Modify" ) )
+        if ( form.getErrors().isEmpty() )// if there is no error after the
+                                         // verification...
+        {
+            if ( modify.equals( "Modify" ) )// and if this is a modification
             {
-        		factTableDao.addFact(userSession.getUsername(), "Privilege modified");
-            }else{
-            	factTableDao.addFact(userSession.getUsername(), "Privilege created");
+                // New action saved in database
+                factTableDao.addFact( userSession.getUsername(), "Privilege modified" );
             }
+            else
+            {
+                // New action saved in database
+                factTableDao.addFact( userSession.getUsername(), "Privilege created" );
+            }
+
+            // Redirection toward the privilege list
             response.sendRedirect( VUE_SUCCESS );
-        } else {
+        }
+        else // if there is at least one error
+        {
 
-            if ( modify.equals( "Modify" ) )
+            if ( modify.equals( "Modify" ) )// and if this is a modification
             {
-            	factTableDao.addFact(userSession.getUsername(), "Privilege modification errors");
+                // New action saved in database
+                factTableDao.addFact( userSession.getUsername(), "Privilege modification errors" );
+
+                // Specifies that it's still a modification
                 request.setAttribute( VERIFY_PARAM, "true" );
-            }else{
-            	factTableDao.addFact(userSession.getUsername(), "Privilege creation errors");
+            }
+            else
+            {
+                // New action saved in database
+                factTableDao.addFact( userSession.getUsername(), "Privilege creation errors" );
             }
 
-            /*
-             * Sinon, ré-affichage du formulaire de création avec les erreurs
-             */
-            
+            // else forwarding toward the creation form
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
-        }
-    }
-
-    private static String getParameterValue( HttpServletRequest request,
-            String nomChamp ) {
-        String value = request.getParameter( nomChamp );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } else {
-            return value;
         }
     }
 }

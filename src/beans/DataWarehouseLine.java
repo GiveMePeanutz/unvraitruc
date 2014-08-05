@@ -16,7 +16,7 @@ public class DataWarehouseLine implements Serializable {
     private int    activity;
     private int    count;
 
-    /*----------------------------------------CONSTRUCTORS(depends of hierarchy time) ---------------------------------------------------------*/
+    /*----------------------------------------CONSTRUCTORS(depends of time hierarchy) ---------------------------------------------------------*/
 
     public DataWarehouseLine() {
         super();

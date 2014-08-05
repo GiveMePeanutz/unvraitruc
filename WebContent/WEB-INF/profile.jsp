@@ -19,7 +19,7 @@
             <dl><dt class ="important">Username :</dt> <dd><c:out value="${ user.username }"/></dd></dl>
             <c:set var="contains" value="false" />
             
-            <%--Password is displayed only if this profile is the profile of the connected user or if the user could modify the users. --%>
+            <%--Password is displayed only if this profile is the profile of the connected user or if the user could modify the users.(explained in the servlet) --%>
 			<c:choose>
 			<c:when test='${ user.username eq sessionScope.userSession.username }'>
 			<dl><dt class="important">Password :</dt> <dd><c:out value="${ user.password }"/></dd></dl>

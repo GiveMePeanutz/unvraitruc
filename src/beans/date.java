@@ -6,15 +6,15 @@ public class Date {
 
     // Bean properties
     private int    dateID;
-    private int    minute;
     private int    hour;
     private int    day;
     private String dayName;
     private int    week;
     private String monthName;
-    private int    quarter;
     private int    year;
 
+    // Retrieves each part of a DateTime (hours, weeks ...) and saves the real
+    // name of days and months according to their number.
     public Date()
     {
 
@@ -22,7 +22,6 @@ public class Date {
 
         this.dateID = -1;
 
-        this.minute = dateTime.getMinuteOfHour();
         this.hour = dateTime.getHourOfDay();
         this.day = dateTime.getDayOfMonth();
         this.week = dateTime.getWeekOfWeekyear();
@@ -70,34 +69,6 @@ public class Date {
             break;
         }
 
-        switch ( dateTime.getMonthOfYear() ) {
-        case 1:
-        case 3:
-        case 2:
-            this.quarter = 1;
-            break;
-        case 5:
-        case 6:
-        case 4:
-            this.quarter = 2;
-            break;
-        case 7:
-        case 8:
-        case 9:
-            this.quarter = 3;
-            break;
-
-        case 10:
-        case 11:
-        case 12:
-            this.quarter = 4;
-            break;
-
-        default:
-            this.quarter = 0;
-            break;
-        }
-
         switch ( dateTime.getDayOfWeek() ) {
         case 1:
             this.dayName = "Monday";
@@ -138,14 +109,6 @@ public class Date {
         this.dateID = dateID;
     }
 
-    public int getMinute() {
-        return minute;
-    }
-
-    public void setMinute( int minute ) {
-        this.minute = minute;
-    }
-
     public int getHour() {
         return hour;
     }
@@ -184,14 +147,6 @@ public class Date {
 
     public void setMonthName( String monthName ) {
         this.monthName = monthName;
-    }
-
-    public int getQuarter() {
-        return quarter;
-    }
-
-    public void setQuarter( int quarter ) {
-        this.quarter = quarter;
     }
 
     public int getYear() {

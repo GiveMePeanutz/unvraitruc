@@ -1,5 +1,7 @@
 package servlets;
 
+//Controller to handle image uploads. 
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -19,77 +21,62 @@ public class Image extends HttpServlet {
     public static final int TAILLE_TAMPON = 10240; // 10ko
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        /*
-         * Lecture du paramètre 'path' passé à la servlet via la déclaration
-         * dans le web.xml
-         */
+
+        // path = urlPatterns annotation parameter
         String path = this.getServletConfig().getInitParameter( "path" );
 
-        /*
-         * Récupération du path du file demandé au sein de l'URL de la requête
-         */
+        // File Path retrieving from the request
         String requiredFile = request.getPathInfo();
 
-        /* Vérifie qu'un file a bien été fourni */
         if ( requiredFile == null || "/".equals( requiredFile ) ) {
-            /*
-             * Si non, alors on envoie une erreur 404, qui signifie que la
-             * ressource demandée n'existe pas
-             */
+            // If the file hasn't been provided, returns a error 404
             response.sendError( HttpServletResponse.SC_NOT_FOUND );
             return;
         }
 
-        /*
-         * Décode le nom de file récupéré, susceptible de contenir des espaces
-         * et autres caractères spéciaux, et prépare l'objet File
-         */
+        // Decode the file name (spaces and specials characters) and prepare the
+        // File object
         requiredFile = URLDecoder.decode( requiredFile, "UTF-8" );
         File file = new File( path, requiredFile );
 
-        /* Vérifie que le file existe bien */
         if ( !file.exists() ) {
-            /*
-             * Si non, alors on envoie une erreur 404, qui signifie que la
-             * ressource demandée n'existe pas
-             */
+            // If the file doesn't exist, returns a error 404
             response.sendError( HttpServletResponse.SC_NOT_FOUND );
             return;
         }
 
-        /* Récupère le type du file */
+        // File Type retrieving
         String type = getServletContext().getMimeType( file.getName() );
-
-        /*
-         * Si le type de file est inconnu, alors on initialise un type par
-         * défaut
-         */
+        // If it's a unknown type, initializes a default type
         if ( type == null ) {
             type = "application/octet-stream";
         }
 
-        /* Initialise la réponse HTTP */
+        /* Initialize HTTP response */
         response.reset();
         response.setBufferSize( TAILLE_TAMPON );
         response.setContentType( type );
         response.setHeader( "Content-Length", String.valueOf( file.length() ) );
         response.setHeader( "Content-Disposition", "inline; filename=\"" + file.getName() + "\"" );
 
-        /* Prépare les flux */
+        // Prepares the streams
         BufferedInputStream in = null;
         BufferedOutputStream out = null;
-        try {
-            /* Ouvre les flux */
+        try
+        {
+
+            // Opens the streams
             in = new BufferedInputStream( new FileInputStream( file ), TAILLE_TAMPON );
             out = new BufferedOutputStream( response.getOutputStream(), TAILLE_TAMPON );
 
-            /* Lit le file et écrit son contenu dans la réponse HTTP */
+            // Reads the file and writes its content on the HTTP response
             byte[] buffer = new byte[TAILLE_TAMPON];
             int longueur;
             while ( ( longueur = in.read( buffer ) ) > 0 ) {
                 out.write( buffer, 0, longueur );
             }
-        } finally {
+        } finally
+        {
             try {
                 out.close();
             } catch ( IOException ignore ) {

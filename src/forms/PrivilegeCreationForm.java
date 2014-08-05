@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import utilities.utilitiesForm;
+import utilities.UtilitiesForm;
 import beans.Priv;
 import dao.DAOException;
 import dao.PrivDao;
@@ -22,7 +22,7 @@ public final class PrivilegeCreationForm {
     private String              result;
     private Map<String, String> errors            = new HashMap<String, String>();
     private PrivDao             privDao;
-    private utilitiesForm       util              = new utilitiesForm();
+    private UtilitiesForm       util              = new UtilitiesForm();
 
     public PrivilegeCreationForm( PrivDao privDao ) {
         this.privDao = privDao;
@@ -36,6 +36,7 @@ public final class PrivilegeCreationForm {
         return result;
     }
 
+    // Method to create a privilege
     public Priv createPriv( HttpServletRequest request, String path ) throws ParseException {
 
         // Parameters Recovery
@@ -70,6 +71,7 @@ public final class PrivilegeCreationForm {
         return priv;
     }
 
+    // Method to modify a privilege
     public Priv modifyPriv( HttpServletRequest request, String path ) throws ParseException {
 
         // Parameters Recovery

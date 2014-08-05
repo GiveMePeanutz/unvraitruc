@@ -1,5 +1,7 @@
 package servlets;
 
+//Controller of courses display 
+
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -38,6 +40,7 @@ public class DisplayCourses extends HttpServlet {
     private NaiveBayesDao      naiveBayesDao;
 
     public void init() throws ServletException {
+
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
         this.naiveBayesDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getNaiveBayesDao();
         this.courseDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getCourseDao();
@@ -45,15 +48,24 @@ public class DisplayCourses extends HttpServlet {
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
+        /* Session retrieving from the request */
         HttpSession session = request.getSession();
         User user = new User();
+        // user = user logged onn this session
         user = (User) session.getAttribute( USER_SESSION_ATT );
+
+        // Course list retrieving from database
         List<Course> listeCourses = courseDao.list();
+
         LinkedHashMap<String, Course> mapAvailableCourses = new LinkedHashMap<String, Course>();
         LinkedHashMap<String, Course> mapUserCourses = new LinkedHashMap<String, Course>();
-        if ( user.getCourseNames().isEmpty() )
+
+        if ( user.getCourseNames().isEmpty() )// if the user didn't subscribe to
+                                              // any courses yet
         {
 
+            // Saving the course list in the availableCourse map (key = course
+            // name)
             for ( Course course : listeCourses )
             {
                 mapAvailableCourses.put( course.getCourseName(), course );
@@ -61,8 +73,11 @@ public class DisplayCourses extends HttpServlet {
         }
         else
         {
+            // else user's courses retrieving
             List<String> userCourseList = user.getCourseNames();
 
+            // and saving in UserCourses if he subscribed to this course yet, in
+            // availableCourses else
             for ( Course course : listeCourses ) {
                 if ( userCourseList.contains( course.getCourseName() ) )
                 {
@@ -80,34 +95,43 @@ public class DisplayCourses extends HttpServlet {
         request.setAttribute( AVAILABLECOURSE_REQUEST_ATT, mapAvailableCourses );
 
         /*------------------------Naive Bayes----------------------------------*/
+
+        // Limits number of digits
         NumberFormat nf = new DecimalFormat( "0.##" );
+        // Creates a naive bayes classifier (from dataMining package)
         NaiveBayesClass classifier = new NaiveBayesClass( user, userDao, naiveBayesDao );
+
         double[] likelihood = null;
+
         Attribute courseAttribute = null;
 
         try {
+            // Runs the naive Bayes algorithm
             classifier.courseAdvice( user );
+            // Save the likelihoods in a table
             likelihood = classifier.getfDistribution();
+            // Course list retrieving (attribute, vector of course names)
             courseAttribute = classifier.getCourse();
 
         } catch ( Exception e ) {
             e.printStackTrace();
         }
 
-        if ( likelihood != null || courseAttribute != null )
+        if ( likelihood != null || courseAttribute != null ) // If the algorithm
+                                                             // returns a result
         {
             HashMap<String, String> mapCourseLikelihood = new HashMap<String, String>();
+            // Saving likelihoods in a map (key = course name, value =
+            // likelihood)
             for ( int i = 0; i < likelihood.length; i++ )
             {
                 mapCourseLikelihood.put( courseAttribute.value( i ), nf.format( likelihood[i] * 100 ) );
             }
             request.setAttribute( MAP_RESULT, mapCourseLikelihood );
         }
+
+        // Course list display
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
-
-    }
-
-    public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
     }
 

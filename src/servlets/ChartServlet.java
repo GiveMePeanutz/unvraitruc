@@ -1,5 +1,7 @@
 package servlets;
 
+//Controller of charts drawing 
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -14,6 +16,7 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 
 import utilities.DrawChart;
+import utilities.UtilitiesForm;
 import beans.User;
 import dao.DAOFactory;
 import dao.ExtractDataWarehouseDao;
@@ -31,6 +34,7 @@ public class ChartServlet extends HttpServlet {
 
     private ExtractDataWarehouseDao extractDataWarehouseDao;
     private FactTableDao            factTableDao;
+    private UtilitiesForm           util             = new UtilitiesForm();
 
     public void init() throws ServletException {
         this.extractDataWarehouseDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) )
@@ -39,48 +43,36 @@ public class ChartServlet extends HttpServlet {
                 .getFactTableDao();
     }
 
-    protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws IOException {
-
-    }
-
     protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws IOException {
 
         response.setContentType( "image/png" );
-        String type = getFieldValue( request, TYPE_FIELD );
-        int action = getIntValue( request, ACTION_FIELD );
-        int year = getIntValue( request, YEAR_FIELD );
+
+        // Chosen type parameter retrieving from the form.
+        String type = util.getFieldValue( request, TYPE_FIELD );
+        // Chosen action retrieving from the form.
+        int action = util.getIntValue( request, ACTION_FIELD );
+        // Chosen year retrieving from the form.
+        int year = util.getIntValue( request, YEAR_FIELD );
 
         OutputStream outputStream = response.getOutputStream();
+        // Creation of a DrawChart Instance (from utilities package)
         DrawChart drawChart = new DrawChart();
+        // Creation of the Piechart with the retrieved parameters
         JFreeChart chart = drawChart.getChart( type, action, year, extractDataWarehouseDao );
+        // Dimension definition
         int width = 500;
         int height = 350;
 
+        // Displays the pieChart
         ChartUtilities.writeChartAsPNG( outputStream, chart, width, height );
 
-        // Save the action in database
+        /* Session retrieving from the request */
         HttpSession session = request.getSession();
         User userSession = new User();
+        // userSession = user logged on this session
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
+        // New action saved in database
         factTableDao.addFact( userSession.getUsername(), "Drawing" );
     }
 
-    private static String getFieldValue( HttpServletRequest request, String fieldName ) {
-        String value = request.getParameter( fieldName );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } else {
-            return value;
-        }
-    }
-
-    private static int getIntValue( HttpServletRequest request, String fieldName ) {
-        String value = request.getParameter( fieldName );
-        int valueInt = Integer.parseInt( value );
-        if ( valueInt == 0 ) {
-            return 0;
-        } else {
-            return valueInt;
-        }
-    }
 }

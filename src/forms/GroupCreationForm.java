@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import utilities.utilitiesForm;
+import utilities.UtilitiesForm;
 import beans.Group;
 import dao.DAOException;
 import dao.GroupDao;
@@ -22,7 +22,7 @@ public final class GroupCreationForm {
     private String              result;
     private Map<String, String> errors            = new HashMap<String, String>();
     private GroupDao            groupDao;
-    private utilitiesForm       util              = new utilitiesForm();
+    private UtilitiesForm       util              = new UtilitiesForm();
 
     public GroupCreationForm( GroupDao groupDao ) {
         this.groupDao = groupDao;
@@ -36,6 +36,7 @@ public final class GroupCreationForm {
         return result;
     }
 
+    // Method to create a group
     public Group createGroup( HttpServletRequest request, String path ) throws ParseException {
 
         // Parameters Recovery
@@ -69,6 +70,7 @@ public final class GroupCreationForm {
         return group;
     }
 
+    // Method to modify a group
     public Group modifyGroup( HttpServletRequest request, String path ) throws ParseException {
 
         // Parameters Recovery

@@ -1,10 +1,9 @@
 package servlets;
 
+//Controller of teacher creation
+
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -15,12 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import beans.Date;
-import beans.Group;
+import utilities.UtilitiesForm;
 import beans.User;
 import dao.DAOFactory;
 import dao.FactTableDao;
-import dao.GroupDao;
 import dao.UserDao;
 import forms.FormValidationException;
 import forms.UserCreationForm;
@@ -43,51 +40,48 @@ public class TeacherCreation extends HttpServlet {
     public static final String ACTIVITY_NAME     = "teacherCreation";
 
     private UserDao            userDao;
-    private GroupDao           groupDao;
     private FactTableDao       factTableDao;
+    private UtilitiesForm      util              = new UtilitiesForm();
 
     public void init() throws ServletException {
-        this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
         this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
-        String modifiable = getParameterValue( request, VERIFY_PARAM );
+        // Boolean parameter retrieving from URL : true if it's a modification
+        String modifiable = util.getParameterValue( request, VERIFY_PARAM );
         if ( modifiable != null && modifiable.equals( "true" ) )
         {
-            String userName = getParameterValue( request, USERNAME_PARAM );
+            // Teacher username retrieving from URL
+            String userName = util.getParameterValue( request, USERNAME_PARAM );
+
+            // Searching of the user corresponding to the username
             User user = userDao.find( userName );
+
             request.setAttribute( USER_ATT, user );
             request.setAttribute( VERIFY_PARAM, modifiable );
         }
 
-        List<Group> listeGroup = groupDao.list();
-        Map<String, Group> mapGroups = new HashMap<String, Group>();
-        for ( Group group : listeGroup ) {
-            mapGroups.put( group.getGroupName(), group );
-        }
-
-        request.setAttribute( GROUP_REQUEST_ATT, mapGroups );
-
+        // Creation form display
         this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
     }
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        /*
-         * Lecture du paramètre 'path' passé à la servlet via la déclaration
-         * dans le web.xml
-         */
+
+        // path = urlPatterns annotation parameter
         String path = this.getServletConfig().getInitParameter( PATH );
 
-        /* Préparation de l'objet formulaire */
+        /* Preparation of the form object */
         UserCreationForm form = new UserCreationForm( userDao );
 
-        /* Traitement de la requête et récupération du bean en résultant */
         User user = null;
+
+        // Value of Create Button retrieving
         String modify = request.getParameter( VERIFY_PARAM2 );
-        if ( modify.equals( "Modify" ) )
+
+        if ( modify.equals( "Modify" ) )// So it's a modification
         {
             try {
 
@@ -96,11 +90,11 @@ public class TeacherCreation extends HttpServlet {
             } catch ( ParseException e ) {
                 e.printStackTrace();
             } catch ( FormValidationException e ) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
-        else {
+        else // So it's a creation
+        {
             try {
                 user = form.createUser( request, path );
             } catch ( ParseException | FormValidationException e ) {
@@ -108,57 +102,52 @@ public class TeacherCreation extends HttpServlet {
             }
         }
 
-        /* Ajout du bean et de l'objet métier à l'objet requête */
         request.setAttribute( USER_ATT, user );
         request.setAttribute( FORM_ATT, form );
 
-        if ( request.getAttribute( GROUP_REQUEST_ATT ) == null ) {
-            List<Group> listGroup = groupDao.list();
-            Map<String, Group> mapPrivs = new HashMap<String, Group>();
-            for ( Group group : listGroup ) {
-                mapPrivs.put( group.getGroupName(), group );
-            }
-            request.setAttribute( GROUP_REQUEST_ATT, mapPrivs );
-        }
-
+        /* Session retrieving from the request */
         HttpSession session = request.getSession();
-		User userSession = new User();
+        // userSession = user logged onn this session
+        User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
 
         /* Si aucune erreur */
-        if ( form.getErrors().isEmpty() ) {
-        	if ( modify.equals( "Modify" ) )
+        if ( form.getErrors().isEmpty() ) // if there is no error after the
+                                          // verification...
+        {
+            if ( modify.equals( "Modify" ) )// and if this is a modification
             {
-        		factTableDao.addFact(userSession.getUsername(), "Teacher modified");
-            }else{
-            	factTableDao.addFact(userSession.getUsername(), "Teacher created");
+                // New action saved in database
+                factTableDao.addFact( userSession.getUsername(), "Teacher modified" );
             }
+            else
+            {
+                // New action saved in database
+                factTableDao.addFact( userSession.getUsername(), "Teacher created" );
+            }
+
+            // Redirection toward the teacher list
             response.sendRedirect( VUE_SUCCESS );
-        } else {
+        }
+        else // if there is at least one error
+        {
 
-            if ( modify.equals( "Modify" ) )
+            if ( modify.equals( "Modify" ) )// and if this is a modification
             {
-            	factTableDao.addFact(userSession.getUsername(), "Teacher modification errors");
+                // New action saved in database
+                factTableDao.addFact( userSession.getUsername(), "Teacher modification errors" );
+
+                // Specifies that it's still a modification
                 request.setAttribute( VERIFY_PARAM, "true" );
-            }else{
-            	factTableDao.addFact(userSession.getUsername(), "Teacher creation errors");
+            }
+            else
+            {
+                // New action saved in database
+                factTableDao.addFact( userSession.getUsername(), "Teacher creation errors" );
             }
 
-            /*
-             * Sinon, ré-affichage du formulaire de création avec les erreurs
-             */
-            
+            // else forwarding toward the creation form
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
-        }
-    }
-
-    private static String getParameterValue( HttpServletRequest request,
-            String nomChamp ) {
-        String value = request.getParameter( nomChamp );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } else {
-            return value;
         }
     }
 }

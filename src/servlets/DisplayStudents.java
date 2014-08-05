@@ -1,10 +1,10 @@
 package servlets;
 
+//Controller of Students display 
+
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,36 +27,26 @@ public class DisplayStudents extends HttpServlet {
     private UserDao            userDao;
 
     public void init() throws ServletException {
-        /* Récupération d'une instance de notre DAO Utilisateur */
+
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         Encryption enc = new Encryption();
 
+        // Student list retrieving and saving in the request as a
+        // LinkedHashMap(key = encrypted username)
         List<User> listeUsers = userDao.listGroup( "student" );
         LinkedHashMap<String, User> mapUsers = new LinkedHashMap<String, User>();
-        for ( User user : listeUsers ) {
+        for ( User user : listeUsers )
+        {
             mapUsers.put( enc.encrypt( user.getUsername() ), user );
         }
-
         request.setAttribute( USER_REQUEST_ATT, mapUsers );
 
+        // Student list display
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
 
     }
 
-    public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        Encryption enc = new Encryption();
-        List<User> listeUsers = userDao.listGroup( "student" );
-        Map<String, User> mapUsers = new HashMap<String, User>();
-        for ( User user : listeUsers ) {
-            mapUsers.put( enc.encrypt( user.getUsername() ), user );
-        }
-
-        request.setAttribute( USER_REQUEST_ATT, mapUsers );
-
-        this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
-
-    }
 }

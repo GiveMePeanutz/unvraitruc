@@ -1,5 +1,7 @@
 package servlets;
 
+//Controller of registration  
+
 import java.io.IOException;
 import java.util.List;
 
@@ -33,49 +35,57 @@ public class Login extends HttpServlet {
     private FactTableDao        factTableDao;
 
     public void init() throws ServletException {
-        /* Récupération d'une instance de notre DAO Utilisateur */
+
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
         this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
+        // Forwarding toward the login page
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
     }
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+
+        // path = urlPatterns annotation parameter
         String path = this.getServletConfig().getInitParameter( PATH );
 
-        /* Préparation de l'objet formulaire */
+        // Preparation of the form object
         LoginForm form = new LoginForm( userDao );
-        /* Traitement de la requête et récupération du bean en résultant */
+        // Password and Username verification
         User user = form.connectUser( request, path );
 
-        /* Récupération de la session depuis la requête */
+        // Session retrieving from the request
         HttpSession session = request.getSession();
 
-        /*
-         * Si aucune erreur de validation n'a eu lieu, alors ajout du bean
-         * Utilisateur à la session, sinon suppression du bean de la session.
-         */
-        if ( form.getErrors().isEmpty() ) {
-            session.setAttribute( USER_SESSION_ATT, user );
+        if ( form.getErrors().isEmpty() )// if no error during the check
+        {
+            session.setAttribute( USER_SESSION_ATT, user ); // saves the user in
+                                                            // session
+            // lists differents menus he can access and saves it in a session
+            // attribute
             List<String> menus = userDao.listAccMenus( user.getUsername() );
             session.setAttribute( USER_SESSION_ACCESS_ATT, menus );
 
             User userSession = new User();
+            // userSession = user logged onn this session
             userSession = (User) session.getAttribute( USER_SESSION_ATT );
+            // New action saved in database
             factTableDao.addFact( userSession.getUsername(), "Login" );
 
-        } else {
+        }
+        else
+        {
+            // No user logged
             session.setAttribute( USER_SESSION_ATT, null );
         }
 
-        /* Stockage du formulaire et du bean dans l'objet request */
         request.setAttribute( FORM_ATT, form );
         request.setAttribute( "username", user.getUsername() );
         request.setAttribute( USER_ATT, user );
 
+        // Displays again the login page
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
     }
 }

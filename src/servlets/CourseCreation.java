@@ -1,5 +1,7 @@
 package servlets;
 
+//Controller of course creation 
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
@@ -12,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import utilities.Encryption;
+import utilities.UtilitiesForm;
 import beans.Course;
 import beans.User;
 import dao.CourseDao;
@@ -42,6 +44,7 @@ public class CourseCreation extends HttpServlet {
     private UserDao            userDao;
     private CourseDao          courseDao;
     private FactTableDao       factTableDao;
+    private UtilitiesForm      util                = new UtilitiesForm();
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
@@ -52,17 +55,22 @@ public class CourseCreation extends HttpServlet {
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
-        Encryption enc = new Encryption();
-
-        String modifiable = getParameterValue( request, VERIFY_PARAM );
+        // Boolean parameter retrieving from URL : true if it's a modification
+        String modifiable = util.getParameterValue( request, VERIFY_PARAM );
         if ( modifiable != null && modifiable.equals( "true" ) )
         {
-            String courseName = getParameterValue( request, COURSENAME_PARAM );
+            // Course Name retrieving from URL
+            String courseName = util.getParameterValue( request, COURSENAME_PARAM );
+
+            // Searching of the course corresponding to the course name
             Course course = courseDao.find( courseName );
+
             request.setAttribute( VERIFY_PARAM, modifiable );
             request.setAttribute( COURSE_ATT, course );
         }
 
+        // Teacher list retrieving and saving in the request as a
+        // LinkedHashMap(key = username)
         List<User> listeTeachers = userDao.listGroup( "teacher" );
         LinkedHashMap<String, User> mapTeachers = new LinkedHashMap<String, User>();
         for ( User user : listeTeachers ) {
@@ -71,23 +79,24 @@ public class CourseCreation extends HttpServlet {
 
         request.setAttribute( TEACHER_REQUEST_ATT, mapTeachers );
 
+        // Creation form display
         this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
     }
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        /*
-         * Lecture du paramètre 'path' passé à la servlet via la déclaration
-         * dans le web.xml
-         */
+
+        // path = urlPatterns annotation parameter
         String path = this.getServletConfig().getInitParameter( PATH );
 
-        /* Préparation de l'objet formulaire */
+        /* Preparation of the form object */
         CourseCreationForm form = new CourseCreationForm( courseDao );
 
-        /* Traitement de la requête et récupération du bean en résultant */
         Course course = null;
+
+        // Value of Create Button retrieving
         String modify = request.getParameter( VERIFY_PARAM2 );
-        if ( modify.equals( "Modify" ) )
+
+        if ( modify.equals( "Modify" ) )// So it's a modification
         {
             try {
                 course = form.modifyCourse( request, path );
@@ -95,7 +104,8 @@ public class CourseCreation extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        else {
+        else // So it's a creation
+        {
             try {
                 course = form.createCourse( request, path );
             } catch ( ParseException e ) {
@@ -103,12 +113,15 @@ public class CourseCreation extends HttpServlet {
             }
         }
 
-        /* Ajout du bean et de l'objet métier à l'objet requête */
         request.setAttribute( COURSE_ATT, course );
         request.setAttribute( FORM_ATT, form );
 
-        if ( request.getAttribute( TEACHER_REQUEST_ATT ) == null ) {
+        // if mapTeacher is not created yet
+        if ( request.getAttribute( TEACHER_REQUEST_ATT ) == null )
+        {
 
+            // Teacher list retrieving and saving in the request as a
+            // LinkedHashMap(key = username)
             List<User> listeTeachers = userDao.listGroup( "teacher" );
             LinkedHashMap<String, User> mapTeachers = new LinkedHashMap<String, User>();
             for ( User user : listeTeachers ) {
@@ -118,44 +131,50 @@ public class CourseCreation extends HttpServlet {
             request.setAttribute( TEACHER_REQUEST_ATT, mapTeachers );
         }
 
+        /* Session retrieving from the request */
         HttpSession session = request.getSession();
         User userSession = new User();
+        // userSession = user logged on this session
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
 
         /* Si aucune erreur */
-        if ( form.getErrors().isEmpty() ) {
-            if ( modify.equals( "Modify" ) )
+        if ( form.getErrors().isEmpty() ) // if there is no error after the
+                                          // verification...
+        {
+            if ( modify.equals( "Modify" ) )// and if this is a modification
             {
+                // New action saved in database
                 factTableDao.addFact( userSession.getUsername(), "Course modified" );
-            } else {
+            }
+            else
+            {
+                // New action saved in database
                 factTableDao.addFact( userSession.getUsername(), "Course created" );
             }
-            response.sendRedirect( VUE_SUCCESS );
-        } else {
 
-            if ( modify.equals( "Modify" ) )
+            response.sendRedirect( VUE_SUCCESS );
+        }
+        else // if there is at least one error
+        {
+
+            if ( modify.equals( "Modify" ) )// and if this is a modification
             {
+                // New action saved in database
                 factTableDao.addFact( userSession.getUsername(), "Course modification errors" );
+
+                // Specifies that it's still a modification
                 request.setAttribute( VERIFY_PARAM, "true" );
-            } else {
+
+            }
+            else
+            {
+                // New action saved in database
                 factTableDao.addFact( userSession.getUsername(), "Course creation errors" );
             }
 
-            /*
-             * Sinon, ré-affichage du formulaire de création avec les erreurs
-             */
-
+            // else forwarding toward the creation form
             this.getServletContext().getRequestDispatcher( VUE_FORM ).forward( request, response );
         }
     }
 
-    private static String getParameterValue( HttpServletRequest request,
-            String nomChamp ) {
-        String value = request.getParameter( nomChamp );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } else {
-            return value;
-        }
-    }
 }

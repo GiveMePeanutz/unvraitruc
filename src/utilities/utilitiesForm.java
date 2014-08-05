@@ -10,7 +10,18 @@ import org.joda.time.format.DateTimeFormatter;
 
 import forms.FormValidationException;
 
-public class utilitiesForm {
+public class UtilitiesForm {
+
+    // Retrieves the request parameter corresponding to the string
+    public String getParameterValue( HttpServletRequest request,
+            String nomChamp ) {
+        String value = request.getParameter( nomChamp );
+        if ( value == null || value.trim().length() == 0 ) {
+            return null;
+        } else {
+            return value;
+        }
+    }
 
     // Retrieves the value written in a textfield
     public String getFieldValue( HttpServletRequest request, String fieldName ) {

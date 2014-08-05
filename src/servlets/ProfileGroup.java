@@ -1,5 +1,7 @@
 package servlets;
 
+//Controller of groups profile display 
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import utilities.UtilitiesForm;
 import beans.Group;
 import dao.DAOFactory;
 import dao.GroupDao;
@@ -22,34 +25,26 @@ public class ProfileGroup extends HttpServlet {
     public static final String VIEW              = "/WEB-INF/profileGroup.jsp";
 
     private GroupDao           groupDao;
+    private UtilitiesForm      util              = new UtilitiesForm();
 
     public void init() throws ServletException {
-        /* Récupération d'une instance de notre DAO Utilisateur */
+
         this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        String groupName = getParameterValue( request, GROUPNAME_PARAM );
-        Group group = groupDao.find( groupName );
 
+        // Group name parameter retrieving from URL.
+        String groupName = util.getParameterValue( request, GROUPNAME_PARAM );
+
+        // Group informations retrieving, thanks to the course name and saving
+        // in a request attribute
+        Group group = groupDao.find( groupName );
         request.setAttribute( GROUP_REQUEST_ATT, group );
 
+        // Group Profile is displayed
         this.getServletContext().getRequestDispatcher( VIEW ).forward( request, response );
 
-    }
-
-    public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-
-    }
-
-    private static String getParameterValue( HttpServletRequest request,
-            String nomChamp ) {
-        String value = request.getParameter( nomChamp );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } else {
-            return value;
-        }
     }
 
 }

@@ -29,7 +29,7 @@ public class AddCourseFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpSession session = request.getSession();
 
-        List menus = ( (List<String>) session.getAttribute( USER_SESSION_ACCESS_ATT ) );
+        List<String> menus = ( (List<String>) session.getAttribute( USER_SESSION_ACCESS_ATT ) );
         if ( !menus.contains( "Add Course" ) ) {
             request.getRequestDispatcher( "/notAvailable.jsp" ).forward( req, res );
             return;

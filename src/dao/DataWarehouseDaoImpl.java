@@ -40,8 +40,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
     private static String       SELECT_NEW_LOGS_H1     = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%H') AS hour, date_format(factDate,'%d') AS day, date_format(factDate,'%M') AS monthName, date_format(factDate,'%Y') AS year, count(*) AS count FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, hour, day, monthName, year";
     private static String       SELECT_NEW_LOGS_H2     = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%W') AS dayName,  date_format(factDate,'%u') AS week, date_format(factDate,'%Y') AS year, count(*) AS count FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, dayName, week, year;";
 
-    private static String       COUNT                  = "SELECT COUNT(*) as count FROM fact_table WHERE username IN (SELECT u.username FROM user u, user_group ug, userDim ud, groupDim gd WHERE u.sex=ud.sex AND ud.groupID=gd.groupID AND gd.groupName=ug.groupName  AND u.username=ug.username AND ud.userID=?) AND pageName IN (SELECT pageName FROM fact_table ft, activityDim ad WHERE IF(ad.isAction=0, pageName LIKE '/%', NOT pageName LIKE '/%') AND ad.activityID=?) AND factDate IN (SELECT factDate FROM fact_table ft, timeDim td WHERE  date_format(factDate,'%H')=td.hour AND date_format(factDate,'%d')=td.day AND date_format(factDate,'%W')=td.dayName  AND date_format(factDate,'%u')=td.week AND date_format(factDate,'%M')=td.monthName AND date_format(factDate,'%Y')=td.year AND td.timeID=?)";
-
     private static String       INSERT_TIME_TIMEDIM    = "INSERT INTO timeDim (year,monthName,week,dayName,day,hour) values (?,?,?,?,?,?)";
     private static String       INSERT_GROUP_GROUPDIM  = "INSERT INTO groupDim (groupName) VALUES (?)";
     private static String       INSERT_USER_USERDIM    = "INSERT INTO userDim (sex, groupID) VALUES (?,?)";
@@ -50,8 +48,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
     private static String       INSERT_DWFACT          = "INSERT INTO dwFactTable (userID, activityId, timeId, count) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE count = count+?";
 
     private static String       FIND_RESULT            = "SELECT count FROM dwFactTable dwft, userDim ud, groupDim gd, timeDim td, activityDim ad WHERE dwft.userId=ud.userId AND dwft.timeId=td.timeID AND dwft.activityId=ad.activityId AND ud.groupID=gd.groupId AND ud.sex= ? AND gd.groupName = ? AND ad.isAction = ? AND td.hour = ? AND td.day = ? AND td.dayName= ? AND td.week = ? AND td.monthName = ? AND td.year = ?";
-
-    private static String       WILDCARD_TEST          = "SELECT sex FROM web_app_db.user WHERE sex like ?";
 
     DataWarehouseDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
@@ -64,7 +60,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         PreparedStatement preparedStatement1 = null;
         PreparedStatement preparedStatement2 = null;
         PreparedStatement preparedStatement3 = null;
-        ResultSet resultSet = null;
 
         try {
 
@@ -353,7 +348,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             resultSet2 = preparedStatement2.executeQuery();
             newActivityLogYears = mapSingleColumnIntegerQuery( resultSet2, "year" );
 
-            int it = 0;
             for ( Integer newYear : newActivityLogYears ) {
                 if ( !dimTableyears.contains( newYear ) ) {
 

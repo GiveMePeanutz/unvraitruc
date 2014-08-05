@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import utilities.utilitiesForm;
+import utilities.UtilitiesForm;
 import beans.User;
 import dao.DAOException;
 import dao.UserDao;
@@ -18,7 +18,7 @@ public final class LoginForm {
     private String              result;
     private Map<String, String> errors         = new HashMap<String, String>();
     private UserDao             userDao;
-    private utilitiesForm       util           = new utilitiesForm();
+    private UtilitiesForm       util           = new UtilitiesForm();
 
     public LoginForm( UserDao userDao ) {
         this.userDao = userDao;
@@ -32,6 +32,7 @@ public final class LoginForm {
         return errors;
     }
 
+    // Verifies if pasword and username are ok
     public User connectUser( HttpServletRequest request, String path ) {
         // Parameters Recovery
         String username = util.getFieldValue( request, USERNAME_FIELD );

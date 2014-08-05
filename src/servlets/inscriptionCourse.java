@@ -1,5 +1,7 @@
 package servlets;
 
+//Controller of course subscription 
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import utilities.UtilitiesForm;
 import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
@@ -17,61 +20,58 @@ import dao.UserDao;
 
 @WebServlet( "/inscriptionCourse" )
 public class InscriptionCourse extends HttpServlet {
+
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String COURSENAME_PARAM = "courseName";
     public static final String USER_SESSION_ATT = "userSession";
 
     public static final String VIEW             = "/displayCourses";
 
-    private UserDao            UserDao;
-    private FactTableDao       FactTableDao;
+    private UserDao            userDao;
+    private FactTableDao       factTableDao;
+    private UtilitiesForm      util             = new UtilitiesForm();
 
     public void init() throws ServletException {
-        this.UserDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
-        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+
+        this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
+        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response )
             throws ServletException, IOException {
 
-        String courseName = getParameterValue( request, COURSENAME_PARAM );
-
+        /* Session retrieving from the request */
         HttpSession session = request.getSession();
+        // user = user logged onn this session
         User user = new User();
         user = (User) session.getAttribute( USER_SESSION_ATT );
-
+        // Username of the user logged retrieving
         String username = user.getUsername();
 
-        /* Si l'id du client et la Map des clients ne sont pas vides */
-        if ( courseName != null && username != null ) {
+        // Course name parameter retrieving from URL.
+        String courseName = util.getParameterValue( request, COURSENAME_PARAM );
+
+        // if the two parameters are not empty
+        if ( courseName != null && username != null )
+        {
             try {
-
-                UserDao.addCourse( username, courseName );
-
+                // Course add for this user in database
+                userDao.addCourse( username, courseName );
+                // Course add for this user in session
                 user.addCourseName( courseName );
+
                 session.setAttribute( USER_SESSION_ATT, user );
-                FactTableDao.addFact( username, "Course Subscribe" );
+
+                // New action saved in database
+                factTableDao.addFact( username, "Course Subscribe" );
 
             } catch ( DAOException e ) {
                 e.printStackTrace();
             }
         }
 
-        /* Redirection vers la fiche récapitulative */
+        /* Redirection toward the courses display */
         response.sendRedirect( request.getContextPath() + VIEW );
     }
 
-    /*
-     * Méthode utilitaire qui retourne null si un paramètre est vide, et son
-     * contenu sinon.
-     */
-    private static String getParameterValue( HttpServletRequest request,
-            String nomChamp ) {
-        String value = request.getParameter( nomChamp );
-        if ( value == null || value.trim().length() == 0 ) {
-            return null;
-        } else {
-            return value;
-        }
-    }
 }
