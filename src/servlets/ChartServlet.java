@@ -15,9 +15,10 @@ import javax.servlet.http.HttpSession;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 
-import utilities.DrawChart;
 import utilities.UtilitiesForm;
 import beans.User;
+import chart.DrawBarChart;
+import chart.DrawPieChart;
 import dao.DAOFactory;
 import dao.ExtractDataWarehouseDao;
 import dao.FactTableDao;
@@ -31,6 +32,7 @@ public class ChartServlet extends HttpServlet {
     public static final String      TYPE_FIELD       = "type";
     public static final String      ACTION_FIELD     = "action";
     public static final String      YEAR_FIELD       = "year";
+    public static final String      CHARTTYPE_PARAM  = "Draw";
 
     private ExtractDataWarehouseDao extractDataWarehouseDao;
     private FactTableDao            factTableDao;
@@ -45,6 +47,12 @@ public class ChartServlet extends HttpServlet {
 
     protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws IOException {
 
+        /* Session retrieving from the request */
+        HttpSession session = request.getSession();
+        User userSession = new User();
+        // userSession = user logged on this session
+        userSession = (User) session.getAttribute( USER_SESSION_ATT );
+
         response.setContentType( "image/png" );
 
         // Chosen type parameter retrieving from the form.
@@ -55,24 +63,40 @@ public class ChartServlet extends HttpServlet {
         int year = util.getIntValue( request, YEAR_FIELD );
 
         OutputStream outputStream = response.getOutputStream();
-        // Creation of a DrawChart Instance (from utilities package)
-        DrawChart drawChart = new DrawChart();
-        // Creation of the Piechart with the retrieved parameters
-        JFreeChart chart = drawChart.getChart( type, action, year, extractDataWarehouseDao );
         // Dimension definition
         int width = 500;
         int height = 350;
 
-        // Displays the pieChart
-        ChartUtilities.writeChartAsPNG( outputStream, chart, width, height );
+        String chartType = request.getParameter( CHARTTYPE_PARAM );
 
-        /* Session retrieving from the request */
-        HttpSession session = request.getSession();
-        User userSession = new User();
-        // userSession = user logged on this session
-        userSession = (User) session.getAttribute( USER_SESSION_ATT );
-        // New action saved in database
-        factTableDao.addFact( userSession.getUsername(), "Drawing" );
+        if ( chartType.equals( "Draw a PieChart" ) )
+        {
+            // Creation of a DrawPieChart Instance (from utilities package)
+            DrawPieChart drawPieChart = new DrawPieChart();
+            // Creation of the Piechart with the retrieved parameters
+            JFreeChart chart = drawPieChart.getChart( type, action, year, extractDataWarehouseDao );
+
+            // Displays the pieChart
+            ChartUtilities.writeChartAsPNG( outputStream, chart, width, height );
+
+            // New action saved in database
+            factTableDao.addFact( userSession.getUsername(), "Drawing a PieChart" );
+        }
+
+        else if ( chartType.equals( "Draw a BarChart" ) )
+        {
+            // Creation of a DrawBarChart Instance (from utilities package)
+            DrawBarChart drawBarChart = new DrawBarChart();
+            // Creation of the Piechart with the retrieved parameters
+            JFreeChart chart = drawBarChart.getChart( type, action, year, extractDataWarehouseDao );
+
+            // Displays the pieChart
+            ChartUtilities.writeChartAsPNG( outputStream, chart, width, height );
+
+            // New action saved in database
+            factTableDao.addFact( userSession.getUsername(), "Drawing a BarChart" );
+
+        }
+
     }
-
 }

@@ -317,7 +317,8 @@
 					</c:forEach>
 				</select>
 				<br>
-      			<input type="submit" name = "Submit" value="Draw"  /> 			
+      			<input type="submit" name = "Draw" value="Draw a PieChart"  />
+      			<input type="submit" name = "Draw" value="Draw a BarChart"  /> 			
        		</fieldset>
        	</form>
         </div>

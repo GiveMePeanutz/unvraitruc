@@ -20,6 +20,10 @@ public interface ExtractDataWarehouseDao {
 
     public String countAllBySex( int sex, int action, int year ) throws DAOException;
 
+    public String countAllBySexByMonth( int sex, int action, int year, String Month ) throws DAOException;
+
     public String countAllByGroup( String group, int action, int year ) throws DAOException;
+
+    public String countAllByGroupByMonth( String group, int action, int year, String month ) throws DAOException;
 
 }

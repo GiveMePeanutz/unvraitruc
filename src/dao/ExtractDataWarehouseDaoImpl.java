@@ -17,21 +17,25 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
 
     private DAOFactory          daoFactory;
 
-    private static List<String> months                = Arrays.asList( "All", "January", "February", "March",
-                                                              "April",
-                                                              "May",
-                                                              "June", "July", "August", "September", "October",
-                                                              "November", "December" );
-    private static List<String> days                  = Arrays.asList( "All", "Monday", "Tuesday", "Wednesday",
-                                                              "Thursday",
-                                                              "Friday", "Saturday", "Sunday" );
+    private static List<String> months                         = Arrays.asList( "All", "January", "February", "March",
+                                                                       "April",
+                                                                       "May",
+                                                                       "June", "July", "August", "September",
+                                                                       "October",
+                                                                       "November", "December" );
+    private static List<String> days                           = Arrays.asList( "All", "Monday", "Tuesday",
+                                                                       "Wednesday",
+                                                                       "Thursday",
+                                                                       "Friday", "Saturday", "Sunday" );
 
-    private static String       SELECT_DISTINCT_YEAR  = "SELECT DISTINCT year FROM timeDim";
-    private static String       SELECT_DISTINCT_GROUP = "SELECT DISTINCT groupName FROM groupDim";
-    private static String       FIND_RESULT_MONTH     = "SELECT count FROM dwFactTable dwft, userDim ud, groupDim gd, timeDim td, activityDim ad WHERE dwft.userId=ud.userId AND dwft.timeId=td.timeID AND dwft.activityId=ad.activityId AND ud.groupID=gd.groupId AND ud.sex= ? AND gd.groupName = ? AND ad.isAction = ? AND td.hour = ? AND td.day = ? AND td.monthName = ? AND td.year = ?";
-    private static String       FIND_RESULT_WEEK      = "SELECT count FROM dwFactTable dwft, userDim ud, groupDim gd, timeDim td, activityDim ad WHERE dwft.userId=ud.userId AND dwft.timeId=td.timeID AND dwft.activityId=ad.activityId AND ud.groupID=gd.groupId AND ud.sex= ? AND gd.groupName = ? AND ad.isAction = ?  AND td.dayName= ? AND td.week = ? AND td.year = ?";
-    private static String       FIND_RESULT_BY_SEX    = "SELECT count FROM dwFactTable dwft, userDim ud, activityDim ad, timeDim td WHERE dwft.userId=ud.userId AND dwft.activityId=ad.activityId AND dwft.timeId=td.timeID AND ud.sex= ? AND ad.isAction = ? AND td.year = ? AND td.week =-1 AND dayName='All' AND ud.groupId=1 ";
-    private static String       FIND_RESULT_BY_GROUP  = "SELECT count FROM dwFactTable dwft, userDim ud, groupDim gd, activityDim ad, timeDim td WHERE dwft.userId=ud.userId AND dwft.activityId=ad.activityId AND dwft.timeId=td.timeID AND ud.groupID=gd.groupId AND gd.groupName = ? AND ad.isAction = ? AND td.year = ? AND td.week =-1 AND dayName='All' AND ud.sex=-1 ";
+    private static String       SELECT_DISTINCT_YEAR           = "SELECT DISTINCT year FROM timeDim";
+    private static String       SELECT_DISTINCT_GROUP          = "SELECT DISTINCT groupName FROM groupDim";
+    private static String       FIND_RESULT_MONTH              = "SELECT count FROM dwFactTable dwft, userDim ud, groupDim gd, timeDim td, activityDim ad WHERE dwft.userId=ud.userId AND dwft.timeId=td.timeID AND dwft.activityId=ad.activityId AND ud.groupID=gd.groupId AND ud.sex= ? AND gd.groupName = ? AND ad.isAction = ? AND td.hour = ? AND td.day = ? AND td.monthName = ? AND td.year = ?";
+    private static String       FIND_RESULT_WEEK               = "SELECT count FROM dwFactTable dwft, userDim ud, groupDim gd, timeDim td, activityDim ad WHERE dwft.userId=ud.userId AND dwft.timeId=td.timeID AND dwft.activityId=ad.activityId AND ud.groupID=gd.groupId AND ud.sex= ? AND gd.groupName = ? AND ad.isAction = ?  AND td.dayName= ? AND td.week = ? AND td.year = ?";
+    private static String       FIND_RESULT_BY_SEX             = "SELECT count FROM dwFactTable dwft, userDim ud, activityDim ad, timeDim td WHERE dwft.userId=ud.userId AND dwft.activityId=ad.activityId AND dwft.timeId=td.timeID AND ud.sex= ? AND ad.isAction = ? AND td.year = ? AND td.week =-1 AND dayName='All' AND ud.groupId=1 ";
+    private static String       FIND_RESULT_BY_SEX_AND_MONTH   = "SELECT count FROM dwFactTable dwft, userDim ud, activityDim ad, timeDim td WHERE dwft.userId=ud.userId AND dwft.activityId=ad.activityId AND dwft.timeId=td.timeID AND ud.sex= ? AND ad.isAction = ? AND td.year = ? AND td.monthName =? AND day=-1 AND hour=-1 AND ud.groupId=1 ";
+    private static String       FIND_RESULT_BY_GROUP           = "SELECT count FROM dwFactTable dwft, userDim ud, groupDim gd, activityDim ad, timeDim td WHERE dwft.userId=ud.userId AND dwft.activityId=ad.activityId AND dwft.timeId=td.timeID AND ud.groupID=gd.groupId AND gd.groupName = ? AND ad.isAction = ? AND td.year = ? AND td.week =-1 AND dayName='All' AND ud.sex=-1 ";
+    private static String       FIND_RESULT_BY_GROUP_AND_MONTH = "SELECT count FROM dwFactTable dwft, userDim ud, groupDim gd, activityDim ad, timeDim td WHERE dwft.userId=ud.userId AND dwft.activityId=ad.activityId AND dwft.timeId=td.timeID AND ud.groupID=gd.groupId AND gd.groupName = ? AND ad.isAction = ? AND td.year = ? AND td.monthName =? AND day=-1 AND hour=-1 AND ud.sex=-1 ";
 
     ExtractDataWarehouseDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
@@ -183,6 +187,33 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         return result;
     }
 
+    public String countAllBySexByMonth( int sex, int action, int year, String month ) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        ResultSet resultSet = null;
+
+        String result = "";
+
+        try {
+            connection = daoFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connection, FIND_RESULT_BY_SEX_AND_MONTH, false, sex,
+                    action, year, month );
+            resultSet = preparedStatement.executeQuery();
+
+            while ( resultSet.next() ) {
+
+                result = resultSet.getString( "count" );
+            }
+
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connection );
+        }
+        return result;
+    }
+
     @Override
     public String countAllByGroup( String group, int action, int year ) throws DAOException {
         Connection connection = null;
@@ -196,6 +227,34 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
             connection = daoFactory.getConnection();
             preparedStatement = initialisationRequetePreparee( connection, FIND_RESULT_BY_GROUP, false, group,
                     action, year );
+            resultSet = preparedStatement.executeQuery();
+
+            while ( resultSet.next() ) {
+
+                result = resultSet.getString( "count" );
+            }
+
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            fermeturesSilencieuses( resultSet, preparedStatement, connection );
+        }
+        return result;
+    }
+
+    public String countAllByGroupByMonth( String group, int action, int year, String month ) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        ResultSet resultSet = null;
+
+        String result = "";
+
+        try {
+            connection = daoFactory.getConnection();
+            preparedStatement = initialisationRequetePreparee( connection, FIND_RESULT_BY_GROUP_AND_MONTH, false,
+                    group,
+                    action, year, month );
             resultSet = preparedStatement.executeQuery();
 
             while ( resultSet.next() ) {

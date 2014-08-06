@@ -1,4 +1,4 @@
-package utilities;
+package chart;
 
 //used to draw Chart
 
@@ -12,7 +12,7 @@ import org.jfree.data.general.DefaultPieDataset;
 
 import dao.ExtractDataWarehouseDao;
 
-public class DrawChart {
+public class DrawPieChart {
 
     // Prepares a PieChart
     public JFreeChart getChart( String type, int action, int year, ExtractDataWarehouseDao extractDataWarehouseDao ) {
@@ -52,9 +52,6 @@ public class DrawChart {
 
         DefaultPieDataset dataset = new DefaultPieDataset();
 
-        // retrieves all existing groups
-        List<String> groups = extractDataWarehouseDao.listGroup();
-
         int nbMale;
         int nbFemale;
         int nbByGroup;
@@ -80,6 +77,9 @@ public class DrawChart {
         // If user chose Group
         if ( type.equals( "Group" ) )
         {
+            // retrieves all existing groups
+            List<String> groups = extractDataWarehouseDao.listGroup();
+
             for ( String group : groups )
             {
                 // counts number of action for each group
