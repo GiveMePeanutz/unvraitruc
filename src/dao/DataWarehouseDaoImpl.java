@@ -71,8 +71,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             preparedStatement1 = connexion.prepareStatement( INSERT_UPDATE_DATETIME );
             preparedStatement1.executeUpdate();
 
-            System.out.println( "updateDW done" );
-
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } finally {
@@ -89,8 +87,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         updateTimeDim();
 
         updateUserGroupDim();
-
-        System.out.println( "updateDWdim done" );
 
     }
 
