@@ -114,7 +114,6 @@ public class DataWarehouse extends HttpServlet {
         // This string will indicate if the user chose to calculate with the
         // first or the second time hierarchy
         String calculate = request.getParameter( VERIFY_PARAM );
-
         if ( calculate.equals( "Display by month" ) )
         {
             // For the first hierarchy, we have to retrieve month, day and hour
@@ -161,7 +160,7 @@ public class DataWarehouse extends HttpServlet {
         // For the first hierarchy, we add the data warehouse line to the first
         // table, so in the first ArrayList : resultsMonth, which we have to
         // create if doesn't exists
-        if ( calculate.equals( "Calculate" ) )
+        if ( calculate.equals( "Display by month" ) )
         {
             ArrayList<DataWarehouseLine> resultsMonth = (ArrayList<DataWarehouseLine>) session
                     .getAttribute( SESSION_RESULTS_MONTH );

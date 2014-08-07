@@ -134,8 +134,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                 ArrayList<Integer> timeIDs = new ArrayList<Integer>();
                 ArrayList<Integer> activityIDs = new ArrayList<Integer>();
 
-                System.out.println( "1" );
-
                 for ( int sex : new int[] { -1, resultSet1.getInt( "sex" ) } ) {
                     for ( String groupName : new String[] { "All", resultSet1.getString( "groupName" ) } ) {
                         preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_USERDIM_ID, false, sex,
@@ -144,9 +142,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                         userIDs.addAll( mapSingleColumnIntegerQuery( resultSet2, "userId" ) );
                     }
                 }
-                System.out.println( userIDs.size() + "-------------------------------------------------" );
-
-                System.out.println( "2" );
 
                 for ( int year : new int[] { -1, resultSet1.getInt( "year" ) } ) {
 
@@ -168,9 +163,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
                     }
                 }
-                System.out.println( timeIDs.size() + "---------------------------------------" );
-
-                System.out.println( "3" );
 
                 for ( int isAction : new int[] { -1, resultSet1.getInt( "isAction" ) } ) {
                     preparedStatement5 = initialisationRequetePreparee( connexion, SELECT_ACTIVITYDIM_ID, false,
@@ -179,12 +171,10 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                     activityIDs.addAll( mapSingleColumnIntegerQuery( resultSet5, "activityId" ) );
                 }
 
-                System.out.println( "4" );
                 int it = 0;
                 for ( int userId : userIDs ) {
                     for ( int timeId : timeIDs ) {
                         for ( int activityId : activityIDs ) {
-                            // System.out.println(it);
                             it++;
                             preparedStatement6 = initialisationRequetePreparee( connexion, INSERT_DWFACT, false,
                                     userId, activityId, timeId, resultSet1.getInt( "count" ),
@@ -203,8 +193,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                 ArrayList<Integer> timeIDs = new ArrayList<Integer>();
                 ArrayList<Integer> activityIDs = new ArrayList<Integer>();
 
-                System.out.println( "1" );
-
                 for ( int sex : new int[] { -1, resultSet1Bis.getInt( "sex" ) } ) {
                     for ( String groupName : new String[] { "All", resultSet1Bis.getString( "groupName" ) } ) {
                         preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_USERDIM_ID, false, sex,
@@ -213,8 +201,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                         userIDs.addAll( mapSingleColumnIntegerQuery( resultSet2, "userId" ) );
                     }
                 }
-
-                System.out.println( "2" );
 
                 for ( int year : new int[] { -1, resultSet1Bis.getInt( "year" ) } ) {
 
@@ -230,8 +216,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                     }
                 }
 
-                System.out.println( "3" );
-
                 for ( int isAction : new int[] { -1, resultSet1Bis.getInt( "isAction" ) } ) {
                     preparedStatement5 = initialisationRequetePreparee( connexion, SELECT_ACTIVITYDIM_ID, false,
                             isAction );
@@ -239,12 +223,10 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                     activityIDs.addAll( mapSingleColumnIntegerQuery( resultSet5, "activityId" ) );
                 }
 
-                System.out.println( "4" );
                 int it = 0;
                 for ( int userId : userIDs ) {
                     for ( int timeId : timeIDs ) {
                         for ( int activityId : activityIDs ) {
-                            // System.out.println(it);
                             it++;
                             preparedStatement6 = initialisationRequetePreparee( connexion, INSERT_DWFACT, false,
                                     userId, activityId, timeId, resultSet1Bis.getInt( "count" ),
@@ -255,8 +237,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                     }
                 }
             }
-
-            System.out.println( "done" );
 
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -300,7 +280,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                 if ( generatedKey.next() ) {
                     groupId = generatedKey.getInt( 1 );
                 }
-                System.out.println( generatedKey );
 
                 for ( int sex = -1; sex < 2; sex++ ) {
                     preparedStatement3 = initialisationRequetePreparee( connexion, INSERT_USER_USERDIM, true, sex,
@@ -385,7 +364,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             }
 
             connexion.commit();
-            // System.out.println( it );
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } finally {

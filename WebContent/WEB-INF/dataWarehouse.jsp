@@ -294,7 +294,7 @@
         <div id="normalForm">
         <form method="post" action="<c:url value="/chart"/>" >
            	<fieldset>
-           	<LEGEND>Draw a Pie Chart</LEGEND>
+           	<LEGEND>Draw a Chart</LEGEND>
             	Please choose a category :
                    <select name="type" id = "type">																				
                    		<option value='Sex'>Sex</option>
