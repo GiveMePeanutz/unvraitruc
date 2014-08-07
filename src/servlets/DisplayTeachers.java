@@ -27,7 +27,6 @@ public class DisplayTeachers extends HttpServlet {
     private UserDao            userDao;
 
     public void init() throws ServletException {
-        /* Récupération d'une instance de notre DAO Utilisateur */
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
     }
 
