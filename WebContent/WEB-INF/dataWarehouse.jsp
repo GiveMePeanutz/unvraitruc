@@ -16,14 +16,14 @@
 	        <h1>Data Warehouse</h1>
 	        <%--This button will feed the Data Warehouse  --%>
 	        <a href="<c:url value="/updateDataWarehouse"/>" class="button">
-	        	<input type="button" value="Update the Database"/>
+	        	<input type="button" value=" ETL DataWarehouse"/>
 	        </a>
 	   </CENTER> 
         <br />
         <form method="post" action="<c:url value="/dataWarehouse"/>" >
         <%--There are two tables : one for calculation through Year month and day... --%>
             <table >
-            <CAPTION>Calculate by Year>Month>Day>Hour </CAPTION>
+            <CAPTION>Display by Year>Month>Day>Hour </CAPTION>
                 <tr>
                 	<th>Sex</th>
                     <th>Group</th>
@@ -156,7 +156,7 @@
 						</select>
 					</td>
 					<td>
-						<input type="submit" name="Calculate" value="Calculate">
+						<input type="submit" name="Calculate" value="Display by month">
 					</td>
 					
                 </tr>
@@ -167,7 +167,7 @@
         <form method="post" action="<c:url value="/dataWarehouse"/>" >
             <%-- and the other for calculation through years, weeks and days of week  --%>
             <table >
-            <CAPTION>Calculate by Year>Week>Day of Week </CAPTION>
+            <CAPTION>Display by Year>Week>Day of Week </CAPTION>
             
                 <tr>
                 	<th>Sex</th>
@@ -283,7 +283,7 @@
 						</select>
 					</td>
 					<td>
-						<input type="submit" name="Calculate" value="Count"  >
+						<input type="submit" name="Calculate" value="Display by week"  >
 					</td>
 					
                 </tr>

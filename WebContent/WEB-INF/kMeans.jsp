@@ -22,10 +22,11 @@
 						<option value='<c:out value="User"/>'><c:out value="User"/></option>  
 						<option value='<c:out value="Group"/>'><c:out value="Group"/></option>                   
                 	</select>
+                	<br>
                 	and the number of clusters : 
                 	<input type="number" name="Clusters" min="1" max="5" required="required">
                 	<br/><br>
-                	<input type="submit" name="kMeans" value="Magic button"  />
+                	<input type="submit" name="kMeans" value="Proceed"  />
         		</fieldset>
         	</form>
         </div>

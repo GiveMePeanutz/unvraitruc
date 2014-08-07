@@ -17,7 +17,7 @@ public class User implements Serializable {
     private String            photoURL;
     private String            address;
     private int               sex;
-    private String            promotion;
+    private String            className;
     private DateTime          regDate;
     private DateTime          birthDate;
     private ArrayList<String> groupNames;
@@ -104,12 +104,12 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    public String getPromotion() {
-        return promotion;
+    public String getClassName() {
+        return className;
     }
 
-    public void setPromotion( String promotion ) {
-        this.promotion = promotion;
+    public void setClassName( String className ) {
+        this.className = className;
     }
 
     public DateTime getRegDate() {

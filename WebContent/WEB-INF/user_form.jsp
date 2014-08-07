@@ -79,9 +79,9 @@ all the registered values appear--%>
 <br />
 <br />
 
-<label for="promotion">Promotion</label>
-<input type="text" id="promotion" name="promotion" value="<c:out value="${user.promotion}"/>" size="30" maxlength="60" />
-<span class="error">${form.errors['promotion']}</span>
+<label for="className">ClassName</label>
+<input type="text" id="className" name="className" value="<c:out value="${user.className}"/>" size="30" maxlength="60" />
+<span class="error">${form.errors['className']}</span>
 <br />
 <br />
 

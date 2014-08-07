@@ -20,17 +20,17 @@ public class UserDaoImpl implements UserDao {
 
     private DAOFactory          daoFactory;
 
-    private static final String SQL_SELECT                = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex FROM User ORDER BY username";
-    private static final String SQL_SELECT_TEACHERS       = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex FROM User WHERE username IN (SELECT username FROM user_group WHERE groupname='teacher') ORDER BY username";
-    private static final String SQL_SELECT_STUDENTS       = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex FROM User WHERE username IN (SELECT username FROM user_group WHERE groupname='student') ORDER BY username";
-    private static final String SQL_SELECT_BY_USERNAME    = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, regDate, sex FROM User WHERE username = ?";
+    private static final String SQL_SELECT                = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, className, regDate, sex FROM User ORDER BY username";
+    private static final String SQL_SELECT_TEACHERS       = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, className, regDate, sex FROM User WHERE username IN (SELECT username FROM user_group WHERE groupname='teacher') ORDER BY username";
+    private static final String SQL_SELECT_STUDENTS       = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, className, regDate, sex FROM User WHERE username IN (SELECT username FROM user_group WHERE groupname='student') ORDER BY username";
+    private static final String SQL_SELECT_BY_USERNAME    = "SELECT username, address, birthDate, email, firstName, lastName, password, phone, photoURL, className, regDate, sex FROM User WHERE username = ?";
     private static final String SQL_SELECT_USER_COURSES   = "SELECT courseName FROM course WHERE courseName IN (SELECT courseName FROM user_course WHERE username = ?) ORDER BY courseName";
     private static final String SQL_SELECT_USER_GROUPS    = "SELECT groupName FROM web_app_db.group WHERE groupName IN (SELECT groupName FROM user_group WHERE username = ?) ORDER BY groupName";
     private static final String SQL_SELECT_USER_ACC_MENUS = "SELECT DISTINCT menuPath from priv_menu where privname IN (SELECT privName FROM group_priv WHERE groupname IN ( SELECT groupName FROM user_group WHERE username = ? ))";
 
-    private static final String SQL_MODIFY_USER           = "UPDATE user SET password=?, firstName=?, lastName=?, email=?, phone=?, photoURL=?, address=?, sex=?, birthDate=?, promotion=? WHERE username=?";
+    private static final String SQL_MODIFY_USER           = "UPDATE user SET password=?, firstName=?, lastName=?, email=?, phone=?, photoURL=?, address=?, sex=?, birthDate=?, className=? WHERE username=?";
 
-    private static final String SQL_INSERT                = "INSERT INTO User (username, address, birthDate, email, firstName, lastName, password, phone, photoURL, promotion, sex, regDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_INSERT                = "INSERT INTO User (username, address, birthDate, email, firstName, lastName, password, phone, photoURL, className, sex, regDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_INSERT_USER_COURSE    = "INSERT INTO user_course (username , courseName) VALUES (? , ?)";
     private static final String SQL_INSERT_USER_GROUP     = "INSERT INTO user_group (username , groupName) VALUES (? , ?)";
 
@@ -55,7 +55,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement1 = initialisationRequetePreparee( connection,
                     SQL_INSERT, true, user.getUsername(), user.getAddress(), new Timestamp( user.getBirthDate()
                             .getMillis() ), user.getEmail(), user.getFirstName(), user.getLastName(),
-                    user.getPassword(), user.getPhone(), user.getPhotoURL(), user.getPromotion(), user.getSex(),
+                    user.getPassword(), user.getPhone(), user.getPhotoURL(), user.getClassName(), user.getSex(),
                     new Timestamp( user.getRegDate().getMillis() ) );
             int statut1 = preparedStatement1.executeUpdate();
             if ( statut1 == 0 ) {
@@ -276,7 +276,7 @@ public class UserDaoImpl implements UserDao {
         user.setPassword( resultSet1.getString( "password" ) );
         user.setPhone( resultSet1.getString( "phone" ) );
         user.setPhotoURL( resultSet1.getString( "photoURL" ) );
-        user.setPromotion( resultSet1.getString( "promotion" ) );
+        user.setClassName( resultSet1.getString( "className" ) );
         user.setRegDate( new DateTime( resultSet1.getTimestamp( "regDate" ) ) );
         user.setSex( resultSet1.getInt( "sex" ) );
 
@@ -362,7 +362,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement1 = initialisationRequetePreparee( connection,
                     SQL_MODIFY_USER, true, user.getPassword(), user.getFirstName(), user.getLastName(),
                     user.getEmail(), user.getPhone(), user.getPhotoURL(), user.getAddress(), user.getSex(),
-                    new Timestamp( user.getBirthDate().getMillis() ), user.getPromotion(), user.getUsername() );
+                    new Timestamp( user.getBirthDate().getMillis() ), user.getClassName(), user.getUsername() );
             int statut1 = preparedStatement1.executeUpdate();
             if ( statut1 == 0 ) {
                 throw new DAOException(

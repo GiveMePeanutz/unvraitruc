@@ -18,7 +18,7 @@ public class NaiveBayesClass {
 
     // Algorithm parameters
     private Attribute  sex;
-    private Attribute  promotion;
+    private Attribute  className;
     private Attribute  course;
 
     private Instances  isSet;
@@ -38,7 +38,7 @@ public class NaiveBayesClass {
         // and all the students.
         int numberOfUsers = naiveBayesDao.getUserCount();
         List<String> listCourse = naiveBayesDao.listCourse();
-        List<String> listPromotion = naiveBayesDao.listPromotion();
+        List<String> listClassName = naiveBayesDao.listClassName();
         List<User> listStudent = userDao.listStudent();
 
         // Sex Attribute
@@ -50,12 +50,12 @@ public class NaiveBayesClass {
 
         // Promotion Attribute
 
-        FastVector fvPromotionVal = new FastVector( listPromotion.size() );
-        for ( String promotionElt : listPromotion )
+        FastVector fvClassNameVal = new FastVector( listClassName.size() );
+        for ( String classNameElt : listClassName )
         {
-            fvPromotionVal.addElement( promotionElt );
+            fvClassNameVal.addElement( classNameElt );
         }
-        this.promotion = new Attribute( "promotion", fvPromotionVal );
+        this.className = new Attribute( "className", fvClassNameVal );
 
         // Course Attribute
 
@@ -70,7 +70,7 @@ public class NaiveBayesClass {
 
         this.fvAttributes = new FastVector( 3 );
         fvAttributes.addElement( sex );
-        fvAttributes.addElement( promotion );
+        fvAttributes.addElement( className );
         fvAttributes.addElement( course );
 
         // Create an empty set
@@ -96,7 +96,7 @@ public class NaiveBayesClass {
                     else
                         i.setValue( (Attribute) fvAttributes.elementAt( 0 ), "Man" );
 
-                    i.setValue( (Attribute) fvAttributes.elementAt( 1 ), userList.getPromotion() );
+                    i.setValue( (Attribute) fvAttributes.elementAt( 1 ), userList.getClassName() );
                     i.setValue( (Attribute) fvAttributes.elementAt( 2 ), course );
 
                     // add the instance
@@ -125,7 +125,7 @@ public class NaiveBayesClass {
         else
             iUser.setValue( (Attribute) this.fvAttributes.elementAt( 0 ), "Man" );
 
-        iUser.setValue( (Attribute) this.fvAttributes.elementAt( 1 ), user.getPromotion() );
+        iUser.setValue( (Attribute) this.fvAttributes.elementAt( 1 ), user.getClassName() );
 
         // in order to inherit from the set description
         iUser.setDataset( this.isSet );

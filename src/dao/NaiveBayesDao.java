@@ -6,7 +6,7 @@ public interface NaiveBayesDao {
 
     int getUserCount() throws DAOException;
 
-    List<String> listPromotion() throws DAOException;
+    List<String> listClassName() throws DAOException;
 
     List<String> listCourse() throws DAOException;
 

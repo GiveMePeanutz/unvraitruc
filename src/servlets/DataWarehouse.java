@@ -115,7 +115,7 @@ public class DataWarehouse extends HttpServlet {
         // first or the second time hierarchy
         String calculate = request.getParameter( VERIFY_PARAM );
 
-        if ( calculate.equals( "Calculate" ) )
+        if ( calculate.equals( "Display by month" ) )
         {
             // For the first hierarchy, we have to retrieve month, day and hour
             // parameters too

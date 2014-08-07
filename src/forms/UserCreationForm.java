@@ -37,7 +37,7 @@ public final class UserCreationForm {
     private static final String PHONE_FIELD     = "phone";
     private static final String EMAIL_FIELD     = "email";
     private static final String BIRTH_FIELD     = "birthDate";
-    private static final String PROMOTION_FIELD = "promotion";
+    private static final String PROMOTION_FIELD = "className";
     private static final String PHOTO_FIELD     = "photoURL";
     private static final String GROUP_FIELD     = "groups";
 
@@ -74,7 +74,7 @@ public final class UserCreationForm {
         String email = util.getFieldValue( request, EMAIL_FIELD );
         DateTime birthDate = util.getDateValue( request, BIRTH_FIELD );
         ArrayList<String> groups = util.getSelectedValues( request, GROUP_FIELD );
-        String promotion = util.getFieldValue( request, PROMOTION_FIELD );
+        String className = util.getFieldValue( request, PROMOTION_FIELD );
 
         User user = new User();
 
@@ -91,7 +91,7 @@ public final class UserCreationForm {
         handleBirthDate( birthDate, user );
         handleGroups( groups, user );
         handlePhoto( user, request, path );
-        handlePromotion( promotion, user );
+        handleClassName( className, user );
 
         DateTime today = new DateTime();
         // Registration date is initialized to today date
@@ -129,7 +129,7 @@ public final class UserCreationForm {
         String email = util.getFieldValue( request, EMAIL_FIELD );
         DateTime birthDate = util.getDateValue( request, BIRTH_FIELD );
         ArrayList<String> groups = util.getSelectedValues( request, GROUP_FIELD );
-        String promotion = util.getFieldValue( request, PROMOTION_FIELD );
+        String className = util.getFieldValue( request, PROMOTION_FIELD );
 
         User user = new User();
 
@@ -146,7 +146,7 @@ public final class UserCreationForm {
         handleBirthDate( birthDate, user );
         handlePhoto( user, request, path );
         handleGroups( groups, user );
-        handlePromotion( promotion, user );
+        handleClassName( className, user );
 
         // Registration date is initialized to today date
         DateTime today = new DateTime();
@@ -270,13 +270,13 @@ public final class UserCreationForm {
 
     }
 
-    private void handlePromotion( String promotion, User user ) {
+    private void handleClassName( String className, User user ) {
         try {
-            promotionValidation( promotion, user );
+            classNameValidation( className, user );
         } catch ( FormValidationException e ) {
             setError( PROMOTION_FIELD, e.getMessage() );
         }
-        user.setPromotion( promotion );
+        user.setClassName( className );
     }
 
     private void handlePhoto( User user, HttpServletRequest request, String path ) {
@@ -393,9 +393,9 @@ public final class UserCreationForm {
         }
     }
 
-    // User promotion check : has to be entered only if the user is a student.
+    // User className check : has to be entered only if the user is a student.
     // Has to be an acronym followed by numbers like STE4
-    private void promotionValidation( String promotion, User user ) throws FormValidationException {
+    private void classNameValidation( String className, User user ) throws FormValidationException {
         Boolean bool = false;
         if ( user.getGroupNames() != null )
         {
@@ -411,19 +411,19 @@ public final class UserCreationForm {
         }
         if ( bool == true )
         {
-            if ( promotion != null ) {
-                if ( !promotion.matches( "([^0-9]+)([0-9]+)" ) ) {
-                    throw new FormValidationException( "Promotion must be a name or an acronym followed by a number." );
+            if ( className != null ) {
+                if ( !className.matches( "([^0-9]+)([0-9]+)" ) ) {
+                    throw new FormValidationException( "ClassName must be a name or an acronym followed by a number." );
                 }
             } else {
-                throw new FormValidationException( "Please enter a promotion." );
+                throw new FormValidationException( "Please enter a className." );
             }
         }
         else
         {
-            if ( promotion != null )
+            if ( className != null )
             {
-                throw new FormValidationException( "Please do not enter a promotion for a user of this group." );
+                throw new FormValidationException( "Please do not enter a className for a user of this group." );
             }
         }
     }
