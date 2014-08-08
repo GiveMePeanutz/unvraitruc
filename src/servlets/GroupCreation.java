@@ -96,7 +96,7 @@ public class GroupCreation extends HttpServlet {
         // Value of Create Button retrieving
         String modify = request.getParameter( VERIFY_PARAM2 );
 
-        if ( modify.equals( "Modify" ) )// So it's a modification
+        if ( modify.equals( "Modify" ) )// modification
         {
             try {
                 group = form.modifyGroup( request, path );
@@ -104,7 +104,7 @@ public class GroupCreation extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        else // So it's a creation
+        else // creation
         {
 
             try {
@@ -136,7 +136,7 @@ public class GroupCreation extends HttpServlet {
         User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
 
-        /* Si aucune erreur */
+        // if no error
         if ( form.getErrors().isEmpty() ) // if there is no error after the
                                           // verification...
         {

@@ -88,7 +88,7 @@ public class PrivilegeCreation extends HttpServlet {
         // Value of Create Button retrieving
         String modify = request.getParameter( VERIFY_PARAM2 );
 
-        if ( modify.equals( "Modify" ) )// So it's a modification
+        if ( modify.equals( "Modify" ) )// modification
         {
             try {
                 priv = form.modifyPriv( request, path );
@@ -96,7 +96,7 @@ public class PrivilegeCreation extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        else // So it's a creation
+        else // creation
         {
             try {
                 priv = form.createPriv( request, path );
@@ -115,11 +115,11 @@ public class PrivilegeCreation extends HttpServlet {
 
         /* Session retrieving from the request */
         HttpSession session = request.getSession();
-        // userSession = user logged onn this session
+        // userSession = user logged on this session
         User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
 
-        /* Si aucune erreur */
+        // if no error
         if ( form.getErrors().isEmpty() )// if there is no error after the
                                          // verification...
         {

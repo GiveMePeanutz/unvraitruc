@@ -81,7 +81,7 @@ public class TeacherCreation extends HttpServlet {
         // Value of Create Button retrieving
         String modify = request.getParameter( VERIFY_PARAM2 );
 
-        if ( modify.equals( "Modify" ) )// So it's a modification
+        if ( modify.equals( "Modify" ) )// modification
         {
             try {
 
@@ -93,7 +93,7 @@ public class TeacherCreation extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        else // So it's a creation
+        else // creation
         {
             try {
                 user = form.createUser( request, path );
@@ -111,7 +111,7 @@ public class TeacherCreation extends HttpServlet {
         User userSession = new User();
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
 
-        /* Si aucune erreur */
+        // if no error
         if ( form.getErrors().isEmpty() ) // if there is no error after the
                                           // verification...
         {

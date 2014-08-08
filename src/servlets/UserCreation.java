@@ -97,7 +97,7 @@ public class UserCreation extends HttpServlet {
         // Value of Create Button retrieving
         String modify = request.getParameter( VERIFY_PARAM2 );
 
-        if ( modify.equals( "Modify" ) )// So it's a modification
+        if ( modify.equals( "Modify" ) )// Modification
         {
             try {
 
@@ -109,7 +109,7 @@ public class UserCreation extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        else // So it's a creation
+        else // Creation
         {
             try {
                 user = form.createUser( request, path );
@@ -140,7 +140,7 @@ public class UserCreation extends HttpServlet {
         // userSession = user logged onn this session
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
 
-        /* Si aucune erreur */
+        // if no error
         if ( form.getErrors().isEmpty() ) // if there is no error after the
                                           // verification...
         {
