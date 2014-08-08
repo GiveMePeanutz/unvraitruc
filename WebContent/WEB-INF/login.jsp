@@ -42,7 +42,7 @@ if this page is displayed after an error written values appear--%>
 	           		<%-- If the user already connected... --%>
 	                <c:if test="${!empty sessionScope.userSession}">
 	                    <%-- ...this message is displayed --%>
-	                    <p class="succes">You are connected with the username : ${requestScope.username}</p>
+	                    <p class="succes">Welcome ${requestScope.username} !</p>
 	                </c:if>
 	                <%-- ...and the logout button appears --%>
 	                <c:if test="${!empty sessionScope.userSession}">
