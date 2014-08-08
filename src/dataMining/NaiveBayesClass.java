@@ -39,7 +39,6 @@ public class NaiveBayesClass {
         int numberOfUsers = naiveBayesDao.getUserCount();
         List<String> listCourse = naiveBayesDao.listCourse();
         List<String> listClassName = naiveBayesDao.listClassName();
-        System.out.println( listClassName );
         List<User> listStudent = userDao.listStudent();
 
         // Sex Attribute
