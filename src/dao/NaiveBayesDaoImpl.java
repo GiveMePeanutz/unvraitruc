@@ -14,7 +14,7 @@ public class NaiveBayesDaoImpl implements NaiveBayesDao {
     private DAOFactory          daoFactory;
 
     private static final String SQL_USER_COUNT        = "SELECT count(distinct username) FROM user";
-    private static final String SQL_SELECT_CLASSNAME  = "SELECT distinct className FROM user";
+    private static final String SQL_SELECT_CLASSNAME  = "SELECT distinct className FROM user WHERE className IS NOT NULL ";
     private static final String SQL_SELECT_COURSE     = "SELECT distinct courseName FROM user_course";
     private static final String SQL_USER_COURSE_COUNT = "SELECT count(*) FROM web_app_db.User_course";
 
@@ -61,7 +61,6 @@ public class NaiveBayesDaoImpl implements NaiveBayesDao {
             resultSet = preparedStatement.executeQuery();
 
             while ( resultSet.next() ) {
-
                 classNames.add( resultSet.getString( "className" ) );
             }
 

@@ -82,7 +82,6 @@ public class Login extends HttpServlet {
         }
 
         request.setAttribute( FORM_ATT, form );
-        request.setAttribute( "username", user.getUsername() );
         request.setAttribute( USER_ATT, user );
 
         // Displays again the login page
