@@ -57,7 +57,7 @@ all the registered values appear--%>
 					<br />
 
 					<label for="courseDescription">Description</label>
-					<TEXTAREA name="courseDescription" id="courseDescription" rows="5" cols="22" ><c:out value="${course.courseDescription}"/></TEXTAREA>
+					<TEXTAREA name="courseDescription" id="courseDescription" rows="5" cols="28" ><c:out value="${course.courseDescription}"/></TEXTAREA>
 					<span class="error">${form.errors['courseDescription']}</span>
 					<br />
 					<br />

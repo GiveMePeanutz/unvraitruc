@@ -57,7 +57,7 @@ all the registered values appear--%>
 					<br />
 
 					<label for="groupDescription">Description</label>
-					<TEXTAREA name="groupDescription" id="groupDescription" rows="5" cols="22" ><c:out value="${group.groupDescription}"/></TEXTAREA>
+					<TEXTAREA name="groupDescription" id="groupDescription" rows="5" cols="28" ><c:out value="${group.groupDescription}"/></TEXTAREA>
 					<span class="error">${form.errors['groupDescription']}</span>
 					<br />
 					<br />

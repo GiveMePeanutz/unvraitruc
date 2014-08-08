@@ -54,7 +54,7 @@ all the registered values appear--%>
 					<br />
 					
 					<label for="privDescription">Description</label>
-					<TEXTAREA name="privDescription" rows="5" cols="22" ><c:out value="${priv.privDescription}"/></TEXTAREA>
+					<TEXTAREA name="privDescription" rows="5" cols="28" ><c:out value="${priv.privDescription}"/></TEXTAREA>
 					<span class="error">${form.errors['privDescription']}</span>
 					<br />
 					<br />
