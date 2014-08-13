@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import utilities.UtilitiesForm;
 import beans.User;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 import dao.UserDao;
 import forms.FormValidationException;
 import forms.UserCreationForm;
@@ -40,12 +40,12 @@ public class StudentCreation extends HttpServlet {
     public static final String ACTIVITY_NAME     = "studentCreation";
 
     private UserDao            userDao;
-    private FactTableDao       factTableDao;
+    private TransactionTableDao       transactionTableDao;
     private UtilitiesForm      util              = new UtilitiesForm();
 
     public void init() throws ServletException {
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -119,12 +119,12 @@ public class StudentCreation extends HttpServlet {
             if ( modify.equals( "Modify" ) )// and if this is a modification
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Student modified" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Student modified" );
             }
             else
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Student created" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Student created" );
             }
 
             // Redirection toward the student list
@@ -136,7 +136,7 @@ public class StudentCreation extends HttpServlet {
             if ( modify.equals( "Modify" ) )// and if this is a modification
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Student modification errors" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Student modification errors" );
 
                 // Specifies that it's still a modification
                 request.setAttribute( VERIFY_PARAM, "true" );
@@ -144,7 +144,7 @@ public class StudentCreation extends HttpServlet {
             else
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Student creation errors" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Student creation errors" );
             }
 
             // else forwarding toward the creation form

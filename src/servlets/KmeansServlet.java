@@ -16,7 +16,7 @@ import utilities.UtilitiesForm;
 import beans.KmeansDataType;
 import beans.User;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 import dao.KmeansDataDao;
 import dataMining.Kmeans;
 
@@ -33,12 +33,12 @@ public class KmeansServlet extends HttpServlet {
     public static final String  USER_SESSION_ATT   = "userSession";
 
     private KmeansDataDao       kmeansDataDao;
-    private FactTableDao        factTableDao;
+    private TransactionTableDao        transactionTableDao;
     private UtilitiesForm       util               = new UtilitiesForm();
 
     public void init() throws ServletException {
         this.kmeansDataDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getKmeansDataDao();
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
 
     }
 
@@ -75,7 +75,7 @@ public class KmeansServlet extends HttpServlet {
         // userSession = user logged onn this session
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
         // New action saved in database
-        factTableDao.addFact( userSession.getUsername(), "Kmeans Algorithm" );
+        transactionTableDao.addTransaction( userSession.getUsername(), "Kmeans Algorithm" );
 
         ArrayList<KmeansDataType>[] clusteredData = kmeans.getClusters();
         double[][] clusterCenters = kmeans.getClusterCenters();

@@ -21,7 +21,7 @@ import chart.DrawBarChart;
 import chart.DrawPieChart;
 import dao.DAOFactory;
 import dao.ExtractDataWarehouseDao;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 
 @WebServlet( urlPatterns = "/chart" )
 public class ChartServlet extends HttpServlet {
@@ -35,14 +35,14 @@ public class ChartServlet extends HttpServlet {
     public static final String      CHARTTYPE_PARAM  = "Draw";
 
     private ExtractDataWarehouseDao extractDataWarehouseDao;
-    private FactTableDao            factTableDao;
+    private TransactionTableDao            transactionTableDao;
     private UtilitiesForm           util             = new UtilitiesForm();
 
     public void init() throws ServletException {
         this.extractDataWarehouseDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) )
                 .getExtractDataWarehouseDao();
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) )
-                .getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) )
+                .getTransactionTableDao();
     }
 
     protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws IOException {
@@ -80,7 +80,7 @@ public class ChartServlet extends HttpServlet {
             ChartUtilities.writeChartAsPNG( outputStream, chart, width, height );
 
             // New action saved in database
-            factTableDao.addFact( userSession.getUsername(), "Drawing a PieChart" );
+            transactionTableDao.addTransaction( userSession.getUsername(), "Drawing a PieChart" );
         }
 
         else if ( chartType.equals( "Draw a BarChart" ) )
@@ -94,7 +94,7 @@ public class ChartServlet extends HttpServlet {
             ChartUtilities.writeChartAsPNG( outputStream, chart, width, height );
 
             // New action saved in database
-            factTableDao.addFact( userSession.getUsername(), "Drawing a BarChart" );
+            transactionTableDao.addTransaction( userSession.getUsername(), "Drawing a BarChart" );
 
         }
 

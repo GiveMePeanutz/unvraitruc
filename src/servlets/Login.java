@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import beans.User;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 import dao.UserDao;
 import forms.LoginForm;
 
@@ -32,12 +32,12 @@ public class Login extends HttpServlet {
     public static final String  ACTIVITY_NAME           = "login";
 
     private UserDao             userDao;
-    private FactTableDao        factTableDao;
+    private TransactionTableDao        transactionTableDao;
 
     public void init() throws ServletException {
 
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -72,7 +72,7 @@ public class Login extends HttpServlet {
             // userSession = user logged onn this session
             userSession = (User) session.getAttribute( USER_SESSION_ATT );
             // New action saved in database
-            factTableDao.addFact( userSession.getUsername(), "Login" );
+            transactionTableDao.addTransaction( userSession.getUsername(), "Login" );
 
         }
         else

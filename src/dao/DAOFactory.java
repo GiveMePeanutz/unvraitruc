@@ -114,8 +114,8 @@ public class DAOFactory {
         return new UserDaoImpl( this );
     }
 
-    public FactTableDao getFactTableDao() {
-        return new FactTableDaoImpl( this );
+    public TransactionTableDao getTransactionTableDao() {
+        return new TransactionTableDaoImpl( this );
     }
 
     public KmeansDataDao getKmeansDataDao() {

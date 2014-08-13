@@ -58,13 +58,14 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
         Connection connexion = null;
         PreparedStatement preparedStatement1 = null;
-        PreparedStatement preparedStatement2 = null;
-        PreparedStatement preparedStatement3 = null;
 
         try {
 
             connexion = daoFactory.getConnection();
-
+            
+            // DW Dim tables update
+            updateDWDim();
+            
             // DW Fact table update
             updateDWFactTable();
 
@@ -75,8 +76,6 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             throw new DAOException( e );
         } finally {
             fermeturesSilencieuses( preparedStatement1, connexion );
-            fermeturesSilencieuses( preparedStatement2, connexion );
-            fermeturesSilencieuses( preparedStatement3, connexion );
         }
 
     }
@@ -97,7 +96,8 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             return 1;
         }
     }
-
+    
+    @Override
     public void updateDWFactTable() throws DAOException {
 
         Connection connexion = null;
@@ -458,32 +458,5 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         return groups;
     }
 
-    @Override
-    public String count( DataWarehouseLine dWL ) throws DAOException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-
-        ResultSet resultSet = null;
-
-        String result = "";
-
-        try {
-            connection = daoFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connection, FIND_RESULT, false, dWL.getSex(),
-                    dWL.getGroup(), dWL.getYear(), dWL.getMonth(), dWL.getWeek(), dWL.getDay(), dWL.getDayOfWeek(),
-                    dWL.getHour(), dWL.getActivity() );
-            resultSet = preparedStatement.executeQuery();
-
-            while ( resultSet.next() ) {
-
-                result = resultSet.getString( "count" );
-            }
-
-        } catch ( SQLException e ) {
-            throw new DAOException( e );
-        } finally {
-            fermeturesSilencieuses( resultSet, preparedStatement, connection );
-        }
-        return result;
-    }
+    
 }

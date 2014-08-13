@@ -15,7 +15,7 @@ import utilities.UtilitiesForm;
 import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 import dao.GroupDao;
 
 @WebServlet( "/deleteGroup" )
@@ -29,14 +29,14 @@ public class DeleteGroup extends HttpServlet {
     public static final String ACTIVITY_NAME    = "deleteGroup";
 
     private GroupDao           GroupDao;
-    private FactTableDao       factTableDao;
+    private TransactionTableDao       transactionTableDao;
     private UtilitiesForm      util             = new UtilitiesForm();
 
     public void init() throws ServletException {
 
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.GroupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
 
     }
 
@@ -59,7 +59,7 @@ public class DeleteGroup extends HttpServlet {
                 // userSession = user logged onn this session
                 userSession = (User) session.getAttribute( USER_SESSION_ATT );
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Group Deleted" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Group Deleted" );
             } catch ( DAOException e ) {
                 e.printStackTrace();
             }

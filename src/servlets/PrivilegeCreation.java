@@ -19,7 +19,7 @@ import utilities.UtilitiesForm;
 import beans.Priv;
 import beans.User;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 import dao.PrivDao;
 import forms.PrivilegeCreationForm;
 
@@ -40,13 +40,13 @@ public class PrivilegeCreation extends HttpServlet {
     public static final String ACTIVITY_NAME    = "privCreation";
 
     private PrivDao            privDao;
-    private FactTableDao       factTableDao;
+    private TransactionTableDao       transactionTableDao;
     private UtilitiesForm      util             = new UtilitiesForm();
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.privDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getPrivDao();
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
 
     }
 
@@ -126,12 +126,12 @@ public class PrivilegeCreation extends HttpServlet {
             if ( modify.equals( "Modify" ) )// and if this is a modification
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Privilege modified" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Privilege modified" );
             }
             else
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Privilege created" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Privilege created" );
             }
 
             // Redirection toward the privilege list
@@ -143,7 +143,7 @@ public class PrivilegeCreation extends HttpServlet {
             if ( modify.equals( "Modify" ) )// and if this is a modification
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Privilege modification errors" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Privilege modification errors" );
 
                 // Specifies that it's still a modification
                 request.setAttribute( VERIFY_PARAM, "true" );
@@ -151,7 +151,7 @@ public class PrivilegeCreation extends HttpServlet {
             else
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Privilege creation errors" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Privilege creation errors" );
             }
 
             // else forwarding toward the creation form

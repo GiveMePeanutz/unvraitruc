@@ -16,7 +16,7 @@ import utilities.UtilitiesForm;
 import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 import dao.UserDao;
 
 @WebServlet( "/deleteUser" )
@@ -30,14 +30,14 @@ public class DeleteUser extends HttpServlet {
     public static final String ACTIVITY_NAME    = "deleteUser";
 
     private UserDao            userDao;
-    private FactTableDao       factTableDao;
+    private TransactionTableDao       transactionTableDao;
     private UtilitiesForm      util             = new UtilitiesForm();
 
     public void init() throws ServletException {
 
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
 
     }
 
@@ -62,7 +62,7 @@ public class DeleteUser extends HttpServlet {
                 // userSession = user logged onn this session
                 userSession = (User) session.getAttribute( USER_SESSION_ATT );
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "User Deleted" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "User Deleted" );
             } catch ( DAOException e ) {
                 e.printStackTrace();
             }

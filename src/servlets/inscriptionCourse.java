@@ -15,7 +15,7 @@ import utilities.UtilitiesForm;
 import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 import dao.UserDao;
 
 @WebServlet( "/inscriptionCourse" )
@@ -28,13 +28,13 @@ public class InscriptionCourse extends HttpServlet {
     public static final String VIEW             = "/displayCourses";
 
     private UserDao            userDao;
-    private FactTableDao       factTableDao;
+    private TransactionTableDao       transactionTableDao;
     private UtilitiesForm      util             = new UtilitiesForm();
 
     public void init() throws ServletException {
 
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response )
@@ -63,7 +63,7 @@ public class InscriptionCourse extends HttpServlet {
                 session.setAttribute( USER_SESSION_ATT, user );
 
                 // New action saved in database
-                factTableDao.addFact( username, "Course Subscribe" );
+                transactionTableDao.addTransaction( username, "Course Subscribe" );
 
             } catch ( DAOException e ) {
                 e.printStackTrace();

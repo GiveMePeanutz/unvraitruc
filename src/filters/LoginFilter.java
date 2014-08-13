@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import utilities.Encryption;
 import beans.User;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 
 //Forbids access to every one who is not logged.
 
@@ -24,11 +24,11 @@ public class LoginFilter implements Filter {
     public static final String CONF_DAO_FACTORY = "daofactory";
     public static final String USER_SESSION_ATT = "userSession";
 
-    private FactTableDao       factTableDao;
+    private TransactionTableDao       transactionTableDao;
 
     public void init( FilterConfig filterConfig ) throws ServletException {
         ServletContext servletContext = filterConfig.getServletContext();
-        this.factTableDao = ( (DAOFactory) servletContext.getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) servletContext.getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class LoginFilter implements Filter {
         } else {
             // Add an visited page to the database each time we access to a jsp
             // saved in "inc" repertory.
-            factTableDao.addFact( user.getUsername(), path );
+            transactionTableDao.addTransaction( user.getUsername(), path );
             chain.doFilter( req, res );
         }
     }

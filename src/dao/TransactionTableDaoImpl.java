@@ -7,18 +7,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class FactTableDaoImpl implements FactTableDao {
+public class TransactionTableDaoImpl implements TransactionTableDao {
 
 	private DAOFactory          daoFactory;
 	
 	private static final String SQL_INSERT = "INSERT INTO fact_table(username,pageName,factDate) VALUES (?,?,NOW())";
 	
-	FactTableDaoImpl( DAOFactory daoFactory ) {
+	TransactionTableDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
     }
 	
 	@Override
-	public void addFact(String username, String pageName)
+	public void addTransaction(String username, String pageName)
 			throws DAOException {
 		
 		Connection connexion = null;
@@ -31,7 +31,7 @@ public class FactTableDaoImpl implements FactTableDao {
             int statut1 = preparedStatement1.executeUpdate();
             if ( statut1 == 0 ) {
                 throw new DAOException(
-                        "Failed to create fact. No row added" );
+                        "Failed to create Transaction. No row added" );
             }
 
         } catch ( SQLException e ) {

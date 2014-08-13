@@ -20,7 +20,7 @@ import beans.Group;
 import beans.Priv;
 import beans.User;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 import dao.GroupDao;
 import dao.PrivDao;
 import forms.GroupCreationForm;
@@ -43,14 +43,14 @@ public class GroupCreation extends HttpServlet {
 
     private GroupDao           groupDao;
     private PrivDao            privDao;
-    private FactTableDao       factTableDao;
+    private TransactionTableDao       transactionTableDao;
     private UtilitiesForm      util              = new UtilitiesForm();
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.privDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getPrivDao();
         this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -143,12 +143,12 @@ public class GroupCreation extends HttpServlet {
             if ( modify.equals( "Modify" ) )// and if this is a modification
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Group modified" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Group modified" );
             }
             else
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Group created" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Group created" );
             }
 
             // Redirection toward the group list
@@ -160,7 +160,7 @@ public class GroupCreation extends HttpServlet {
             if ( modify.equals( "Modify" ) )// and if this is a modification
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Group modification errors" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Group modification errors" );
 
                 // Specifies that it's still a modification
                 request.setAttribute( VERIFY_PARAM, "true" );
@@ -168,7 +168,7 @@ public class GroupCreation extends HttpServlet {
             else
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Group creation errors" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Group creation errors" );
             }
 
             // else forwarding toward the creation form

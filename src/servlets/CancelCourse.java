@@ -15,7 +15,7 @@ import utilities.UtilitiesForm;
 import beans.User;
 import dao.DAOException;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 import dao.UserDao;
 
 @WebServlet( "/cancelCourse" )
@@ -29,13 +29,13 @@ public class CancelCourse extends HttpServlet {
     public static final String ACTIVITY_NAME    = "cancelCourse";
 
     private UserDao            UserDao;
-    private FactTableDao       FactTableDao;
+    private TransactionTableDao       transactionTableDao;
     private UtilitiesForm      util             = new UtilitiesForm();
 
     public void init() throws ServletException {
 
         this.UserDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
-        this.FactTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response )
@@ -64,7 +64,7 @@ public class CancelCourse extends HttpServlet {
                 session.setAttribute( USER_SESSION_ATT, user );
 
                 // New action saved in database
-                FactTableDao.addFact( username, "Course Unsubscribe" );
+                transactionTableDao.addTransaction( username, "Course Unsubscribe" );
 
             } catch ( DAOException e ) {
                 e.printStackTrace();

@@ -18,7 +18,7 @@ import beans.DataWarehouseLine;
 import beans.User;
 import dao.DAOFactory;
 import dao.ExtractDataWarehouseDao;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 
 @WebServlet( "/dataWarehouse" )
 public class DataWarehouse extends HttpServlet {
@@ -57,15 +57,15 @@ public class DataWarehouse extends HttpServlet {
     public static final String      VIEW                  = "/WEB-INF/dataWarehouse.jsp";
 
     private ExtractDataWarehouseDao extractDataWarehouseDao;
-    private FactTableDao            factTableDao;
+    private TransactionTableDao            transactionTableDao;
     private UtilitiesForm           util                  = new UtilitiesForm();
 
     public void init() throws ServletException {
 
         this.extractDataWarehouseDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) )
                 .getExtractDataWarehouseDao();
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) )
-                .getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) )
+                .getTransactionTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -155,7 +155,7 @@ public class DataWarehouse extends HttpServlet {
         // userSession = user logged onn this session
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
         // New action saved in database
-        factTableDao.addFact( userSession.getUsername(), "Count something" );
+        transactionTableDao.addTransaction( userSession.getUsername(), "Count something" );
 
         // For the first hierarchy, we add the data warehouse line to the first
         // table, so in the first ArrayList : resultsMonth, which we have to

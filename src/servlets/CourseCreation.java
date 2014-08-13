@@ -19,7 +19,7 @@ import beans.Course;
 import beans.User;
 import dao.CourseDao;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 import dao.UserDao;
 import forms.CourseCreationForm;
 
@@ -43,14 +43,14 @@ public class CourseCreation extends HttpServlet {
 
     private UserDao            userDao;
     private CourseDao          courseDao;
-    private FactTableDao       factTableDao;
+    private TransactionTableDao       transactionTableDao;
     private UtilitiesForm      util                = new UtilitiesForm();
 
     public void init() throws ServletException {
         /* Récupération d'une instance de notre DAO Utilisateur */
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
         this.courseDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getCourseDao();
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -144,12 +144,12 @@ public class CourseCreation extends HttpServlet {
             if ( modify.equals( "Modify" ) )// and if this is a modification
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Course modified" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Course modified" );
             }
             else
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Course created" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Course created" );
             }
 
             response.sendRedirect( VUE_SUCCESS );
@@ -160,7 +160,7 @@ public class CourseCreation extends HttpServlet {
             if ( modify.equals( "Modify" ) )// and if this is a modification
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Course modification errors" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Course modification errors" );
 
                 // Specifies that it's still a modification
                 request.setAttribute( VERIFY_PARAM, "true" );
@@ -169,7 +169,7 @@ public class CourseCreation extends HttpServlet {
             else
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "Course creation errors" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "Course creation errors" );
             }
 
             // else forwarding toward the creation form

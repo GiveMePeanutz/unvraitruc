@@ -21,7 +21,7 @@ import utilities.UtilitiesForm;
 import beans.Group;
 import beans.User;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 import dao.GroupDao;
 import dao.UserDao;
 import forms.FormValidationException;
@@ -45,13 +45,13 @@ public class UserCreation extends HttpServlet {
 
     private UserDao            userDao;
     private GroupDao           groupDao;
-    private FactTableDao       factTableDao;
+    private TransactionTableDao       transactionTableDao;
     private UtilitiesForm      util              = new UtilitiesForm();
 
     public void init() throws ServletException {
         this.groupDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getGroupDao();
         this.userDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getUserDao();
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -147,12 +147,12 @@ public class UserCreation extends HttpServlet {
             if ( modify.equals( "Modify" ) )// and if this is a modification
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "User modified" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "User modified" );
             }
             else
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "User created" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "User created" );
             }
 
             // Redirection toward the course list
@@ -164,7 +164,7 @@ public class UserCreation extends HttpServlet {
             if ( modify.equals( "Modify" ) )// and if this is a modification
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "User modification failed" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "User modification failed" );
 
                 // Specifies that it's still a modification
                 request.setAttribute( VERIFY_PARAM, "true" );
@@ -172,7 +172,7 @@ public class UserCreation extends HttpServlet {
             else
             {
                 // New action saved in database
-                factTableDao.addFact( userSession.getUsername(), "User creation failed" );
+                transactionTableDao.addTransaction( userSession.getUsername(), "User creation failed" );
             }
 
             // else forwarding toward the creation form

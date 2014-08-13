@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import beans.User;
 import dao.DAOFactory;
-import dao.FactTableDao;
+import dao.TransactionTableDao;
 
 @WebServlet( "/logout" )
 public class Logout extends HttpServlet {
@@ -22,11 +22,11 @@ public class Logout extends HttpServlet {
     public static final String ACTIVITY_NAME    = "logout";
     public static final String USER_SESSION_ATT = "userSession";
 
-    private FactTableDao       factTableDao;
+    private TransactionTableDao       transactionTableDao;
 
     public void init() throws ServletException {
 
-        this.factTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getFactTableDao();
+        this.transactionTableDao = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getTransactionTableDao();
     }
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -37,7 +37,7 @@ public class Logout extends HttpServlet {
         // userSession = user logged onn this session
         userSession = (User) session.getAttribute( USER_SESSION_ATT );
         // New action saved in database
-        factTableDao.addFact( userSession.getUsername(), "Logout" );
+        transactionTableDao.addTransaction( userSession.getUsername(), "Logout" );
 
         // turn off the session
         session.invalidate();

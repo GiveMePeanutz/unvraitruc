@@ -2,7 +2,7 @@ package dao;
 
 public class DAOException extends RuntimeException {
     /*
-     * Constructeurs
+     * Constructors
      */
     public DAOException( String message ) {
         super( message );
