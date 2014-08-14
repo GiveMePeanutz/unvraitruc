@@ -35,30 +35,42 @@ public class GroupDaoImpl implements GroupDao {
         this.daoFactory = daoFactory;
     }
 
-    @Override
+    /*
+	 * Creates a group in the database using as parameter a group bean
+	 */
+	@Override
     public void create( Group group ) throws DAOException {
         Connection connexion = null;
         PreparedStatement preparedStatement1 = null;
         PreparedStatement preparedStatement2 = null;
 
         try {
+            // Opens connection 
             connexion = daoFactory.getConnection();
+            
+            // prepared statement of the insert query. This query creates a new group in the table with the
+        	// information from the group bean
             preparedStatement1 = initialisationRequetePreparee( connexion,
                     SQL_INSERT, true, group.getGroupName(), group.getGroupDescription() );
             int statut1 = preparedStatement1.executeUpdate();
+            
+            // status1 == 0 indicates the query failed
             if ( statut1 == 0 ) {
                 throw new DAOException(
                         "Failed to create group. No row added" );
             }
-
-            for ( String privName : group.getPrivNames() ) {
-                preparedStatement2 = initialisationRequetePreparee( connexion,
-                        SQL_INSERT_GROUP_PRIV, true, group.getGroupName(), privName );
-                int statut2 = preparedStatement2.executeUpdate();
-                if ( statut2 == 0 ) {
-                    throw new DAOException(
-                            "Failed to create group-privilege association. No row added" );
-                }
+            else{
+	            for ( String privName : group.getPrivNames() ) {
+	            	// prepared statement of the second insert query. This query inserts a new line in the user_course
+	            	// table : links the created course to the teacher in charge of it
+	            	preparedStatement2 = initialisationRequetePreparee( connexion,
+	                        SQL_INSERT_GROUP_PRIV, true, group.getGroupName(), privName );
+	                int statut2 = preparedStatement2.executeUpdate();
+	                if ( statut2 == 0 ) {
+	                    throw new DAOException(
+	                            "Failed to create group-privilege association. No row added" );
+	                }
+	            }
             }
 
         } catch ( SQLException e ) {

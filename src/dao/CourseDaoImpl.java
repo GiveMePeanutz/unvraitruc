@@ -28,14 +28,15 @@ public class CourseDaoImpl implements CourseDao {
     private static final String SQL_INSERT_COURSE_USER   = "INSERT INTO user_course (username , courseName) VALUES (? , ?)";
 
     private static final String SQL_DELETE_BY_COURSENAME = "DELETE FROM Course WHERE courseName = ?";
-
-    // private static final String SQL_DELETE_FROM_USERCOURSE_BY_COURSENAME =
-    // "DELETE FROM user_course WHERE courseName = ?";
-
+    
+    
     CourseDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
     }
 
+    /*
+	 * Creates a course in the database using as parameter a course bean and a teacher name 
+	 */
     @Override
     public void create( Course course , String teacherName) throws DAOException {
         Connection connexion = null;
@@ -43,18 +44,31 @@ public class CourseDaoImpl implements CourseDao {
         PreparedStatement preparedStatement2 = null;
 
         try {
-            connexion = daoFactory.getConnection();
-            preparedStatement1 = initialisationRequetePreparee( connexion,
+            // Opens connection 
+        	connexion = daoFactory.getConnection();
+            
+        	// prepared statement of the insert query. This query creates a new course in the table with the
+        	// information from the course bean
+        	preparedStatement1 = initialisationRequetePreparee( connexion,
                     SQL_INSERT, true, course.getCourseName(), course.getCourseYear(), course.getCourseDescription(),
                     course.getSchedule() );
             int statut1 = preparedStatement1.executeUpdate();
+            
+            // status1 == 0 indicates the query failed
             if ( statut1 == 0 ) {
                 throw new DAOException(
                         "Failed to create course. No row added" );
-            }else{
+            }
+            // If the insert succeeded we proceed to the second part of course creation : 
+            //associate a course to a teacher
+            else{
+            	
+            	// prepared statement of the second insert query. This query inserts a new line in the user_course
+            	// table : links the created course to the teacher in charge of it
             	preparedStatement2 = initialisationRequetePreparee( connexion,
                         SQL_INSERT_COURSE_USER, true,  teacherName, course.getCourseName() );
                 int statut2 = preparedStatement2.executeUpdate();
+                // verifies if the insert succeeded
                 if ( statut2 == 0 ) {
                     throw new DAOException(
                             "Failed to create course_user association. No row added" );
@@ -69,6 +83,9 @@ public class CourseDaoImpl implements CourseDao {
         }
     }
 
+    /*
+	 * Returns a course bean containing all the information of the course whose courseName is passed as parameter
+	 */
     @Override
     public Course find( String courseName ) throws DAOException {
         Connection connection = null;
@@ -86,11 +103,14 @@ public class CourseDaoImpl implements CourseDao {
         String sql3 = SQL_SELECT_COURSE_TEACHER;
 
         try {
-            /* Récupération d'une connection depuis la Factory */
+            // Retrieves a connection from the factory 
             connection = daoFactory.getConnection();
-            /*
-             * Préparation de la requête avec les objets passés en arguments
-             * (ici, uniquement un id) et exécution.
+            
+            /* Here the prepared statements are initialized, executed and their results are stored in the resultSets
+             * The queries here retrieve for the course whose courseName is passed as parameter its:
+             * - 1: basic information from the course table 
+             * - 2: subscribed students
+             * - 3: teacher in charge
              */
             preparedStatement = initialisationRequetePreparee( connection, sql, false, courseName );
             resultSet = preparedStatement.executeQuery();
@@ -98,9 +118,10 @@ public class CourseDaoImpl implements CourseDao {
             resultSet2 = preparedStatement2.executeQuery();
             preparedStatement3 = initialisationRequetePreparee( connection, sql3 , false, courseName );
             resultSet3 = preparedStatement3.executeQuery();
-            /* Parcours de la ligne de données retournée dans le ResultSet */
+            /* If a course has been retrieved */
             if ( resultSet.next() ) {
-                course = map( resultSet, resultSet2, resultSet3 );
+                // Custom maps the results into a course bean
+            	course = map( resultSet, resultSet2, resultSet3 );
             }
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -108,10 +129,14 @@ public class CourseDaoImpl implements CourseDao {
             fermeturesSilencieuses( resultSet, preparedStatement, connection );
             fermeturesSilencieuses( resultSet2, preparedStatement2, connection );
         }
-
+        
+        // returns the bean filled with all the queried information
         return course;
     }
 
+    /*
+	 * Returns all the courses of the database in the form of a list of course beans
+	 */
     @Override
     public List<Course> list() throws DAOException {
         Connection connection = null;
@@ -124,10 +149,14 @@ public class CourseDaoImpl implements CourseDao {
         List<Course> courses = new ArrayList<Course>();
 
         try {
-            connection = daoFactory.getConnection();
-            preparedStatement = connection.prepareStatement( SQL_SELECT );
+        	// Retrieves a connection from the factory 
+        	connection = daoFactory.getConnection();
+            
+        	// Prepared statement of the select query used to retrieve all courses from the database
+        	preparedStatement = connection.prepareStatement( SQL_SELECT );
             resultSet = preparedStatement.executeQuery();
-
+            
+            // here we loop on every course returned from the first query to retrieve its users and teachers
             while ( resultSet.next() ) {
                 preparedStatement2 = initialisationRequetePreparee( connection, SQL_SELECT_COURSE_USERS, false,
                         resultSet.getString( "courseName" ) );
@@ -135,6 +164,7 @@ public class CourseDaoImpl implements CourseDao {
                 preparedStatement3 = initialisationRequetePreparee( connection, SQL_SELECT_COURSE_TEACHER, false,
                         resultSet.getString( "courseName" ) );
                 resultSet3 = preparedStatement3.executeQuery();
+                // adds to the list the course bean filled within the custom map method
                 courses.add( map( resultSet, resultSet2, resultSet3) );
             }
         } catch ( SQLException e ) {
@@ -147,15 +177,23 @@ public class CourseDaoImpl implements CourseDao {
         return courses;
     }
 
+    /*
+	 * Deletes from the database the course whose courseName is passed as parameter
+	 */
     @Override
     public void delete( String courseName ) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
-            connection = daoFactory.getConnection();
-            preparedStatement = initialisationRequetePreparee( connection, SQL_DELETE_BY_COURSENAME, true, courseName );
+        	// Retrieves a connection from the factory 
+        	connection = daoFactory.getConnection();
+            
+        	// prepared statement of the delete query : deletes in from the database the course whose courseName is passed as parameter
+        	preparedStatement = initialisationRequetePreparee( connection, SQL_DELETE_BY_COURSENAME, true, courseName );
             int statut = preparedStatement.executeUpdate();
+            
+            // verifies if the update succeeded
             if ( statut == 0 ) {
                 throw new DAOException( "Failed to delete course, no row deleted." );
             }
@@ -167,6 +205,13 @@ public class CourseDaoImpl implements CourseDao {
         }
     }
 
+    
+    /*
+     * Static method taking as parameter 3 resultSets :
+     * - 1 : ResultSet of the select course query
+     * - 2 : ResultSet of the select course users query
+     * - 3 : ResultSet of the select course teacher query
+     */
     private static Course map( ResultSet resultSet, ResultSet resultSet2 , ResultSet resultSet3) throws SQLException {
 
         Course course = new Course();
@@ -194,11 +239,16 @@ public class CourseDaoImpl implements CourseDao {
         PreparedStatement preparedStatement1 = null;
 
         try {
-            connection = daoFactory.getConnection();
-            preparedStatement1 = initialisationRequetePreparee( connection,
+        	// Retrieves a connection from the factory 
+        	connection = daoFactory.getConnection();
+            
+        	// prepared statement of the modify course query. This query modifies the course whose courseName has been
+        	// exracted from the bean passed as parameter. It modifies the remaining infn from the bean.
+        	preparedStatement1 = initialisationRequetePreparee( connection,
                     SQL_MODIFY_COURSE, true, course.getCourseDescription(), course.getCourseYear(),
                     course.getCourseName() );
             int statut1 = preparedStatement1.executeUpdate();
+            // verifies if the modification succeeded
             if ( statut1 == 0 ) {
                 throw new DAOException(
                         "Failed to modify priv. No row modified" );
