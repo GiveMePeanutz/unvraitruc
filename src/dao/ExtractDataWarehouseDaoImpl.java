@@ -41,14 +41,23 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         this.daoFactory = daoFactory;
     }
 
+    /*
+     * Returns all the months name in the form of a list of String
+     */
     public List<String> getMonths() {
         return months;
     }
 
+    /*
+     * Returns all the days name in the form of a list of String
+     */
     public List<String> getDays() {
         return days;
     }
 
+    /*
+     * Returns all the years of the database in the form of a list of String
+     */
     public List<String> listYear() throws DAOException {
 
         Connection connection = null;
@@ -59,12 +68,16 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         List<String> years = new ArrayList<String>();
 
         try {
+
+            // Retrieves a connection from the factory
             connection = daoFactory.getConnection();
+            // Prepared statement of the select query used to retrieve all the
+            // years from the database
             preparedStatement = connection.prepareStatement( SELECT_DISTINCT_YEAR );
             resultSet = preparedStatement.executeQuery();
-
+            // here we loop on every year returned from the first query
             while ( resultSet.next() ) {
-
+                // adds the year to the list
                 years.add( resultSet.getString( "year" ) );
             }
 
@@ -77,6 +90,9 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         return years;
     }
 
+    /*
+     * Returns all the groups of the database in the form of a list of String
+     */
     public List<String> listGroup() throws DAOException {
 
         Connection connection = null;
@@ -87,12 +103,16 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         List<String> groups = new ArrayList<String>();
 
         try {
+
+            // Retrieves a connection from the factory
             connection = daoFactory.getConnection();
+            // Prepared statement of the select query used to retrieve all the
+            // groups from the database
             preparedStatement = connection.prepareStatement( SELECT_DISTINCT_GROUP );
             resultSet = preparedStatement.executeQuery();
-
+            // here we loop on every group returned from the first query
             while ( resultSet.next() ) {
-
+                // adds the year to the list
                 groups.add( resultSet.getString( "groupName" ) );
             }
 
@@ -105,7 +125,10 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         return groups;
     }
 
-    @Override
+    /*
+     * Returns the number of activities done according to the parameters, with
+     * the "month hierarchy"
+     */
     public String countMonth( DataWarehouseLine dWL ) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -115,13 +138,16 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         String result = "";
 
         try {
+
+            // Retrieves a connection from the factory
             connection = daoFactory.getConnection();
+            // Prepared statement of the select query used to retrieve the right
+            // number of activities from the database
             preparedStatement = initialisationRequetePreparee( connection, FIND_RESULT_MONTH, false, dWL.getSex(),
                     dWL.getGroup(), dWL.getActivity(), dWL.getHour(), dWL.getDay(), dWL.getMonth(), dWL.getYear() );
             resultSet = preparedStatement.executeQuery();
-
-            while ( resultSet.next() ) {
-
+            if ( resultSet.next() ) {
+                // Saves the result of the query
                 result = resultSet.getString( "count" );
             }
 
@@ -133,6 +159,10 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         return result;
     }
 
+    /*
+     * Returns the number of activities done according to the parameters, with
+     * the "week hierarchy"
+     */
     public String countWeek( DataWarehouseLine dWL ) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -142,13 +172,16 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         String result = "";
 
         try {
+
+            // Retrieves a connection from the factory
             connection = daoFactory.getConnection();
+            // Prepared statement of the select query used to retrieve the right
+            // number of activities from the database
             preparedStatement = initialisationRequetePreparee( connection, FIND_RESULT_WEEK, false, dWL.getSex(),
                     dWL.getGroup(), dWL.getActivity(), dWL.getDayOfWeek(), dWL.getWeek(), dWL.getYear() );
             resultSet = preparedStatement.executeQuery();
-
-            while ( resultSet.next() ) {
-
+            if ( resultSet.next() ) {
+                // Saves the result of the query
                 result = resultSet.getString( "count" );
             }
 
@@ -160,7 +193,10 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         return result;
     }
 
-    @Override
+    /*
+     * Returns the number of activities done according to the sex and kind of
+     * action passed as parameter, for the entire year also passed as parameter.
+     */
     public String countAllBySex( int sex, int action, int year ) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -170,12 +206,15 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         String result = "";
 
         try {
+
+            // Retrieves a connection from the factory
             connection = daoFactory.getConnection();
+            // Prepared statement of the select query used to retrieve the right
+            // number of activities from the database
             preparedStatement = initialisationRequetePreparee( connection, FIND_RESULT_BY_SEX, false, sex, action, year );
             resultSet = preparedStatement.executeQuery();
-
-            while ( resultSet.next() ) {
-
+            if ( resultSet.next() ) {
+                // Saves the result of the query
                 result = resultSet.getString( "count" );
             }
 
@@ -187,6 +226,11 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         return result;
     }
 
+    /*
+     * Returns the number of activities done according to the sex and kind of
+     * action passed as parameters, for each month of the year also passed as
+     * parameter
+     */
     public String countAllBySexByMonth( int sex, int action, int year, String month ) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -196,13 +240,16 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         String result = "";
 
         try {
+
+            // Retrieves a connection from the factory
             connection = daoFactory.getConnection();
+            // Prepared statement of the select query used to retrieve the right
+            // number of activities from the database
             preparedStatement = initialisationRequetePreparee( connection, FIND_RESULT_BY_SEX_AND_MONTH, false, sex,
                     action, year, month );
             resultSet = preparedStatement.executeQuery();
-
-            while ( resultSet.next() ) {
-
+            if ( resultSet.next() ) {
+                // Saves the result of the query
                 result = resultSet.getString( "count" );
             }
 
@@ -214,7 +261,10 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         return result;
     }
 
-    @Override
+    /*
+     * Returns the number of activities done according to the group and kind of
+     * action passed as parameter, for the entire year also passed as parameter.
+     */
     public String countAllByGroup( String group, int action, int year ) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -224,13 +274,16 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         String result = "";
 
         try {
+
+            // Retrieves a connection from the factory
             connection = daoFactory.getConnection();
+            // Prepared statement of the select query used to retrieve the right
+            // number of activities from the database
             preparedStatement = initialisationRequetePreparee( connection, FIND_RESULT_BY_GROUP, false, group,
                     action, year );
             resultSet = preparedStatement.executeQuery();
-
-            while ( resultSet.next() ) {
-
+            if ( resultSet.next() ) {
+                // Saves the result of the query
                 result = resultSet.getString( "count" );
             }
 
@@ -242,6 +295,11 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         return result;
     }
 
+    /*
+     * Returns the number of activities done according to the group and kind of
+     * action passed as parameters, for each month of the year also passed as
+     * parameter
+     */
     public String countAllByGroupByMonth( String group, int action, int year, String month ) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -251,14 +309,17 @@ public class ExtractDataWarehouseDaoImpl implements ExtractDataWarehouseDao {
         String result = "";
 
         try {
+
+            // Retrieves a connection from the factory
             connection = daoFactory.getConnection();
+            // Prepared statement of the select query used to retrieve the right
+            // number of activities from the database
             preparedStatement = initialisationRequetePreparee( connection, FIND_RESULT_BY_GROUP_AND_MONTH, false,
                     group,
                     action, year, month );
             resultSet = preparedStatement.executeQuery();
-
-            while ( resultSet.next() ) {
-
+            if ( resultSet.next() ) {
+                // Saves the result of the query
                 result = resultSet.getString( "count" );
             }
 

@@ -22,6 +22,9 @@ public class NaiveBayesDaoImpl implements NaiveBayesDao {
         this.daoFactory = daoFactory;
     }
 
+    /*
+     * Returns how many users are registered in database
+     */
     public int getUserCount() throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -30,10 +33,13 @@ public class NaiveBayesDaoImpl implements NaiveBayesDao {
         int result = 0;
 
         try {
+
+            // Retrieves a connection from the factory
             connection = daoFactory.getConnection();
             preparedStatement = connection.prepareStatement( SQL_USER_COUNT );
             resultSet = preparedStatement.executeQuery();
             if ( resultSet.next() ) {
+                // Saves the result
                 result = resultSet.getInt( "count(distinct username)" );
             }
 
@@ -46,6 +52,9 @@ public class NaiveBayesDaoImpl implements NaiveBayesDao {
         return result;
     }
 
+    /*
+     * Returns all the ClassName of the database in the form of a list of String
+     */
     public List<String> listClassName() throws DAOException {
 
         Connection connection = null;
@@ -56,11 +65,14 @@ public class NaiveBayesDaoImpl implements NaiveBayesDao {
         List<String> classNames = new ArrayList<String>();
 
         try {
+
+            // Retrieves a connection from the factory
             connection = daoFactory.getConnection();
             preparedStatement = connection.prepareStatement( SQL_SELECT_CLASSNAME );
             resultSet = preparedStatement.executeQuery();
-
+            // here we loop on every ClassName returned from the first query
             while ( resultSet.next() ) {
+                // adds to the list the course name
                 classNames.add( resultSet.getString( "className" ) );
             }
 
@@ -73,6 +85,10 @@ public class NaiveBayesDaoImpl implements NaiveBayesDao {
         return classNames;
     }
 
+    /*
+     * Returns all the Courses of the database in the form of a list of
+     * String(the course name)
+     */
     public List<String> listCourse() throws DAOException {
 
         Connection connection = null;
@@ -83,12 +99,16 @@ public class NaiveBayesDaoImpl implements NaiveBayesDao {
         List<String> courses = new ArrayList<String>();
 
         try {
+
+            // Retrieves a connection from the factory
             connection = daoFactory.getConnection();
             preparedStatement = connection.prepareStatement( SQL_SELECT_COURSE );
             resultSet = preparedStatement.executeQuery();
 
+            // here we loop on every course returned from the first query to
+            // retrieve its name
             while ( resultSet.next() ) {
-
+                // adds to the list the course name
                 courses.add( resultSet.getString( "courseName" ) );
             }
 
@@ -101,6 +121,10 @@ public class NaiveBayesDaoImpl implements NaiveBayesDao {
         return courses;
     }
 
+    /*
+     * Returns how many user_course line are registered in database (a line =
+     * one course for one user)
+     */
     public int getUserCourseCount() throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -110,10 +134,12 @@ public class NaiveBayesDaoImpl implements NaiveBayesDao {
 
         try {
 
+            // Retrieves a connection from the factory
             connection = daoFactory.getConnection();
             preparedStatement = connection.prepareStatement( SQL_USER_COURSE_COUNT );
             resultSet = preparedStatement.executeQuery();
             if ( resultSet.next() ) {
+                // Saves the result
                 result = resultSet.getInt( "count(*)" );
             }
 
