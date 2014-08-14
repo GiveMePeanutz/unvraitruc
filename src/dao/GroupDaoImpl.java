@@ -45,7 +45,7 @@ public class GroupDaoImpl implements GroupDao {
         PreparedStatement preparedStatement2 = null;
 
         try {
-            // Opens connection 
+            // Retrieves a connection from the factory 
             connexion = daoFactory.getConnection();
             
             // prepared statement of the insert query. This query creates a new group in the table with the
@@ -61,8 +61,8 @@ public class GroupDaoImpl implements GroupDao {
             }
             else{
 	            for ( String privName : group.getPrivNames() ) {
-	            	// prepared statement of the second insert query. This query inserts a new line in the user_course
-	            	// table : links the created course to the teacher in charge of it
+	            	// prepared statement of the second insert query. This query inserts a new line in the group_priv
+	            	// table : links the created group to a privilege
 	            	preparedStatement2 = initialisationRequetePreparee( connexion,
 	                        SQL_INSERT_GROUP_PRIV, true, group.getGroupName(), privName );
 	                int statut2 = preparedStatement2.executeUpdate();
@@ -83,6 +83,10 @@ public class GroupDaoImpl implements GroupDao {
         }
     }
 
+	
+	/*
+	 *  Returns a group bean containing all the informatino of the group whose name is passed as parameter
+	 */
     @Override
     public Group find( String groupName ) throws DAOException {
         Connection connection = null;
@@ -100,19 +104,22 @@ public class GroupDaoImpl implements GroupDao {
         String sql3 = SQL_SELECT_GROUP_USERS;
 
         try {
-            /* Récupération d'une connection depuis la Factory */
+            /* Retrieves a connection from the factory */
             connection = daoFactory.getConnection();
-            /*
-             * Préparation de la requête avec les objets passés en arguments
-             * (ici, uniquement un id) et exécution.
-             */
+            
+           /* prepared statements of the queries that :
+           * - 1 : retrieves group information from group table
+           * - 2 : retrieves group privileges from group_priv table
+           * - 3 : retrieves groups users from the user_group table
+           */
             preparedStatement = initialisationRequetePreparee( connection, sql, false, groupName );
             resultSet = preparedStatement.executeQuery();
             preparedStatement2 = initialisationRequetePreparee( connection, sql2, false, groupName );
             resultSet2 = preparedStatement2.executeQuery();
             preparedStatement3 = initialisationRequetePreparee( connection, sql3, false, groupName );
             resultSet3 = preparedStatement3.executeQuery();
-            /* Parcours de la ligne de données retournée dans le ResultSet */
+
+            // if a group is retrieved from the database, the resultsets are custom mapped into a group bean
             if ( resultSet.next() ) {
                 group = map( resultSet, resultSet2, resultSet3 );
             }
@@ -123,10 +130,14 @@ public class GroupDaoImpl implements GroupDao {
             fermeturesSilencieuses( resultSet2, preparedStatement2, connection );
             fermeturesSilencieuses( resultSet3, preparedStatement3, connection );
         }
-
+        
+        // returns the groups bean filled with the queried information
         return group;
     }
-
+    
+    /*
+	 * Returns all the groups of the database in the form of a list of group beans
+	 */
     @Override
     public List<Group> list() throws DAOException {
         Connection connection = null;
@@ -139,10 +150,18 @@ public class GroupDaoImpl implements GroupDao {
         List<Group> groups = new ArrayList<Group>();
 
         try {
-            connection = daoFactory.getConnection();
+            /* Retrieves a connection from the factory */
+        	connection = daoFactory.getConnection();
+        	
+        	// prepared statement of the query that retrieves all the groups from the database
             preparedStatement = connection.prepareStatement( SQL_SELECT );
             resultSet = preparedStatement.executeQuery();
-
+            
+            /* For every group retrieved with the first query and stored in ResutSet :
+             * - we query the database to retrieve the associated privileges and users
+             * - we store the retrieved information in a bean thanks to the custom map method
+             * - add this bean to the list
+             */
             while ( resultSet.next() ) {
                 preparedStatement2 = initialisationRequetePreparee( connection, SQL_SELECT_GROUP_PRIVS, false,
                         resultSet.getString( "groupName" ) );
@@ -160,23 +179,29 @@ public class GroupDaoImpl implements GroupDao {
             fermeturesSilencieuses( resultSet3, preparedStatement3, connection );
         }
         
+        //returns the list of group beans 
         return groups;
     }
 
+    /*
+	 * Deletes from the database the group whose groupName is passed as parameter
+	 */
     @Override
     public void delete( String groupName ) throws DAOException {
-        Connection connexion = null;
+    	Connection connexion = null;
         PreparedStatement preparedStatement = null;
 
         try {
-            connexion = daoFactory.getConnection();
+            /* Retrieves a connection from the factory */
+        	connexion = daoFactory.getConnection();
+            
+            // prepared statement of the deletion query
             preparedStatement = initialisationRequetePreparee( connexion, SQL_DELETE_BY_GROUPNAME, true,
                     groupName );
             int statut = preparedStatement.executeUpdate();
+            // If the deletion failed
             if ( statut == 0 ) {
                 throw new DAOException( "Failed to delete group, no row deleted." );
-            } else {
-                // group.setIGroupID( null );
             }
         } catch ( SQLException e ) {
             throw new DAOException( e );
@@ -185,6 +210,70 @@ public class GroupDaoImpl implements GroupDao {
         }
     }
 
+    
+    /*
+	 * Modifies the group in the database with the corresponding groupName extracted from the bean passed as argument
+	 */
+    @Override
+	public void modify(Group group) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement1 = null;
+		PreparedStatement preparedStatement2 = null;
+		PreparedStatement preparedStatement3 = null;
+
+		try {
+            /* Retrieves a connection from the factory */
+			connection = daoFactory.getConnection();
+			
+			// prepared statement of the modify group query. This query modifies the group whose groupName has been
+         	// extracted from the bean passed as parameter. It modifies the remaining info from the bean.
+			preparedStatement1 = initialisationRequetePreparee(connection,
+					SQL_MODIFY_GROUP, true, group.getGroupDescription(), group.getGroupName());
+			int statut1 = preparedStatement1.executeUpdate();
+			if (statut1 == 0) {
+				throw new DAOException(
+						"Failed to modify group. No row modified");
+			}
+			
+			// Here we delete all the group/priv associations
+			preparedStatement2 = initialisationRequetePreparee(connection, SQL_DELETE_GROUP_PRIVS, true, group.getGroupName());
+			int statut2 = preparedStatement2.executeUpdate();
+			if (statut2 == 0) {
+				throw new DAOException(
+						"Failed to delete group privs. No rows deleted");
+			}
+			
+			
+			// And here we create the group/priv associations
+			for (String privName : group.getPrivNames()) {
+				preparedStatement3 = initialisationRequetePreparee( connection,
+	                    SQL_INSERT_GROUP_PRIV, true, group.getGroupName(), privName );
+	            int statut3 = preparedStatement3.executeUpdate();
+	            if ( statut3 == 0 ) {
+	                throw new DAOException(
+	                        "Failed to create group_privilege association. No row added" );
+	            }
+			}
+			
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			fermeturesSilencieuses(preparedStatement1,
+					connection);
+			fermeturesSilencieuses(preparedStatement2,
+					connection);
+			fermeturesSilencieuses(preparedStatement3,
+					connection);
+		}				
+	}
+    
+    
+    /*
+	 * Static method taking as parameter 3 resultSets :
+	 * - 1 : ResultSet of the select group query
+	 * - 2 : ResultSet of the select group privileges query
+	 * - 3 : ResultSet of the select group users query
+	 */
     private static Group map( ResultSet resultSet, ResultSet resultSet2, ResultSet resultSet3 ) throws SQLException {
 
         Group group = new Group();
@@ -210,53 +299,6 @@ public class GroupDaoImpl implements GroupDao {
         return group;
     }
 
-	@Override
-	public void modify(Group group) throws DAOException {
-		Connection connection = null;
-		PreparedStatement preparedStatement1 = null;
-		PreparedStatement preparedStatement2 = null;
-		PreparedStatement preparedStatement3 = null;
-
-		try {
-			connection = daoFactory.getConnection();
-			preparedStatement1 = initialisationRequetePreparee(connection,
-					SQL_MODIFY_GROUP, true, group.getGroupDescription(), group.getGroupName());
-			int statut1 = preparedStatement1.executeUpdate();
-			if (statut1 == 0) {
-				throw new DAOException(
-						"Failed to modify group. No row modified");
-			}
-			
-			
-			preparedStatement2 = initialisationRequetePreparee(connection, SQL_DELETE_GROUP_PRIVS, true, group.getGroupName());
-			int statut2 = preparedStatement2.executeUpdate();
-			if (statut2 == 0) {
-				throw new DAOException(
-						"Failed to delete group privs. No rows deleted");
-			}
-			
-			
-			
-			for (String privName : group.getPrivNames()) {
-				preparedStatement3 = initialisationRequetePreparee( connection,
-	                    SQL_INSERT_GROUP_PRIV, true, group.getGroupName(), privName );
-	            int statut3 = preparedStatement3.executeUpdate();
-	            if ( statut3 == 0 ) {
-	                throw new DAOException(
-	                        "Failed to create group_privilege association. No row added" );
-	            }
-			}
-			
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			fermeturesSilencieuses(preparedStatement1,
-					connection);
-			fermeturesSilencieuses(preparedStatement2,
-					connection);
-			fermeturesSilencieuses(preparedStatement3,
-					connection);
-		}				
-	}
+	
 
 }

@@ -27,7 +27,8 @@ public interface UserDao {
     List<User> listStudent() throws DAOException;
 
     /*
-	 * Returns all the teachers of the database in the form of a list of user beans
+	 * Returns all the users of the database in the form of a list of user beans
+	 * whose group corresponds to the String passed as parameter
      */
     List<User> listGroup( String group ) throws DAOException;
 

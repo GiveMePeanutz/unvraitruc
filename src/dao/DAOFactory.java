@@ -25,8 +25,8 @@ public class DAOFactory {
     }
 
     /*
-     * Méthode chargée de récupérer les informations de connexion à la base de
-     * données, charger le driver JDBC et retourner une instance de la Factory
+     * Method in charge of retrieving the informationof the connection to the 
+     * database, loading the driver JDBC and return an instance of the factory
      */
     public static DAOFactory getInstance() throws DAOConfigurationException {
         Properties properties = new Properties();
@@ -63,40 +63,39 @@ public class DAOFactory {
 
         try {
             /*
-             * Création d'une configuration de pool de connexions via l'objet
-             * BoneCPConfig et les différents setters associés.
+             * Creation of a configuration of a pool of connection via
+             * BoneCPConfig object and the different associated setters
              */
             BoneCPConfig config = new BoneCPConfig();
-            /* Mise en place de l'URL, du nom et du mot de passe */
+            /* Setting of the URL, name and password */
             config.setJdbcUrl( url );
             config.setUsername( nomUtilisateur );
             config.setPassword( motDePasse );
-            /* Paramétrage de la taille du pool */
+            /* Setting of the pool size  */
             config.setMinConnectionsPerPartition( 5 );
             config.setMaxConnectionsPerPartition( 30 );
             config.setPartitionCount( 2 );
-            /* Création du pool à partir de la configuration, via l'objet BoneCP */
+            /* Creation of the pool from the configuration via the BoneCP object */
             connectionPool = new BoneCP( config );
         } catch ( SQLException e ) {
             e.printStackTrace();
             throw new DAOConfigurationException( "Erreur de configuration du pool de connexions.", e );
         }
         /*
-         * Enregistrement du pool créé dans une variable d'instance via un appel
-         * au constructeur de DAOFactory
+         * Saves the created pool in a instance variable via a call
+         * to the DAOFactry constructor
          */
         DAOFactory instance = new DAOFactory( connectionPool );
         return instance;
     }
 
-    /* Méthode chargée de fournir une connexion à la base de données */
+    /* Method in charge of giving a connection to the database */
     /* package */Connection getConnection() throws SQLException {
         return connectionPool.getConnection();
     }
 
     /*
-     * Méthodes de récupération de l'implémentation des différents DAO
-     * (uniquement deux dans le cadre de ce TP)
+     * Methods used to retrieve the implementation of the various DAOs
      */
     public CourseDao getCourseDao() {
         return new CourseDaoImpl( this );

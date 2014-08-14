@@ -9,13 +9,12 @@ import java.sql.Statement;
 public final class DAOUtility {
 
     /*
-     * Constructeur cachÃ© par dÃ©faut (car c'est une classe finale utilitaire,
-     * contenant uniquement des mÃ©thode appelÃ©es de maniÃ¨re statique)
+     * Hidden constructor by default
      */
     private DAOUtility() {
     }
 
-    /* Fermeture silencieuse du resultset */
+    /* Silent closing of the ResultSet */
     public static void fermetureSilencieuse( ResultSet resultSet ) {
         if ( resultSet != null ) {
             try {
@@ -26,7 +25,7 @@ public final class DAOUtility {
         }
     }
 
-    /* Fermeture silencieuse du statement */
+    /* Silent closing of the Statement */
     public static void fermetureSilencieuse( Statement statement ) {
         if ( statement != null ) {
             try {
@@ -37,7 +36,7 @@ public final class DAOUtility {
         }
     }
 
-    /* Fermeture silencieuse de la connexion */
+    /* Silent closing of the connection */
     public static void fermetureSilencieuse( Connection connexion ) {
         if ( connexion != null ) {
             try {
@@ -48,13 +47,13 @@ public final class DAOUtility {
         }
     }
 
-    /* Fermetures silencieuses du statement et de la connexion */
+    /* Silent closing of the Statement and the connection */
     public static void fermeturesSilencieuses( Statement statement, Connection connexion ) {
         fermetureSilencieuse( statement );
         fermetureSilencieuse( connexion );
     }
 
-    /* Fermetures silencieuses du resultset, du statement et de la connexion */
+    /* Silent closing of the resultset, statement and connection */
     public static void fermeturesSilencieuses( ResultSet resultSet, Statement statement, Connection connexion ) {
         fermetureSilencieuse( resultSet );
         fermetureSilencieuse( statement );
@@ -62,8 +61,8 @@ public final class DAOUtility {
     }
 
     /*
-     * Initialise la requÃªte prÃ©parÃ©e basÃ©e sur la connexion passÃ©e en argument,
-     * avec la requÃªte SQL et les objets donnÃ©s.
+     * Initialization of the prepared statement with the connection passed as parameter as well
+     * as the SQL query and the given objects
      */
     public static PreparedStatement initialisationRequetePreparee( Connection connexion, String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException {
         PreparedStatement preparedStatement = connexion.prepareStatement( sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS );

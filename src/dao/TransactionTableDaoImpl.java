@@ -16,7 +16,11 @@ public class TransactionTableDaoImpl implements TransactionTableDao {
 	TransactionTableDaoImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
     }
-	
+
+	/*
+	 * Adds a line in the transaction table taking as parameter the username of the user that performed the action
+	 * and the action/page name.
+	 */
 	@Override
 	public void addTransaction(String username, String pageName)
 			throws DAOException {
@@ -25,10 +29,17 @@ public class TransactionTableDaoImpl implements TransactionTableDao {
         PreparedStatement preparedStatement1 = null;
 
         try {
-            connexion = daoFactory.getConnection();
-            preparedStatement1 = initialisationRequetePreparee( connexion,
+            /* Retrieves a connection from the factory */
+        	connexion = daoFactory.getConnection();
+            
+        	// Prepared statement of the query in charge of inserting a new transaction :
+        	// the pageName ( accessed page or action ) and the username
+        	// The date is inserted within the query with "NOW()"
+        	preparedStatement1 = initialisationRequetePreparee( connexion,
                     SQL_INSERT, true, username, pageName );
             int statut1 = preparedStatement1.executeUpdate();
+            
+            // If the insertion failed
             if ( statut1 == 0 ) {
                 throw new DAOException(
                         "Failed to create Transaction. No row added" );
