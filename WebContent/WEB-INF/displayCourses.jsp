@@ -103,7 +103,9 @@
             <c:choose>
             <c:when test="${ empty requestScope.userCourses }">
                 <br>
+                <c:if test="${stu eq 'true'}">
                 <p class="erreur">You are not registered to any courses</p>
+                </c:if>
             </c:when>
             <%-- else, table of his courses is displayed --%>
             <c:otherwise>
