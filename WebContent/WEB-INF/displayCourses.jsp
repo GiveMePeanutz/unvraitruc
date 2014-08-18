@@ -34,7 +34,6 @@
                 	<th>Course name</th>
                     <th>Description</th>
                     <th class="action">More</th>
-					<c:set var="contains" value="false" />
 					<%--Delete row is displayed if the user has the right privilege --%>
 					<c:forEach var="item" items="${sessionScope.userSessionAccess}">
 					<c:if test="${item eq 'Delete Course'}">
