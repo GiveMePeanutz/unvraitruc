@@ -9,6 +9,6 @@
 <title>Page not available.</title>
 </head>
 <body>
-<br>Page not available.<br>You don't have what it takes buddy.
+<br>Page not available.<br>You don't have the right privilege.
 </body>
 </html>
