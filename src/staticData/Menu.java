@@ -58,7 +58,6 @@ public final class Menu {
         try {
             return menus[path / 10000][( path - ( path / 10000 ) * 10000 ) / 100][( path - ( path / 100 ) * 100 )];
         } catch ( Exception e ) {
-            System.out.println( path );
             return "Path invalid";
         }
     }

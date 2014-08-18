@@ -81,6 +81,14 @@
 	
 }
 
+#normalFormPriv {
+	margin-left: auto;
+    margin-right: auto;
+    width : 60%;
+
+	
+}
+
 fieldset {
     padding: 10px;
     border: 1px #0568CD solid;

@@ -12,7 +12,7 @@
     <body>
         <c:import url="/inc/menu.jsp" />
         
-        <div id="normalForm">
+        <div id="normalFormPriv">
         <h1>Privileges  </h1>
         <br />
         <c:choose>
