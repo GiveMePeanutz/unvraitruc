@@ -13,8 +13,6 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
-import beans.DataWarehouseLine;
-
 public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     private DAOFactory          daoFactory;
@@ -29,7 +27,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     private static String       SELECT_DISTINCT_YEAR   = "SELECT DISTINCT year FROM timeDim";
     private static String       SELECT_DISTINCT_GROUP  = "SELECT DISTINCT groupName FROM groupDim";
-    private static String       SELECT_NEW_YEARS       = "SELECT DISTINCT date_format(factDate,'%Y') AS year FROM fact_table WHERE factDate>(SELECT MAX(updateTime) FROM updateTime)";
+    private static String       SELECT_NEW_YEARS       = "SELECT DISTINCT date_format(factDate,'%Y') AS year FROM transaction_table WHERE factDate>(SELECT MAX(updateTime) FROM updateTime)";
     private static String       SELECT_NEW_GROUPS      = "SELECT DISTINCT groupName FROM user_group WHERE groupName NOT IN ( SELECT DISTINCT groupName FROM GroupDim)";
 
     private static String       SELECT_USERDIM_ID      = "SELECT DISTINCT userId FROM userDim ud, groupDim gd WHERE ud.sex=? AND gd.groupName=? AND ud.groupId=gd.groupId";
@@ -37,8 +35,8 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
     private static String       SELECT_TIMEDIM_ID_H2   = "SELECT DISTINCT timeId FROM timeDim td WHERE td.dayName like ?  AND td.week like ? AND td.year like ?";
     private static String       SELECT_ACTIVITYDIM_ID  = "SELECT DISTINCT activityId FROM activityDim ad WHERE ad.isAction like ?";
 
-    private static String       SELECT_NEW_LOGS_H1     = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%H') AS hour, date_format(factDate,'%d') AS day, date_format(factDate,'%M') AS monthName, date_format(factDate,'%Y') AS year, count(*) AS count FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, hour, day, monthName, year";
-    private static String       SELECT_NEW_LOGS_H2     = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%W') AS dayName,  date_format(factDate,'%u') AS week, date_format(factDate,'%Y') AS year, count(*) AS count FROM fact_table, user_group ug, user u WHERE fact_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, dayName, week, year;";
+    private static String       SELECT_NEW_LOGS_H1     = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%H') AS hour, date_format(factDate,'%d') AS day, date_format(factDate,'%M') AS monthName, date_format(factDate,'%Y') AS year, count(*) AS count FROM transaction_table, user_group ug, user u WHERE transaction_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, hour, day, monthName, year";
+    private static String       SELECT_NEW_LOGS_H2     = "SELECT u.sex AS sex, ug.groupName AS groupName, IF( pageName like '/%', 0,1) AS isAction,  date_format(factDate,'%W') AS dayName,  date_format(factDate,'%u') AS week, date_format(factDate,'%Y') AS year, count(*) AS count FROM transaction_table, user_group ug, user u WHERE transaction_table.username=ug.username AND ug.username=u.username AND factDate>(SELECT MAX(updateTime) FROM updateTime) GROUP BY sex, groupName, isAction, dayName, week, year;";
 
     private static String       INSERT_TIME_TIMEDIM    = "INSERT INTO timeDim (year,monthName,week,dayName,day,hour) values (?,?,?,?,?,?)";
     private static String       INSERT_GROUP_GROUPDIM  = "INSERT INTO groupDim (groupName) VALUES (?)";
@@ -62,10 +60,10 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         try {
 
             connexion = daoFactory.getConnection();
-            
+
             // DW Dim tables update
             updateDWDim();
-            
+
             // DW Fact table update
             updateDWFactTable();
 
@@ -96,7 +94,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             return 1;
         }
     }
-    
+
     @Override
     public void updateDWFactTable() throws DAOException {
 
@@ -458,5 +456,4 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         return groups;
     }
 
-    
 }
