@@ -51,6 +51,10 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         this.daoFactory = daoFactory;
     }
 
+    /*
+	 *  Method that updates the dataWarehouse
+	 *  Uses updateDWDim() and updateDWFactTable()
+	 */
     @Override
     public void updateDW() throws DAOException {
 
@@ -59,6 +63,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
         try {
 
+        	// Retrieves connection from the factory
             connexion = daoFactory.getConnection();
 
             // DW Dim tables update
@@ -67,6 +72,8 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
             // DW Fact table update
             updateDWFactTable();
 
+            // Once the Datawarehouse is updated we insert a datetime indicating the last time the 
+            // Data warehouse was updated.
             preparedStatement1 = connexion.prepareStatement( INSERT_UPDATE_DATETIME );
             preparedStatement1.executeUpdate();
 
@@ -78,6 +85,9 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     }
 
+    /*
+     * Calls the update methods of all dimensions that can evolve
+     */
     @Override
     public void updateDWDim() throws DAOException {
 
@@ -87,14 +97,11 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     }
 
-    public int blah( int i ) {
-        if ( i < 0 ) {
-            return 0;
-        } else {
-            return 1;
-        }
-    }
-
+    /*
+	 *  Method that updates the dataWarehouse fact table
+	 *  Should not be called separately from updateDWDim()
+	 *  Used for testing
+	 */
     @Override
     public void updateDWFactTable() throws DAOException {
 
@@ -115,19 +122,34 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         ResultSet resultSet5 = null;
 
         try {
-            connexion = daoFactory.getConnection();
-            preparedStatement1 = connexion.prepareStatement( SELECT_NEW_LOGS_H1 );
+            
+        	// Retrieves connection from the factory
+        	connexion = daoFactory.getConnection();
+            
+        	// Prepared statement the query in charge of loading the new logs regrouped according to distinct 
+        	// combinations of the dimensions using the hierarchy 1 of the time dimension 
+        	preparedStatement1 = connexion.prepareStatement( SELECT_NEW_LOGS_H1 );
             resultSet1 = preparedStatement1.executeQuery();
+            
+            // Prepared statement the query in charge of loading the new logs regrouped and counted according to distinct 
+        	// combinations of the dimensions using the hierarchy 2 of the time dimension 
             preparedStatement1Bis = connexion.prepareStatement( SELECT_NEW_LOGS_H2 );
             resultSet1Bis = preparedStatement1Bis.executeQuery();
 
-            // hierarchy 1
+            // Update of the fact table using hierarchy 1 of the time dimension
+            // We loop on every line and retrieve the different userIDs, timeIDs and activityIDs from the dimensions
+            // that correspond to the attributes of the line read
             while ( resultSet1.next() ) {
 
+            	// List of all the userIDs of the user dimension that correspond to new activity logs
                 ArrayList<Integer> userIDs = new ArrayList<Integer>();
+                // List of all the timeIDs of the time dimension that correspond to new activity logs
                 ArrayList<Integer> timeIDs = new ArrayList<Integer>();
+                // List of all the activityIDs of the activity dimension that correspond to new activity logs
                 ArrayList<Integer> activityIDs = new ArrayList<Integer>();
 
+                // Loop on all the different possible combinations with the attributes of the user of the line 
+                // read and the "all" possibilities
                 for ( int sex : new int[] { -1, resultSet1.getInt( "sex" ) } ) {
                     for ( String groupName : new String[] { "All", resultSet1.getString( "groupName" ) } ) {
                         preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_USERDIM_ID, false, sex,
@@ -137,9 +159,9 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                     }
                 }
 
+                // Same as with user in the previous loop but with all the combinations of the hierarchy 1 
                 for ( int year : new int[] { -1, resultSet1.getInt( "year" ) } ) {
 
-                    // hierarchy 1
                     for ( String monthName : new String[] { "All", resultSet1.getString( "monthName" ) } ) {
 
                         for ( int day : new int[] { -1, resultSet1.getInt( "day" ) } ) {
@@ -158,6 +180,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                     }
                 }
 
+                // Same as before with action dim
                 for ( int isAction : new int[] { -1, resultSet1.getInt( "isAction" ) } ) {
                     preparedStatement5 = initialisationRequetePreparee( connexion, SELECT_ACTIVITYDIM_ID, false,
                             isAction );
@@ -165,11 +188,13 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                     activityIDs.addAll( mapSingleColumnIntegerQuery( resultSet5, "activityId" ) );
                 }
 
-                int it = 0;
+                //Once we have retrieved all the different instances of each dimension that reflects the data
+                // retrieved from the transaction table, we combinate them in every possible way and insert the new
+                // line with the count. The query will add the new count if this combination already exists in
+                // the database.
                 for ( int userId : userIDs ) {
                     for ( int timeId : timeIDs ) {
                         for ( int activityId : activityIDs ) {
-                            it++;
                             preparedStatement6 = initialisationRequetePreparee( connexion, INSERT_DWFACT, false,
                                     userId, activityId, timeId, resultSet1.getInt( "count" ),
                                     resultSet1.getInt( "count" ) );
@@ -180,13 +205,17 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                 }
             }
 
-            // hierarchy 2
+            // Update of the fact table using hierarchy 2 of the time dimension
+            // We loop on every line and retrieve the different userIDs, timeIDs and activityIDs from the dimensions
+            // that correspond to the attributes of the line read
             while ( resultSet1Bis.next() ) {
 
                 ArrayList<Integer> userIDs = new ArrayList<Integer>();
                 ArrayList<Integer> timeIDs = new ArrayList<Integer>();
                 ArrayList<Integer> activityIDs = new ArrayList<Integer>();
 
+                // Loop on all the different possible combinations with the attributes of the user of the line 
+                // read and the "all" possibilities
                 for ( int sex : new int[] { -1, resultSet1Bis.getInt( "sex" ) } ) {
                     for ( String groupName : new String[] { "All", resultSet1Bis.getString( "groupName" ) } ) {
                         preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_USERDIM_ID, false, sex,
@@ -196,9 +225,9 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                     }
                 }
 
+                // Same as with user in the previous loop but with all the combinations of the hierarchy 2
                 for ( int year : new int[] { -1, resultSet1Bis.getInt( "year" ) } ) {
 
-                    // hierarchy 2
                     for ( String dayName : new String[] { "All", resultSet1Bis.getString( "dayName" ) } ) {
 
                         for ( int week : new int[] { -1, resultSet1Bis.getInt( "week" ) } ) {
@@ -210,6 +239,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                     }
                 }
 
+                // Same as before with action dim
                 for ( int isAction : new int[] { -1, resultSet1Bis.getInt( "isAction" ) } ) {
                     preparedStatement5 = initialisationRequetePreparee( connexion, SELECT_ACTIVITYDIM_ID, false,
                             isAction );
@@ -217,11 +247,13 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                     activityIDs.addAll( mapSingleColumnIntegerQuery( resultSet5, "activityId" ) );
                 }
 
-                int it = 0;
+                //Once we have retrieved all the different instances of each dimension that reflects the data
+                // retrieved from the transaction table, we combinate them in every possible way and insert the new
+                // line with the count. The query will add the new count if this combination already exists in
+                // the database.
                 for ( int userId : userIDs ) {
                     for ( int timeId : timeIDs ) {
                         for ( int activityId : activityIDs ) {
-                            it++;
                             preparedStatement6 = initialisationRequetePreparee( connexion, INSERT_DWFACT, false,
                                     userId, activityId, timeId, resultSet1Bis.getInt( "count" ),
                                     resultSet1Bis.getInt( "count" ) );
@@ -246,6 +278,9 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     }
 
+    /*
+     * Method in charge of updating the group dimension
+     */
     @SuppressWarnings( "resource" )
     public void updateUserGroupDim() throws DAOException {
 
@@ -258,23 +293,34 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         ResultSet generatedKey = null;
 
         try {
-            connexion = daoFactory.getConnection();
-            preparedStatement1 = initialisationRequetePreparee( connexion, SELECT_NEW_GROUPS, false );
+            // Retrives the connection from the factory
+        	connexion = daoFactory.getConnection();
+            
+        	// Prepared statement of the query in charge of retrieving groups that arent reflected in the group dimension
+        	// of the data warehouse
+        	preparedStatement1 = initialisationRequetePreparee( connexion, SELECT_NEW_GROUPS, false );
             resultSet1 = preparedStatement1.executeQuery();
+            
+            // Here we map all the retrived groupnales in an arrayList
             newGroups = mapSingleColumnStringQuery( resultSet1, "groupName" );
 
+            // Here we loop on every new groupName
             for ( String groupName : newGroups ) {
 
-                preparedStatement2 = initialisationRequetePreparee( connexion, INSERT_GROUP_GROUPDIM, true, groupName );
+                // For every groupname we create a new type of group in the group dimension table
+            	preparedStatement2 = initialisationRequetePreparee( connexion, INSERT_GROUP_GROUPDIM, true, groupName );
                 preparedStatement2.executeUpdate();
 
                 int groupId = 1;
+                // generatedKey stores the groupID of the new group
                 generatedKey = preparedStatement2.getGeneratedKeys();
 
                 if ( generatedKey.next() ) {
                     groupId = generatedKey.getInt( 1 );
                 }
 
+                // The user dimension only has one attribute sex and there are usually users of both sex in a group
+                // So here we loop on every possibility of the sex attribute. -1 being "all"
                 for ( int sex = -1; sex < 2; sex++ ) {
                     preparedStatement3 = initialisationRequetePreparee( connexion, INSERT_USER_USERDIM, true, sex,
                             groupId );
@@ -296,6 +342,9 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     }
 
+    /*
+     * Method in charge of updating the time dimension
+     */
     @SuppressWarnings( "resource" )
     public void updateTimeDim() throws DAOException {
 
@@ -309,18 +358,31 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         PreparedStatement preparedStatement3 = null;
 
         try {
-            connexion = daoFactory.getConnection();
-            connexion.setAutoCommit( false );
-            preparedStatement1 = initialisationRequetePreparee( connexion, SELECT_DISTINCT_YEAR, false );
+            // Retrieves a connection from the factory
+        	connexion = daoFactory.getConnection();
+           
+        	// Prepared statement of the query in charge of selecting all the years from the time dimension
+        	preparedStatement1 = initialisationRequetePreparee( connexion, SELECT_DISTINCT_YEAR, false );
             resultSet1 = preparedStatement1.executeQuery();
+            
+            // Method used to extract the new years from the resultSet into a List
             dimTableyears = mapSingleColumnIntegerQuery( resultSet1, "year" );
+            
+            // If there isn't any year in the time dimension ( time dimension empty ) then we add the "all" value
             if ( dimTableyears.isEmpty() ) {
                 dimTableyears.add( -1 );
             }
+            
+            // Statement in charge of retrieving all years from the transaction table datetimes
             preparedStatement2 = initialisationRequetePreparee( connexion, SELECT_NEW_YEARS, false );
             resultSet2 = preparedStatement2.executeQuery();
+            
+            // Method used to extract the years from the resultSet into a List
             newActivityLogYears = mapSingleColumnIntegerQuery( resultSet2, "year" );
 
+            
+            // Loops to create all new possible combinations for the new years
+            // The two inner loops are for both hierarchies
             for ( Integer newYear : newActivityLogYears ) {
                 if ( !dimTableyears.contains( newYear ) ) {
 
@@ -329,7 +391,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                         for ( int day = -1; day < 32; day++ ) {
 
                             for ( int hour = -1; hour < 25; hour++ ) {
-
+                            	// Prepared statement of the query in charge of creating a new time in the time dimension
                                 preparedStatement3 = initialisationRequetePreparee( connexion, INSERT_TIME_TIMEDIM,
                                         true, newYear, monthName, null, null, day, hour );
                                 int statut = preparedStatement3.executeUpdate();
@@ -343,7 +405,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                     for ( int week = -1; week < 53; week++ ) {
 
                         for ( String dayName : days ) {
-
+                        	// Prepared statement of the query in charge of creating a new time in the time dimension
                             preparedStatement3 = initialisationRequetePreparee( connexion, INSERT_TIME_TIMEDIM, true,
                                     newYear, null, week, dayName, null, null );
                             int statut = preparedStatement3.executeUpdate();
@@ -357,7 +419,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
                 }
             }
 
-            connexion.commit();
+            
         } catch ( SQLException e ) {
             throw new DAOException( e );
         } finally {
@@ -368,6 +430,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
 
     }
 
+    // Method that takes a ResultSet and map the String values from one column whose name is passed as parameter to an ArrayList
     public ArrayList<String> mapSingleColumnStringQuery( ResultSet resultSet, String colName ) throws SQLException {
         ArrayList<String> result = new ArrayList<>();
         while ( resultSet.next() ) {
@@ -376,6 +439,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         return result;
     }
 
+    // Method that takes a ResultSet and map the Integer values from one column whose name is passed as parameter to an ArrayList
     public ArrayList<Integer> mapSingleColumnIntegerQuery( ResultSet resultSet, String colName ) throws SQLException {
         ArrayList<Integer> result = new ArrayList<>();
         while ( resultSet.next() ) {
@@ -384,6 +448,7 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         return result;
     }
 
+    // Method that takes a ResultSet and map the DateTime values from one column whose name is passed as parameter to an ArrayList
     public ArrayList<DateTime> mapSingleColumnDateTimeQuery( ResultSet resultSet, String colName ) throws SQLException {
         ArrayList<DateTime> result = new ArrayList<DateTime>();
         while ( resultSet.next() ) {
@@ -392,68 +457,5 @@ public class DataWarehouseDaoImpl implements DataWarehouseDao {
         return result;
     }
 
-    public List<String> getMonths() {
-        return months;
-    }
-
-    public List<String> getDays() {
-        return days;
-    }
-
-    public List<String> listYear() throws DAOException {
-
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-
-        ResultSet resultSet = null;
-
-        List<String> years = new ArrayList<String>();
-
-        try {
-            connection = daoFactory.getConnection();
-            preparedStatement = connection.prepareStatement( SELECT_DISTINCT_YEAR );
-            resultSet = preparedStatement.executeQuery();
-
-            while ( resultSet.next() ) {
-
-                years.add( resultSet.getString( "year" ) );
-            }
-
-        } catch ( SQLException e ) {
-            throw new DAOException( e );
-        } finally {
-            fermeturesSilencieuses( resultSet, preparedStatement, connection );
-        }
-
-        return years;
-    }
-
-    public List<String> listGroup() throws DAOException {
-
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-
-        ResultSet resultSet = null;
-
-        List<String> groups = new ArrayList<String>();
-
-        try {
-            connection = daoFactory.getConnection();
-            preparedStatement = connection.prepareStatement( SELECT_DISTINCT_GROUP );
-            resultSet = preparedStatement.executeQuery();
-
-            while ( resultSet.next() ) {
-
-                groups.add( resultSet.getString( "groupName" ) );
-            }
-
-        } catch ( SQLException e ) {
-            throw new DAOException( e );
-        } finally {
-            fermeturesSilencieuses( resultSet, preparedStatement, connection );
-        }
-
-        return groups;
-    }
 
 }
